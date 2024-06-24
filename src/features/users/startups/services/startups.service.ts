@@ -4,10 +4,12 @@ import { Startup } from "../entities/startup";
 import { Repository } from "typeorm";
 import { CreateStartupDto } from "../dtos/create-startup-dto";
 import * as bcrypt from "bcrypt";
+import { JwtSecretRequestType, JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class StartupsService {
-    constructor(@InjectRepository(Startup) private readonly startupRepository: Repository<Startup>) {
+    constructor(@InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
+                private readonly jwtService: JwtService) {
     }
 
     getAll() {
@@ -17,6 +19,10 @@ export class StartupsService {
     async create(createStartupDto: CreateStartupDto) {
         let startup = createStartupDto;
         startup.password = await bcrypt.hash(startup.password, 10);
-        return this.startupRepository.save(startup);
+        let savedStartup = await this.startupRepository.save(startup);
+        console.log(savedStartup)
+        return {
+            accessToken: await this.jwtService.signAsync({id: savedStartup.id, email: savedStartup.email})
+        }
     }
 }

@@ -8,6 +8,8 @@ import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { JwtModule } from "@nestjs/jwt";
+import { InvestorsController } from './investors/controllers/investors.controller';
+import { InvestorsService } from './investors/services/investors.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Startup, Investor]),
@@ -17,8 +19,8 @@ import { JwtModule } from "@nestjs/jwt";
             signOptions: { expiresIn: '30d' },
         }),
     ],
-    controllers: [StartupsController, AuthController],
-    providers: [StartupsService, UsersService, AuthService],
+    controllers: [StartupsController, AuthController, InvestorsController],
+    providers: [StartupsService, UsersService, AuthService, InvestorsService],
     exports: [StartupsService, UsersService, AuthService]
 })
 export class UsersModule {}

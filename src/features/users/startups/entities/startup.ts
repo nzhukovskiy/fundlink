@@ -1,5 +1,6 @@
 import { User } from "../../user/user";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
+import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 
 @Entity()
 export class Startup extends User {
@@ -11,4 +12,7 @@ export class Startup extends User {
 
     @Column({type: "decimal"})
     fundingGoal: number;
+
+    @OneToMany(() => FundingRound, (fundingRound) => fundingRound.startup)
+    fundingRounds: FundingRound[];
 }

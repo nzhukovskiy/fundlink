@@ -1,19 +1,10 @@
-import { Column } from "typeorm";
-import { IsEmail, IsNotEmpty, IsNumber, MinLength } from "class-validator";
+import { IsEmail, MinLength } from "class-validator";
+import { UpdateStartupDto } from "./update-startup-dto";
 
-export class CreateStartupDto {
+export class CreateStartupDto extends UpdateStartupDto {
     @IsEmail()
     email: string;
 
     @MinLength(8)
     password: string;
-
-    @IsNotEmpty()
-    title: string;
-
-    @IsNotEmpty()
-    description: string;
-
-    @IsNumber()
-    fundingGoal: number;
 }

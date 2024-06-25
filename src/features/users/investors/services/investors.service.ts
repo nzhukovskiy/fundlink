@@ -5,15 +5,22 @@ import { Repository } from "typeorm";
 import { CreateInvestorDto } from "../dtos/create-investor-dto";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { paginate, PaginateQuery } from "nestjs-paginate";
+import { PaginateService } from "../../common/services/paginate/paginate.service";
 
 @Injectable()
 export class InvestorsService {
     constructor(@InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
-                private readonly jwtService: JwtService) {
+                private readonly jwtService: JwtService,
+                private readonly paginateService: PaginateService) {
     }
 
-    getAll() {
-        return this.investorRepository.find();
+    getAll(query: PaginateQuery) {
+        return this.paginateService.paginate(query, this.investorRepository);
+    }
+
+    getOne(id: number) {
+        return this.investorRepository.findOne({where: {id: id}});
     }
 
     async create(createInvestorDto: CreateInvestorDto) {

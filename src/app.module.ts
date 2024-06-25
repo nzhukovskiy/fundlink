@@ -35,6 +35,6 @@ import { FundingRoundsService } from './features/investments/services/funding-ro
         InvestmentModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
-    providers: [AppService, FundingRoundsService],
+    providers: [AppService],
 })
 export class AppModule {}

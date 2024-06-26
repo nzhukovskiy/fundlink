@@ -20,7 +20,8 @@ import { InvestmentModule } from "../investments/investment.module";
             global: true,
             secret: 'secret',
             signOptions: { expiresIn: '30d' },
-        })
+        }),
+      InvestmentModule
     ],
     controllers: [StartupsController, AuthController, InvestorsController],
     providers: [StartupsService, UsersService, AuthService, InvestorsService, PaginateService],

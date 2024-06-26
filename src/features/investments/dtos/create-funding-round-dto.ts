@@ -1,16 +1,12 @@
-import { FundingStage } from "../constants/funding-stage";
-import { IsDate, IsEnum, IsNumber } from "class-validator";
+import { IsDateString, IsNumberString } from "class-validator";
 
 export class CreateFundingRoundDto {
-    @IsEnum(FundingStage)
-    stage: FundingStage;
+    @IsNumberString()
+    fundingGoal: string;
 
-    @IsNumber()
-    fundingGoal: number;
-
-    @IsDate()
+    @IsDateString()
     startDate: Date;
 
-    @IsDate()
+    @IsDateString()
     endDate: Date;
 }

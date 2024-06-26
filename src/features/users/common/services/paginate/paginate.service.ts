@@ -7,7 +7,6 @@ export class PaginateService {
     paginate(query: PaginateQuery, repository: Repository<any>) {
         return paginate(query, repository, {
             sortableColumns: ['id'],
-            relations: ['fundingRounds'],
             origin: "http://localhost:3000"
         })
     }

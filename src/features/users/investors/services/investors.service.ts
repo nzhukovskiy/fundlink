@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Investor } from "../entities/investor";
 import { Repository } from "typeorm";
@@ -19,8 +19,12 @@ export class InvestorsService {
         return this.paginateService.paginate(query, this.investorRepository);
     }
 
-    getOne(id: number) {
-        return this.investorRepository.findOne({where: {id: id}});
+    async getOne(id: number) {
+        let investor = await this.investorRepository.findOne({ where: { id: id } });
+        if (!investor) {
+            throw new NotFoundException(`Investor with an id ${id} does not exist`);
+        }
+        return investor;
     }
 
     async create(createInvestorDto: CreateInvestorDto) {

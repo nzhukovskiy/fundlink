@@ -11,7 +11,8 @@ import { FundingRoundsService } from "../../../../investments/services/funding-r
 @ApiTags('startups')
 export class StartupsController {
 
-    constructor(private readonly startupsService: StartupsService) {
+    constructor(private readonly startupsService: StartupsService,
+                private readonly fundingRoundsService: FundingRoundsService) {
     }
     @Get()
     findAll(@Paginate() query: PaginateQuery) {
@@ -33,8 +34,18 @@ export class StartupsController {
         return this.startupsService.update(id, updateStartupDto);
     }
 
-    @Post(':id/fundingRound')
+    @Post(':id/funding-rounds')
     createFundingRound(@Param('id') id: number, @Body() createFundingRoundDto: CreateFundingRoundDto) {
-        // return this.fundingRoundsService.create(id, createFundingRoundDto);
+        return this.fundingRoundsService.create(id, createFundingRoundDto);
+    }
+
+    @Get(':id/funding-rounds')
+    getFundingRounds(@Param('id') id: number) {
+        return this.fundingRoundsService.getForStartup(id);
+    }
+
+    @Get(':id/current-funding-round')
+    getCurrentFundingRound(@Param('id') id: number) {
+        return this.fundingRoundsService.getCurrentFundingRound(id);
     }
 }

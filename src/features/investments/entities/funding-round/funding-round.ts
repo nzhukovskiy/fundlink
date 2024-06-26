@@ -15,10 +15,10 @@ export class FundingRound {
     stage: FundingStage;
 
     @Column({type: "decimal"})
-    fundingGoal: number;
+    fundingGoal: string;
 
     @Column({ default: 0, type: "decimal" })
-    currentRaised: number;
+    currentRaised: string;
 
     @Column()
     startDate: Date;

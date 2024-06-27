@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Roles } from "../constants/roles";
 
 @Entity()
 export abstract class User {
@@ -10,4 +11,6 @@ export abstract class User {
 
     @Column({select: false})
     password: string;
+
+    abstract getRole(): Roles;
 }

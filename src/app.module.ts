@@ -13,6 +13,8 @@ import { InvestmentModule } from './features/investments/investment.module';
 import { FundingRound } from "./features/investments/entities/funding-round/funding-round";
 import { FundingRoundsController } from './features/investments/controllers/funding-rounds.controller';
 import { FundingRoundsService } from './features/investments/services/funding-rounds.service';
+import { AuthModule } from './features/auth/auth.module';
+import { JwtTokenModule } from './features/token/jwt-token.module';
 
 @Module({
     imports: [
@@ -33,6 +35,8 @@ import { FundingRoundsService } from './features/investments/services/funding-ro
         }),
         UsersModule,
         InvestmentModule,
+        AuthModule,
+        JwtTokenModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Investor } from "../entities/investor";
 import { Repository } from "typeorm";
@@ -7,12 +7,15 @@ import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { paginate, PaginateQuery } from "nestjs-paginate";
 import { PaginateService } from "../../common/services/paginate/paginate.service";
+import { JwtTokenService } from "../../../token/services/jwt-token.service";
+import { UsersService } from "../../services/users.service";
 
 @Injectable()
 export class InvestorsService {
     constructor(@InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
-                private readonly jwtService: JwtService,
-                private readonly paginateService: PaginateService) {
+                private readonly jwtTokenService: JwtTokenService,
+                private readonly paginateService: PaginateService,
+                private readonly usersService: UsersService) {
     }
 
     getAll(query: PaginateQuery) {
@@ -28,11 +31,17 @@ export class InvestorsService {
     }
 
     async create(createInvestorDto: CreateInvestorDto) {
-        let investor = createInvestorDto;
-        investor.password = await bcrypt.hash(investor.password, 10);
-        let savedInvestor = await this.investorRepository.save(investor);
+        let investorDto = createInvestorDto;
+        if (await this.usersService.findByEmail(investorDto.email)) {
+            throw new BadRequestException(`User with email ${investorDto.email} already exists`);
+        }
+        investorDto.password = await bcrypt.hash(investorDto.password, 10);
+        let savedInvestor = await this.investorRepository.save(investorDto);
+        let investor = await this.investorRepository.findOneBy({id: savedInvestor.id});
+        delete investor.password
+        investor["role"] = investor.getRole()
         return {
-            accessToken: await this.jwtService.signAsync({id: savedInvestor.id, email: savedInvestor.email})
+            accessToken: await this.jwtTokenService.generateToken(investor)
         }
     }
 }

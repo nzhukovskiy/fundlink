@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { Startup } from "../../users/startups/entities/startup";
 import { Cron } from "@nestjs/schedule";
 import { FundingStage } from "../constants/funding-stage";
+import Decimal from "decimal.js";
 
 @Injectable()
 export class FundingRoundsService {
@@ -43,7 +44,7 @@ export class FundingRoundsService {
     }
 
     getOne(id: number) {
-        return this.fundingRoundRepository.findOne({where: {id: id}, relations: ['startup']});
+        return this.fundingRoundRepository.findOne({where: {id: id}, relations: ['startup', 'investments']});
     }
 
     async getForStartup(startupId: number) {
@@ -57,10 +58,17 @@ export class FundingRoundsService {
         })).fundingRounds.find(el => el.isCurrent);
     }
 
+    async addFunds(fundingRound: FundingRound, amount: string) {
+        let currentRaised = new Decimal(fundingRound.currentRaised);
+        fundingRound.currentRaised = currentRaised.plus(new Decimal(amount)).toString();
+        await this.fundingRoundRepository.save(fundingRound);
+        await this.updateFundingRoundStatus(await this.startupRepository.findOne({where: {id: fundingRound.startup.id}, relations: {fundingRounds: true}}));
+    }
+
     async updateFundingRoundStatus(startup: Startup) {
         for (let fundingRound of startup.fundingRounds) {
             let currentDate = new Date();
-            if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate && fundingRound.currentRaised < fundingRound.fundingGoal) {
+            if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate && new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
                 fundingRound.isCurrent = true;
                 break;
             } else {

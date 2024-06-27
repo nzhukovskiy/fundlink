@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { FundingStage } from "../../constants/funding-stage";
 import { Startup } from "../../../users/startups/entities/startup";
+import { Investment } from "../investment/investment";
 
 @Entity()
 export class FundingRound {
@@ -31,4 +32,7 @@ export class FundingRound {
 
     @ManyToOne(() => Startup, (startup) => startup.fundingRounds)
     startup: Startup;
+
+    @OneToMany(() => Investment, (investment) => investment.fundingRound)
+    investments: Investment[];
 }

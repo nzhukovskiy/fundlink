@@ -15,6 +15,7 @@ import { FundingRoundsController } from './features/investments/controllers/fund
 import { FundingRoundsService } from './features/investments/services/funding-rounds.service';
 import { AuthModule } from './features/auth/auth.module';
 import { JwtTokenModule } from './features/token/jwt-token.module';
+import { Investment } from "./features/investments/entities/investment/investment";
 
 @Module({
     imports: [
@@ -29,7 +30,7 @@ import { JwtTokenModule } from './features/token/jwt-token.module';
                 username: configService.get("POSTGRES_USER"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DB").toString(),
-                entities: [Startup, Investor, FundingRound],
+                entities: [Startup, Investor, FundingRound, Investment],
                 synchronize: true,
             }),
         }),

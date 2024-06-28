@@ -77,4 +77,13 @@ export class StartupsService {
           .distinct(true)
           .getMany();
     }
+
+    async uploadPresentation(startupId: number, fileName: string) {
+        const startup = await this.startupRepository.findOneBy({id: startupId});
+        if (!startup) {
+            throw new NotFoundException('Startup with this id not found');
+        }
+        startup.presentationPath = fileName;
+        return this.startupRepository.save(startup);
+    }
 }

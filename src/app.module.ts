@@ -3,23 +3,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { User } from "./features/users/user/user";
 import { Startup } from "./features/users/startups/entities/startup";
 import { Investor } from "./features/users/investors/entities/investor";
 import { StartupsController } from './features/users/startups/controllers/startups/startups.controller';
-import { StartupsService } from './features/users/startups/services/startups.service';
 import { UsersModule } from './features/users/users.module';
 import { InvestmentModule } from './features/investments/investment.module';
 import { FundingRound } from "./features/investments/entities/funding-round/funding-round";
 import { FundingRoundsController } from './features/investments/controllers/funding-rounds.controller';
-import { FundingRoundsService } from './features/investments/services/funding-rounds.service';
 import { AuthModule } from './features/auth/auth.module';
 import { JwtTokenModule } from './features/token/jwt-token.module';
 import { Investment } from "./features/investments/entities/investment/investment";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from 'path';
 
 @Module({
     imports: [
         ConfigModule.forRoot(),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'uploads'),
+            serveRoot: '/uploads'
+        }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],

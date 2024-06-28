@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Req,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from "@nestjs/common";
 import { StartupsService } from "../../services/startups.service";
 import { CreateStartupDto } from "../../dtos/create-startup-dto";
 import { Paginate, PaginateQuery } from "nestjs-paginate";
@@ -9,6 +21,10 @@ import { FundingRoundsService } from "../../../../investments/services/funding-r
 import { AuthGuard } from "../../../../auth/guards/auth.guard";
 import { Roles } from "../../../../auth/decorators/roles.decorator";
 import { RolesGuard } from "../../../../auth/guards/roles.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { fileFilter } from "../../presentations/constants/file-filter";
+import { presentationStorage } from "../../presentations/constants/presentation-storage";
+
 
 @Controller('startups')
 @ApiTags('startups')
@@ -58,5 +74,20 @@ export class StartupsController {
     @Get(':id/investors')
     getStartupInvestors(@Param('id') id: number) {
         return this.startupsService.getInvestors(id);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post('upload-presentation')
+    @UseInterceptors(FileInterceptor('presentation', {
+        storage: presentationStorage,
+        fileFilter: fileFilter
+    }))
+    async uploadStartupPresentation(@UploadedFile() file: Express.Multer.File, @Req() req) {
+        if (!file) {
+            throw new BadRequestException("No file provided");
+        }
+        const user = req.token.payload;
+        return this.startupsService.uploadPresentation(user.id, file.filename);
     }
 }

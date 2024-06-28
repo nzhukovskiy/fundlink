@@ -54,4 +54,9 @@ export class StartupsController {
     getCurrentFundingRound(@Param('id') id: number) {
         return this.fundingRoundsService.getCurrentFundingRound(id);
     }
+
+    @Get(':id/investors')
+    getStartupInvestors(@Param('id') id: number) {
+        return this.startupsService.getInvestors(id);
+    }
 }

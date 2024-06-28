@@ -15,6 +15,7 @@ export class FundingRoundsService {
     }
     async create(startupId: number, createFundingRoundDto: CreateFundingRoundDto) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
+        await this.ensureNoRoundsOverlap(createFundingRoundDto, startup.id);
         let fundingRound = await this.fundingRoundRepository.save(createFundingRoundDto);
         if (startup.fundingRounds.length == 0) {
             fundingRound.stage = FundingStage.SEED;
@@ -33,14 +34,16 @@ export class FundingRoundsService {
         }
         startup.fundingRounds.push(fundingRound);
         await this.startupRepository.save(startup);
-        await this.updateFundingRoundStatus(startup);
+        await this.updateFundingRoundStatus(startup.id);
         return fundingRound;
     }
 
     async update(fundingRoundId: number, updateFundingRoundDto: CreateFundingRoundDto) {
-        let fundingRound = await this.fundingRoundRepository.findOneBy({ id: fundingRoundId});
+        let fundingRound = await this.getOne(fundingRoundId);
         Object.assign(fundingRound, updateFundingRoundDto);
-        return this.fundingRoundRepository.save(fundingRound);
+        let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
+        await this.updateFundingRoundStatus(fundingRound.startup.id);
+        return savedFundingRound;
     }
 
     getOne(id: number) {
@@ -62,13 +65,17 @@ export class FundingRoundsService {
         let currentRaised = new Decimal(fundingRound.currentRaised);
         fundingRound.currentRaised = currentRaised.plus(new Decimal(amount)).toString();
         await this.fundingRoundRepository.save(fundingRound);
-        await this.updateFundingRoundStatus(await this.startupRepository.findOne({where: {id: fundingRound.startup.id}, relations: {fundingRounds: true}}));
+        await this.updateFundingRoundStatus(fundingRound.startup.id);
     }
 
-    async updateFundingRoundStatus(startup: Startup) {
+    async updateFundingRoundStatus(startupId?: number, startup?: Startup) {
+        if (typeof startup === 'undefined') {
+            startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
+        }
         for (let fundingRound of startup.fundingRounds) {
             let currentDate = new Date();
-            if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate && new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
+            if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate &&
+              new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
                 fundingRound.isCurrent = true;
                 break;
             } else {
@@ -82,7 +89,20 @@ export class FundingRoundsService {
     async checkAndUpdateFundingRounds(): Promise<void> {
         const startups = await this.startupRepository.find({ relations: ['fundingRounds'] });
         for (let startup of startups) {
-            await this.updateFundingRoundStatus(startup);
+            await this.updateFundingRoundStatus(undefined, startup);
         }
+    }
+
+    async ensureNoRoundsOverlap(newRound: CreateFundingRoundDto, startupId: number) {
+        let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
+        startup.fundingRounds.forEach(round => {
+            if (
+              (new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
+              (new Date(newRound.endDate) >= new Date(round.startDate) && new Date(newRound.endDate) <= new Date(round.endDate)) ||
+              (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate))
+            ) {
+                throw new BadRequestException('New funding round dates overlap with existing rounds for this startup');
+            }
+        })
     }
 }

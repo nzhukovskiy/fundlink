@@ -18,14 +18,14 @@ export class InvestmentService {
     async create(fundingRoundId: number, createInvestmentDto: CreateInvestmentDto, investorData: User) {
         let fundingRound = await this.fundingRoundsService.getOne(fundingRoundId);
         let investor = await this.investorRepository.findOneBy({id: investorData.id});
-        let investment = await this.investmentRepository.save({
+        let investment = await this.investmentRepository.create({
             amount: createInvestmentDto.amount,
             date: new Date(),
             investor: investor,
             fundingRound: fundingRound
         })
+        await this.investmentRepository.save(investment);
         await this.fundingRoundsService.addFunds(fundingRound, investment.amount);
-        delete investment.fundingRound.investments;
         return investment;
     }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Startup } from "../entities/startup";
 import { Repository } from "typeorm";
@@ -11,6 +11,7 @@ import { FundingRoundsService } from "../../../investments/services/funding-roun
 import { JwtTokenService } from "../../../token/services/jwt-token.service";
 import { Investor } from "../../investors/entities/investor";
 import { UsersService } from "../../services/users.service";
+import { User } from "../../user/user";
 
 @Injectable()
 export class StartupsService {
@@ -58,10 +59,13 @@ export class StartupsService {
         }
     }
 
-    async update(id: number, updateStartupDto: UpdateStartupDto) {
+    async update(id: number, updateStartupDto: UpdateStartupDto, startupData: User) {
+        if (id != startupData.id) {
+            throw new ForbiddenException("Not allowed to perform this action");
+        }
         let startup = await this.startupRepository.findOne({ where: {id: id} });
         if (!startup) {
-            throw new NotFoundException(`Startup with an id ${id} does not exist`)
+            throw new NotFoundException(`Startup with an id ${id} does not exist`);
         }
         Object.assign(startup, updateStartupDto);
         return this.startupRepository.save(startup);

@@ -4,15 +4,18 @@ import { Investor } from "../entities/investor";
 import { Repository } from "typeorm";
 import { CreateInvestorDto } from "../dtos/create-investor-dto";
 import * as bcrypt from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
-import { paginate, PaginateQuery } from "nestjs-paginate";
+import { PaginateQuery } from "nestjs-paginate";
 import { PaginateService } from "../../common/services/paginate/paginate.service";
 import { JwtTokenService } from "../../../token/services/jwt-token.service";
 import { UsersService } from "../../services/users.service";
+import { UpdateInvestorDto } from "../dtos/update-investor-dto";
+import { User } from "../../user/user";
+import { Startup } from "../../startups/entities/startup";
 
 @Injectable()
 export class InvestorsService {
     constructor(@InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
+                @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
                 private readonly jwtTokenService: JwtTokenService,
                 private readonly paginateService: PaginateService,
                 private readonly usersService: UsersService) {
@@ -23,7 +26,7 @@ export class InvestorsService {
     }
 
     async getOne(id: number) {
-        let investor = await this.investorRepository.findOne({ where: { id: id } });
+        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: {investments: true} });
         if (!investor) {
             throw new NotFoundException(`Investor with an id ${id} does not exist`);
         }
@@ -43,5 +46,21 @@ export class InvestorsService {
         return {
             accessToken: await this.jwtTokenService.generateToken(investor)
         }
+    }
+
+    async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {
+        let investor = await this.getOne(investorData.id);
+        Object.assign(investor, updateInvestorDto);
+        return await this.investorRepository.save(investor);
+    }
+
+    async getStartupsForInvestor(id: number) {
+        return this.startupRepository.createQueryBuilder('startup')
+          .innerJoin('startup.fundingRounds', 'fundingRound')
+          .innerJoin('fundingRound.investments', 'investment')
+          .innerJoin('investment.investor', 'investor')
+          .where('investor.id = :id', { id })
+          .distinct(true)
+          .getMany();
     }
 }

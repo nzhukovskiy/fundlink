@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FundingRound } from "../entities/funding-round/funding-round";
@@ -7,6 +7,7 @@ import { Startup } from "../../users/startups/entities/startup";
 import { Cron } from "@nestjs/schedule";
 import { FundingStage } from "../constants/funding-stage";
 import Decimal from "decimal.js";
+import { User } from "../../users/user/user";
 
 @Injectable()
 export class FundingRoundsService {
@@ -38,16 +39,27 @@ export class FundingRoundsService {
         return fundingRound;
     }
 
-    async update(fundingRoundId: number, updateFundingRoundDto: CreateFundingRoundDto) {
+    async update(fundingRoundId: number, updateFundingRoundDto: CreateFundingRoundDto, startupData: User) {
         let fundingRound = await this.getOne(fundingRoundId);
+        if (fundingRound.startup.id !== startupData.id) {
+            throw new ForbiddenException("Not allowed to perform this action");
+        }
+        await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
         Object.assign(fundingRound, updateFundingRoundDto);
         let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
         await this.updateFundingRoundStatus(fundingRound.startup.id);
         return savedFundingRound;
     }
 
-    getOne(id: number) {
-        return this.fundingRoundRepository.findOne({where: {id: id}, relations: ['startup', 'investments']});
+    async getOne(id: number) {
+        let fundingRound = await this.fundingRoundRepository.findOne({
+            where: { id: id },
+            relations: ['startup', 'investments']
+        });
+        if (!fundingRound) {
+            throw new NotFoundException(`Funding round with an id ${id} does not exist`);
+        }
+        return fundingRound;
     }
 
     async getForStartup(startupId: number) {
@@ -93,16 +105,28 @@ export class FundingRoundsService {
         }
     }
 
-    async ensureNoRoundsOverlap(newRound: CreateFundingRoundDto, startupId: number) {
+    async ensureNoRoundsOverlap(newRound: CreateFundingRoundDto, startupId: number, fundingRoundId?: number) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
         startup.fundingRounds.forEach(round => {
             if (
-              (new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
+              (typeof fundingRoundId !== 'undefined' && round.id != fundingRoundId) &&
+              ((new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
               (new Date(newRound.endDate) >= new Date(round.startDate) && new Date(newRound.endDate) <= new Date(round.endDate)) ||
-              (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate))
+              (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate)))
             ) {
                 throw new BadRequestException('New funding round dates overlap with existing rounds for this startup');
             }
         })
+    }
+
+    async delete(id: number, startupData: User) {
+        let fundingRound = await this.getOne(id);
+        if (fundingRound.startup.id !== startupData.id) {
+            throw new ForbiddenException("Not allowed to perform this action");
+        }
+        if (fundingRound.investments.length > 0) {
+            throw new BadRequestException("Cannot delete funding round with existing investments")
+        }
+        await this.fundingRoundRepository.remove(fundingRound);
     }
 }

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsNumber, MinLength } from "class-validator";
+import { IsNotEmpty, IsNumberString } from "class-validator";
 
 export class UpdateStartupDto {
     @IsNotEmpty()
@@ -7,6 +7,6 @@ export class UpdateStartupDto {
     @IsNotEmpty()
     description: string;
 
-    @IsNumber()
+    @IsNumberString()
     fundingGoal: number;
 }

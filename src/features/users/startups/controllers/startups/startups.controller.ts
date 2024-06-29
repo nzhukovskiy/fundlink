@@ -48,10 +48,11 @@ export class StartupsController {
         return this.startupsService.create(createStartupDto);
     }
 
-    @UseGuards(AuthGuard)
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
     @Patch(':id')
-    update(@Param('id') id: number, @Body() updateStartupDto: UpdateStartupDto) {
-        return this.startupsService.update(id, updateStartupDto);
+    update(@Param('id') id: number, @Body() updateStartupDto: UpdateStartupDto, @Req() req) {
+        return this.startupsService.update(id, updateStartupDto, req.token.payload);
     }
 
     @Roles('startup')

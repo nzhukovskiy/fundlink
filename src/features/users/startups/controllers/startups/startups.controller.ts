@@ -15,7 +15,7 @@ import { StartupsService } from "../../services/startups.service";
 import { CreateStartupDto } from "../../dtos/create-startup-dto";
 import { Paginate, PaginateQuery } from "nestjs-paginate";
 import { UpdateStartupDto } from "../../dtos/update-startup-dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateFundingRoundDto } from "../../../../investments/dtos/create-funding-round-dto";
 import { FundingRoundsService } from "../../../../investments/services/funding-rounds.service";
 import { AuthGuard } from "../../../../auth/guards/auth.guard";
@@ -38,28 +38,41 @@ export class StartupsController {
         return this.startupsService.getAll(query);
     }
 
+    @ApiBearerAuth()
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Get('current-startup')
+    findCurrentStartup(@Req() req) {
+        return this.startupsService.getCurrent(req.token.payload);
+    }
+
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.startupsService.getOne(id);
     }
 
+    @ApiBody({ type: CreateStartupDto })
     @Post()
     create(@Body() createStartupDto: CreateStartupDto) {
         return this.startupsService.create(createStartupDto);
     }
 
+    @ApiBearerAuth()
+    @ApiBody({ type: UpdateStartupDto })
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
-    @Patch(':id')
-    update(@Param('id') id: number, @Body() updateStartupDto: UpdateStartupDto, @Req() req) {
-        return this.startupsService.update(id, updateStartupDto, req.token.payload);
+    @Patch('')
+    update(@Body() updateStartupDto: UpdateStartupDto, @Req() req) {
+        return this.startupsService.update(req.token.payload.id, updateStartupDto);
     }
 
+    @ApiBearerAuth()
+    @ApiBody({ type: CreateFundingRoundDto })
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
-    @Post(':id/funding-rounds')
-    createFundingRound(@Param('id') id: number, @Body() createFundingRoundDto: CreateFundingRoundDto) {
-        return this.fundingRoundsService.create(id, createFundingRoundDto);
+    @Post('funding-rounds')
+    createFundingRound(@Body() createFundingRoundDto: CreateFundingRoundDto, @Req() req) {
+        return this.fundingRoundsService.create(req.token.payload.id, createFundingRoundDto);
     }
 
     @Get(':id/funding-rounds')
@@ -77,6 +90,19 @@ export class StartupsController {
         return this.startupsService.getInvestors(id);
     }
 
+    @ApiBearerAuth()
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                presentation: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    })
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
     @Post('upload-presentation')

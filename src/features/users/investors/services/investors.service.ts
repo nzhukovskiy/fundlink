@@ -63,4 +63,8 @@ export class InvestorsService {
           .distinct(true)
           .getMany();
     }
+
+    getCurrent(payload: User) {
+        return this.getStartupsForInvestor(payload.id);
+    }
 }

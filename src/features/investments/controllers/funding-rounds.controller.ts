@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { FundingRoundsService } from "../services/funding-rounds.service";
 import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
 import { CreateInvestmentDto } from "../dtos/create-investment-dto";
@@ -19,6 +19,8 @@ export class FundingRoundsController {
         return this.fundingRoundsService.getOne(id);
     }
 
+    @ApiBearerAuth()
+    @ApiBody({ type: CreateFundingRoundDto })
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
     @Put(':id')
@@ -26,6 +28,8 @@ export class FundingRoundsController {
         return this.fundingRoundsService.update(id, updateFundingRoundDto, req.token.payload);
     }
 
+    @ApiBearerAuth()
+    @ApiBody({ type: CreateInvestmentDto })
     @Roles('investor')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/investments')
@@ -33,6 +37,7 @@ export class FundingRoundsController {
         return this.investmentService.create(id, createInvestmentDto, req.token.payload);
     }
 
+    @ApiBearerAuth()
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
     @Delete(':id')

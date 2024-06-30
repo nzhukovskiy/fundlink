@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from "@nest
 import { InvestorsService } from "../services/investors.service";
 import { CreateInvestorDto } from "../dtos/create-investor-dto";
 import { Paginate, PaginateQuery } from "nestjs-paginate";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { UpdateInvestorDto } from "../dtos/update-investor-dto";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RolesGuard } from "../../../auth/guards/roles.guard";
@@ -18,6 +18,14 @@ export class InvestorsController {
         return this.investorsService.getAll(query);
     }
 
+    @ApiBearerAuth()
+    @Roles('investor')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Get('current-investor')
+    findCurrentInvestor(@Req() req) {
+        return this.investorsService.getCurrent(req.token.payload);
+    }
+
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.investorsService.getOne(id);
@@ -28,6 +36,8 @@ export class InvestorsController {
         return this.investorsService.create(createInvestorDto);
     }
 
+    @ApiBearerAuth()
+    @ApiBody({ type: UpdateInvestorDto })
     @Roles('investor')
     @UseGuards(AuthGuard, RolesGuard)
     @Patch()

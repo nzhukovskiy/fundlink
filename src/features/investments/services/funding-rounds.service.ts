@@ -17,7 +17,7 @@ export class FundingRoundsService {
     async create(startupId: number, createFundingRoundDto: CreateFundingRoundDto) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
         await this.ensureNoRoundsOverlap(createFundingRoundDto, startup.id);
-        let fundingRound = await this.fundingRoundRepository.save(createFundingRoundDto);
+        let fundingRound = await this.fundingRoundRepository.create(createFundingRoundDto);
         if (startup.fundingRounds.length == 0) {
             fundingRound.stage = FundingStage.SEED;
         }
@@ -33,8 +33,8 @@ export class FundingRoundsService {
                 throw new BadRequestException("Unable to add new round for this startup because all rounds have been already created");
             }
         }
-        startup.fundingRounds.push(fundingRound);
-        await this.startupRepository.save(startup);
+        fundingRound.startup = startup;
+        await this.fundingRoundRepository.save(fundingRound);
         await this.updateFundingRoundStatus(startup.id);
         return fundingRound;
     }
@@ -109,7 +109,7 @@ export class FundingRoundsService {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
         startup.fundingRounds.forEach(round => {
             if (
-              (typeof fundingRoundId !== 'undefined' && round.id != fundingRoundId) &&
+              (typeof fundingRoundId !== 'undefined' && round.id != fundingRoundId) ||
               ((new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
               (new Date(newRound.endDate) >= new Date(round.startDate) && new Date(newRound.endDate) <= new Date(round.endDate)) ||
               (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate)))

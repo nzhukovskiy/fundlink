@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Startup } from "../entities/startup";
 import { Repository } from "typeorm";
@@ -39,6 +39,10 @@ export class StartupsService {
         return startup;
     }
 
+    async getCurrent(userData: User) {
+        return this.getOne(userData.id);
+    }
+
     async create(createStartupDto: CreateStartupDto) {
         let startupDto = createStartupDto;
         if (await this.usersService.findByEmail(startupDto.email)) {
@@ -59,10 +63,7 @@ export class StartupsService {
         }
     }
 
-    async update(id: number, updateStartupDto: UpdateStartupDto, startupData: User) {
-        if (id != startupData.id) {
-            throw new ForbiddenException("Not allowed to perform this action");
-        }
+    async update(id: number, updateStartupDto: UpdateStartupDto) {
         let startup = await this.startupRepository.findOne({ where: {id: id} });
         if (!startup) {
             throw new NotFoundException(`Startup with an id ${id} does not exist`);

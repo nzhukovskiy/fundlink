@@ -1,0 +1,6 @@
+<div *ngFor="let investor of investors" class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">{{investor.name}} {{investor.surname}}</h5>
+      <a [routerLink]="['/investors', investor.id]" class="btn btn-primary">Профиль</a>
+    </div>
+  </div>

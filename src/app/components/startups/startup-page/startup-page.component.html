@@ -1,0 +1,19 @@
+<h3>{{startup?.title}}</h3>
+<h4>Общая цель: {{startup?.fundingGoal}}</h4>
+<p>{{startup?.description}}</p>
+<a [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
+<h4>Раунды финансирования:
+</h4>
+<div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">
+    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
+        <h5 class="card-title">{{fundingRound.stage}}</h5>
+        <p>Цель: {{fundingRound.fundingGoal}}</p>
+        <p>Собрано: {{fundingRound.currentRaised}}</p>
+        <p>Начало: {{fundingRound.startDate}}</p>
+        <p>Окончание: {{fundingRound.endDate}}</p>
+    </div>
+</div>
+<h4>Инвесторы:</h4>
+<p *ngFor="let investor of investors">
+    {{investor.name}} {{investor.surname}}
+</p>

@@ -36,6 +36,7 @@ export class FundingRoundsService {
         fundingRound.startup = startup;
         await this.fundingRoundRepository.save(fundingRound);
         await this.updateFundingRoundStatus(startup.id);
+        delete fundingRound.startup.fundingRounds;
         return fundingRound;
     }
 

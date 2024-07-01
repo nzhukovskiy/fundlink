@@ -12,7 +12,7 @@ export class Startup extends User {
     description: string;
 
     @Column({type: "decimal"})
-    fundingGoal: number;
+    fundingGoal: string;
 
     @Column({ nullable: true })
     presentationPath: string;

@@ -65,6 +65,6 @@ export class InvestorsService {
     }
 
     getCurrent(payload: User) {
-        return this.getStartupsForInvestor(payload.id);
+        return this.getOne(payload.id);
     }
 }

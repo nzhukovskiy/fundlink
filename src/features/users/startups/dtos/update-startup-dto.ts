@@ -12,5 +12,5 @@ export class UpdateStartupDto {
 
     @ApiProperty()
     @IsNumberString()
-    fundingGoal: number;
+    fundingGoal: string;
 }

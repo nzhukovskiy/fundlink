@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AppHttpService } from './app-http.service';
 import { Startup } from '../data/models/startup';
 import { Investor } from '../data/models/investor';
+import {HttpParams} from "@angular/common/http";
+import {PaginationResult} from "../data/dtos/pagination-result";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,15 @@ export class StartupService {
 
   constructor(private readonly appHttpService: AppHttpService) { }
 
-    getAll() {
-      return this.appHttpService.get<{data: Startup[]}>("startups");
+    getAll(page?: number, per_page?: number) {
+      let query = new HttpParams();
+      if (typeof page !== "undefined") {
+        query = query.append("page", page);
+      }
+      if (typeof per_page !== "undefined") {
+        query = query.append("limit", per_page);
+      }
+      return this.appHttpService.get<PaginationResult<Startup>>("startups", query);
     }
 
     getOne(id: number) {

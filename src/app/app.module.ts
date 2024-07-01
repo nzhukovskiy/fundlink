@@ -11,6 +11,13 @@ import { SingleStartupComponent } from './components/startups/single-startup/sin
 import { AllInvestorsComponent } from './components/investors/all-investors/all-investors.component';
 import { InvestorPageComponent } from './components/investors/investor-page/investor-page.component';
 import { StartupPageComponent } from './components/startups/startup-page/startup-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import { LoginComponent } from './components/auth/login/login.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import { RegisterComponent } from './components/auth/register/register.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,12 +27,19 @@ import { StartupPageComponent } from './components/startups/startup-page/startup
     SingleStartupComponent,
     AllInvestorsComponent,
     InvestorPageComponent,
-    StartupPageComponent
+    StartupPageComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatPaginatorModule,
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    NgbModule
   ],
   providers: [AppHttpService],
   bootstrap: [AppComponent]

@@ -1,0 +1,61 @@
+<div class="auth-container">
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+      <button ngbNavLink>Стартап</button>
+      <ng-template ngbNavContent>
+        <form class="register-form" [formGroup]="startupRegisterFormGroup">
+          <div class="mb-3">
+            <label for="registerEmailField" class="form-label">Адрес электронной почты</label>
+            <input type="email" formControlName="email" class="form-control" id="registerEmailField" placeholder="name@example.com">
+          </div>
+          <div class="mb-3">
+            <label for="registerPasswordField" class="form-label">Пароль</label>
+            <input class="form-control" formControlName="password" type="password" id="registerPasswordField">
+          </div>
+          <div class="mb-3">
+            <label for="registerNameField" class="form-label">Название</label>
+            <input type="text" formControlName="title" class="form-control" id="registerNameField" placeholder="Мой стартап">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Описание стартапа</label>
+            <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="registerNameField" class="form-label">Необходимое финансирование</label>
+            <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalNameField" placeholder="50000">
+          </div>
+          <div class="mb-3 register-submit-button-group">
+            <button type="submit" (click)="registerStartup()" class="btn btn-primary mb-3 action-btn">Регистрация</button>
+          </div>
+        </form>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <button ngbNavLink>Инвестор</button>
+      <ng-template ngbNavContent>
+        <form class="register-form" [formGroup]="investorRegisterFormGroup">
+          <div class="mb-3">
+            <label for="registerEmailField" class="form-label">Адрес электронной почты</label>
+            <input type="email" formControlName="email" class="form-control" id="startupRegisterEmailField" placeholder="name@example.com">
+          </div>
+          <div class="mb-3">
+            <label for="registerPasswordField" class="form-label">Пароль</label>
+            <input class="form-control" formControlName="password" type="password" id="startupRegisterPasswordField">
+          <div class="mb-3">
+            <label for="registerNameField" class="form-label">Имя пользователя</label>
+            <input type="text" formControlName="name" class="form-control" id="startupRegisterNameField" placeholder="Alexander">
+          </div>
+            <div class="mb-3">
+              <label for="registerNameField" class="form-label">Фамилия пользователя</label>
+              <input type="text" formControlName="surname" class="form-control" id="startupRegisterSurnameField" placeholder="Alexandrov">
+            </div>
+          </div>
+          <div class="mb-3 register-submit-button-group">
+            <button type="submit" (click)="registerInvestor()" class="btn btn-primary mb-3 action-btn">Регистрация</button>
+          </div>
+        </form>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</div>

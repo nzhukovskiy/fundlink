@@ -1,3 +1,12 @@
-<div *ngFor="let startup of startups">
+<div class="startups-list" >
+  <div *ngFor="let startup of startups">
     <app-single-startup [startup]="startup"></app-single-startup>
+  </div>
 </div>
+<mat-paginator class="startups-paginator" [length]="totalBooksNumber"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               (page)="handlePageChange($event)"
+               aria-label="Select page">
+</mat-paginator>

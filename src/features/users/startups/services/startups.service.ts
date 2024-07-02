@@ -78,9 +78,12 @@ export class StartupsService {
           .innerJoin('investment.fundingRound', 'fundingRound')
           .innerJoin('fundingRound.startup', 'startup')
           .where('startup.id = :id', { id })
-          .select(['investor.id', 'investor.name', 'investor.surname', 'investor.email'])
+          .select(['investor.id as id', 'investor.name as name', 'investor.surname as surname', 'investor.email as email',
+              'SUM(investment.amount) AS totalInvestment'])
+          .groupBy('investor.id')
+          .addGroupBy('investor.name')
           .distinct(true)
-          .getMany();
+          .getRawMany();
     }
 
     async uploadPresentation(startupId: number, fileName: string) {

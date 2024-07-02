@@ -13,9 +13,10 @@ import { PaginateService } from './common/services/paginate/paginate.service';
 import { FundingRound } from "../investments/entities/funding-round/funding-round";
 import { InvestmentModule } from "../investments/investment.module";
 import { JwtTokenModule } from "../token/jwt-token.module";
+import { Investment } from "../investments/entities/investment/investment";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound]),
+    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment]),
       InvestmentModule,
       JwtTokenModule
     ],

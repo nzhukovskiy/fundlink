@@ -11,11 +11,13 @@ import { UsersService } from "../../services/users.service";
 import { UpdateInvestorDto } from "../dtos/update-investor-dto";
 import { User } from "../../user/user";
 import { Startup } from "../../startups/entities/startup";
+import { Investment } from "../../../investments/entities/investment/investment";
 
 @Injectable()
 export class InvestorsService {
     constructor(@InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
                 @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
+                @InjectRepository(Investment) private readonly investmentRepository: Repository<Investment>,
                 private readonly jwtTokenService: JwtTokenService,
                 private readonly paginateService: PaginateService,
                 private readonly usersService: UsersService) {
@@ -62,6 +64,21 @@ export class InvestorsService {
           .where('investor.id = :id', { id })
           .distinct(true)
           .getMany();
+    }
+
+    getFullInvestmentsInfo(id: number) {
+        return this.investmentRepository.createQueryBuilder('investment')
+          .innerJoin('investment.fundingRound', 'fundingRound')
+          .innerJoin('fundingRound.startup', 'startup')
+          .where('investment.investorId = :id', { id })
+          .select([
+              'investment.id as id',
+              'investment.amount as amount',
+              'investment.date as date',
+              'startup.id',
+              'startup.title'
+          ])
+          .getRawMany();
     }
 
     getCurrent(payload: User) {

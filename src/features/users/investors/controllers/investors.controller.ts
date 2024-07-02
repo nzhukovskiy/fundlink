@@ -26,6 +26,14 @@ export class InvestorsController {
         return this.investorsService.getCurrent(req.token.payload);
     }
 
+    @ApiBearerAuth()
+    @Roles('investor')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Get('investments')
+    getInvestments(@Req() req) {
+        return this.investorsService.getFullInvestmentsInfo(req.token.payload.id);
+    }
+
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.investorsService.getOne(id);

@@ -108,16 +108,17 @@ export class FundingRoundsService {
 
     async ensureNoRoundsOverlap(newRound: CreateFundingRoundDto, startupId: number, fundingRoundId?: number) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
-        startup.fundingRounds.forEach(round => {
-            if (
-              (typeof fundingRoundId !== 'undefined' && round.id != fundingRoundId) ||
-              ((new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
+        for (const round of startup.fundingRounds) {
+            if (typeof fundingRoundId !== 'undefined' && round.id == fundingRoundId) {
+                continue;
+            }
+            if ((new Date(newRound.startDate) >= new Date(round.startDate) && new Date(newRound.startDate) <= new Date(round.endDate)) ||
               (new Date(newRound.endDate) >= new Date(round.startDate) && new Date(newRound.endDate) <= new Date(round.endDate)) ||
-              (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate)))
+              (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate))
             ) {
                 throw new BadRequestException('New funding round dates overlap with existing rounds for this startup');
             }
-        })
+        }
     }
 
     async delete(id: number, startupData: User) {

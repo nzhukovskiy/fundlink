@@ -21,7 +21,7 @@ export class StartupPageComponent {
   }
 
   startup?: Startup;
-  investors: Investor[] = [];
+  investors?: Investor[];
 
   ngOnInit(): void {
     this.loadStartupAndInvestors();
@@ -40,6 +40,7 @@ export class StartupPageComponent {
   }
 
   openInvestmentDialog(fundingRoundId: number) {
+    console.log(this.investors);
     const dialogRef = this.dialog.open(CreateInvestmentComponent, {
       data: fundingRoundId,
     });

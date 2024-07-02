@@ -31,6 +31,7 @@ import {SubmitDialogComponent} from "./dialogs/submit-dialog/submit-dialog.compo
 import {MatDialogModule} from "@angular/material/dialog";
 import { EditStartupComponent } from './components/startups/edit-startup/edit-startup.component';
 import { CreateInvestmentComponent } from './components/dialogs/create-investment/create-investment.component';
+import { PageNotFoundComponent } from './components/common/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { CreateInvestmentComponent } from './components/dialogs/create-investmen
     SubmitDialogComponent,
     NumericOnlyDirective,
     EditStartupComponent,
-    CreateInvestmentComponent
+    CreateInvestmentComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

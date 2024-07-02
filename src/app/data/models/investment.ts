@@ -11,4 +11,8 @@ export interface Investment {
     investor: Investor;
 
     fundingRound: FundingRound;
+
+    startup_id: number;
+
+    startup_title: string;
 }

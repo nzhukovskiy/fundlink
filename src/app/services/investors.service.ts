@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppHttpService } from './app-http.service';
 import { Investor } from '../data/models/investor';
+import {Investment} from "../data/models/investment";
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,9 @@ export class InvestorsService {
 
     getCurrentInvestor() {
       return this.appHttpService.get<Investor>(`investors/current-investor`);
+    }
+
+    getFullInvestmentsInfo() {
+      return this.appHttpService.get<Investment[]>(`investors/investments`);
     }
 }

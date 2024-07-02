@@ -7,4 +7,6 @@ export interface Investor extends User {
     surname: string;
 
     investments: Investment[];
+
+    totalinvestment: string;
 }

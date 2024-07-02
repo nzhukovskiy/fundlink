@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {Roles} from "../../../constants/roles";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profile',
@@ -8,7 +9,8 @@ import {Roles} from "../../../constants/roles";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit{
-  constructor(private readonly localStorageService: LocalStorageService) {
+  constructor(private readonly localStorageService: LocalStorageService,
+              private readonly router: Router) {
   }
 
   role?: Roles;
@@ -22,4 +24,9 @@ export class ProfileComponent implements OnInit{
   }
 
   protected readonly Roles = Roles;
+
+  logout() {
+    this.localStorageService.removeUser();
+    this.router.navigate(['/login']).then();
+  }
 }

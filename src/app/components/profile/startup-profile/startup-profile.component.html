@@ -7,9 +7,15 @@
 <h4>Общая цель: {{startup?.fundingGoal}}</h4>
 <p>{{startup?.description}}</p>
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
+<div class="mb-3">
+  <label for="formFile" class="form-label">Загрузить презентацию</label>
+  <div class="book-image-group">
+    <input (change)="onImageChanged($event)"  class="form-control" type="file" id="formFile">
+  </div>
+</div>
 <div class="startup-profile-top-group">
-  <h4>Раунды финансирования:</h4>
-  <div class="mb-3 edit-funding-round-button-group">
+  <h4>Раунды инвестирования:</h4>
+  <div *ngIf="startup?.fundingRounds!.length < 7" class="mb-3 edit-funding-round-button-group">
     <a [routerLink]="['/fundingRounds/create']" type="submit" class="btn btn-primary mb-3 action-btn"><mat-icon>add</mat-icon>Добавить раунд</a>
   </div>
 </div>
@@ -31,4 +37,23 @@
     <p>Начало: {{fundingRound.startDate.toLocaleString('ru-RU')}}</p>
     <p>Окончание: {{fundingRound.endDate.toLocaleString('ru-RU')}}</p>
   </div>
+</div>
+<div>
+  <h4>Инвесторы</h4>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Имя</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Общий размер инвестиций</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let investor of investors">
+      <td>{{investor.name}}</td>
+      <td>{{investor.surname}}</td>
+      <td>{{investor.totalinvestment}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>

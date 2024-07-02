@@ -7,6 +7,13 @@ import { InvestorPageComponent } from './components/investors/investor-page/inve
 import { StartupPageComponent } from './components/startups/startup-page/startup-page.component';
 import {LoginComponent} from "./components/auth/login/login.component";
 import {RegisterComponent} from "./components/auth/register/register.component";
+import {ProfileComponent} from "./components/profile/profile/profile.component";
+import {authGuard} from "./guards/auth.guard";
+import {EditFundingRoundComponent} from "./components/funding-rounds/edit-funding-round/edit-funding-round.component";
+import {
+  CreateFundingRoundComponent
+} from "./components/funding-rounds/create-funding-round/create-funding-round.component";
+import {EditStartupComponent} from "./components/startups/edit-startup/edit-startup.component";
 
 const routes: Routes = [
     {path: '', component: AllStartupsComponent},
@@ -14,8 +21,12 @@ const routes: Routes = [
     {path: 'investors/:id', component: InvestorPageComponent},
     {path: 'startups', component: AllStartupsComponent},
     {path: 'startups/:id', component: StartupPageComponent},
+    {path: 'startups/:id/edit', component: EditStartupComponent, canActivate: [authGuard]},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
+    {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
+    {path: 'fundingRounds/:id/edit', component: EditFundingRoundComponent, canActivate: [authGuard]},
+    {path: 'fundingRounds/create', component: CreateFundingRoundComponent, canActivate: [authGuard]},
 ];
 
 @NgModule({

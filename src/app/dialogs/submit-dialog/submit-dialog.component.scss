@@ -1,0 +1,21 @@
+.dialog-title {
+    margin: 30px;
+    text-align: center;
+}
+.button-group {
+    margin: 30px;
+    display: flex;
+    gap: 20px;
+}
+.button-group button {
+    min-width: 100px;
+}
+.accept-btn {
+    background-color: green;
+}
+.accept-btn:active {
+    background-color: #93ff42;
+}
+.reject-btn {
+    background-color: red;
+}

@@ -1,0 +1,9 @@
+<form class="create-investment-form" [formGroup]="investmentFormGroup">
+  <div class="mb-3">
+    <label for="registerEmailField" class="form-label">Размер инвестиции</label>
+    <input appNumericOnly formControlName="amount" class="form-control" id="registerEmailField" placeholder="1000">
+  </div>
+  <div class="mb-3 register-submit-button-group">
+    <button type="submit" (click)="makeInvestment()" class="btn btn-primary mb-3 action-btn">Инвестировать</button>
+  </div>
+</form>

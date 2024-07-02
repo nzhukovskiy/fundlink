@@ -1,0 +1,21 @@
+<h3>{{investor?.name}} {{investor?.surname}}</h3>
+<p>Email: {{investor?.email}}</p>
+<div>
+  <h4>Совершенные инвестиции</h4>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Дата</th>
+      <th scope="col">Размер</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let investment of investor?.investments">
+      <td scope="row">{{investment.date}}</td>
+      <td>
+        {{investment.amount}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -30,9 +30,6 @@ export class RegisterComponent {
     fundingGoal: new FormControl<string>("", )
   })
 
-
-  slideState: "Cтартап" | "Инвестор" = "Cтартап";
-
   registerStartup() {
     this.authService.registerStartup({
       title: this.startupRegisterFormGroup.controls.title.getRawValue()!,
@@ -43,18 +40,6 @@ export class RegisterComponent {
     }).subscribe(res => {
       this.router.navigate(['']).then();
     })
-    // if (this.registerFormGroup.invalid) {
-    //   this.registerFormGroup.markAllAsTouched();
-    //   return;
-    // }
-    // this.userService.register({
-    //   name: this.registerFormGroup.controls.name.getRawValue()!,
-    //   email: this.registerFormGroup.controls.email.getRawValue()!,
-    //   password: this.registerFormGroup.controls.password.getRawValue()!
-    // }).subscribe(() => {
-    //   this.registerLoaded.next(true);
-    //   this.router.navigate(['']).then();
-    // })
   }
 
   registerInvestor() {

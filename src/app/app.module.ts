@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppHttpService } from './services/app-http.service';
 import { AllStartupsComponent } from './components/startups/all-startups/all-startups.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { HeaderComponent } from './components/common/header/header.component';
 import { SingleStartupComponent } from './components/startups/single-startup/single-startup.component';
 import { AllInvestorsComponent } from './components/investors/all-investors/all-investors.component';
@@ -14,10 +14,23 @@ import { StartupPageComponent } from './components/startups/startup-page/startup
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { LoginComponent } from './components/auth/login/login.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './components/auth/register/register.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ProfileComponent } from './components/profile/profile/profile.component';
+import { StartupProfileComponent } from './components/profile/startup-profile/startup-profile.component';
+import { InvestorProfileComponent } from './components/profile/investor-profile/investor-profile.component';
+import {ToastrModule} from "ngx-toastr";
+import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import {MatIconModule} from "@angular/material/icon";
+import { EditFundingRoundComponent } from './components/funding-rounds/edit-funding-round/edit-funding-round.component';
+import { CreateFundingRoundComponent } from './components/funding-rounds/create-funding-round/create-funding-round.component';
+import { NumericOnlyDirective } from './directives/numeric-only.directive';
+import {SubmitDialogComponent} from "./dialogs/submit-dialog/submit-dialog.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import { EditStartupComponent } from './components/startups/edit-startup/edit-startup.component';
+import { CreateInvestmentComponent } from './components/dialogs/create-investment/create-investment.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +42,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     InvestorPageComponent,
     StartupPageComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent,
+    StartupProfileComponent,
+    InvestorProfileComponent,
+    EditFundingRoundComponent,
+    CreateFundingRoundComponent,
+    SubmitDialogComponent,
+    NumericOnlyDirective,
+    EditStartupComponent,
+    CreateInvestmentComponent
   ],
   imports: [
     BrowserModule,
@@ -39,9 +61,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatPaginatorModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
-    NgbModule
+    NgbModule,
+    ToastrModule.forRoot(),
+    MatIconModule,
+    FormsModule,
+    MatDialogModule
   ],
-  providers: [AppHttpService],
+  providers: [AppHttpService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

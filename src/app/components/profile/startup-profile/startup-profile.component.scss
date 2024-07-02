@@ -1,0 +1,23 @@
+.funding-round-card {
+  width: 100% !important;
+  margin-bottom: 20px;
+}
+.current-round-card {
+  border: 2px solid greenyellow;
+}
+.funding-round-top-group {
+  display: flex;
+  justify-content: space-between;
+}
+.edit-funding-round-button-group a {
+  display: flex;
+  align-items: center;
+}
+.startup-profile-top-group {
+  display: flex;
+  justify-content: space-between;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+}

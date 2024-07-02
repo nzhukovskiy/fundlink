@@ -1,0 +1,34 @@
+<div class="startup-profile-top-group">
+  <h2>Профиль стартапа {{startup?.title}}</h2>
+  <div class="mb-3 edit-funding-round-button-group">
+    <a [routerLink]="['/startups', startup?.id, 'edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
+  </div>
+</div>
+<h4>Общая цель: {{startup?.fundingGoal}}</h4>
+<p>{{startup?.description}}</p>
+<a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
+<div class="startup-profile-top-group">
+  <h4>Раунды финансирования:</h4>
+  <div class="mb-3 edit-funding-round-button-group">
+    <a [routerLink]="['/fundingRounds/create']" type="submit" class="btn btn-primary mb-3 action-btn"><mat-icon>add</mat-icon>Добавить раунд</a>
+  </div>
+</div>
+<div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">
+  <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
+    <div class="funding-round-top-group">
+      <h5 class="card-title">{{fundingRound.stage}}</h5>
+      <div class="buttons">
+        <div class="mb-3 edit-funding-round-button-group">
+          <a [routerLink]="['/fundingRounds', fundingRound.id, 'edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
+        </div>
+        <div class="mb-3 edit-funding-round-button-group">
+          <a (click)="deleteFundingRound(fundingRound.id)"  class="btn btn-danger mb-3 action-btn"><mat-icon>delete</mat-icon>Удалить</a>
+        </div>
+      </div>
+    </div>
+    <p>Цель: {{fundingRound.fundingGoal}}</p>
+    <p>Собрано: {{fundingRound.currentRaised}}</p>
+    <p>Начало: {{fundingRound.startDate.toLocaleString('ru-RU')}}</p>
+    <p>Окончание: {{fundingRound.endDate.toLocaleString('ru-RU')}}</p>
+  </div>
+</div>

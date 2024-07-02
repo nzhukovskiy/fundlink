@@ -1,7 +1,6 @@
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title">{{startup?.title}}</h5>
-      <p class="card-text">{{startup?.description}}</p>
-      <a [routerLink]="['/startups', startup?.id]" class="btn btn-primary">На страницу стартапа</a>
+      <h5 [routerLink]="['/startups', startup?.id]" class="card-title startup-card-title">{{startup?.title}}</h5>
+      <p class="card-text">{{startup?.description!.length > 50 ? startup?.description!.substring(0, 50) + "..." : startup?.description}}</p>
     </div>
   </div>

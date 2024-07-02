@@ -17,19 +17,25 @@ export class AuthService {
 
   login(userLoginDto: LoginUserDto) {
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`auth/login`, userLoginDto).pipe(
-      tap(x => this.localStorageService.setUser(jwtDecode(x.accessToken.access_token)))
+      tap(x => this.localStorageService.setUser(
+        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+      )
     )
   }
 
   registerStartup(createStartupDto: CreateStartupDto) {
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`startups`, createStartupDto).pipe(
-      tap(x => this.localStorageService.setUser(jwtDecode(x.accessToken.access_token)))
+      tap(x => this.localStorageService.setUser(
+        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+      )
     )
   }
 
   registerInvestor(createInvestorDto: CreateInvestorDto) {
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`investors`, createInvestorDto).pipe(
-      tap(x => this.localStorageService.setUser(jwtDecode(x.accessToken.access_token)))
+      tap(x => this.localStorageService.setUser(
+        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+      )
     )
   }
 }

@@ -4,6 +4,7 @@ import { Startup } from '../data/models/startup';
 import { Investor } from '../data/models/investor';
 import {HttpParams} from "@angular/common/http";
 import {PaginationResult} from "../data/dtos/pagination-result";
+import {UpdateStartupDto} from "../data/dtos/update-startup-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,14 @@ export class StartupService {
 
     getInvestors(id: number) {
       return this.appHttpService.get<Investor[]>(`startups/${id}/investors`);
+    }
+
+    getCurrentStartup() {
+      return this.appHttpService.get<Startup>(`startups/current-startup`);
+    }
+
+    update(updateStartupDto: UpdateStartupDto) {
+      return this.appHttpService.patch<Startup>(`startups/`, updateStartupDto);
     }
 
     // async getCurrent(userData: User) {

@@ -6,14 +6,20 @@
 </h4>
 <div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">
     <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
+      <div class="flex-horizontal-container">
         <h5 class="card-title">{{fundingRound.stage}}</h5>
+        <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group">
+          <a (click)="openInvestmentDialog(fundingRound.id)" class="btn btn-primary mb-3 action-btn"><mat-icon>payment</mat-icon>Инвестировать</a>
+        </div>
+      </div>
+
         <p>Цель: {{fundingRound.fundingGoal}}</p>
         <p>Собрано: {{fundingRound.currentRaised}}</p>
-        <p>Начало: {{fundingRound.startDate}}</p>
-        <p>Окончание: {{fundingRound.endDate}}</p>
+        <p>Начало: {{fundingRound.startDate.toLocaleString('ru-RU')}}</p>
+        <p>Окончание: {{fundingRound.endDate.toLocaleString('ru-RU')}}</p>
     </div>
 </div>
-<h4>Инвесторы:</h4>
+<h4 *ngIf="investors.length > 0">Инвесторы:</h4>
 <p *ngFor="let investor of investors">
     {{investor.name}} {{investor.surname}}
 </p>

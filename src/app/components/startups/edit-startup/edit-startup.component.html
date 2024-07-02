@@ -1,0 +1,21 @@
+<div class="form-container">
+  <h3>Редактирование информации о стартапе</h3>
+  <form class="register-form" [formGroup]="startupEditFormGroup">
+    <div class="mb-3">
+      <label for="registerNameField" class="form-label">Название</label>
+      <input type="text" formControlName="title" class="form-control" id="registerNameField" placeholder="Мой стартап">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">Описание стартапа</label>
+      <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="registerNameField" class="form-label">Необходимое финансирование</label>
+      <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalNameField" placeholder="50000">
+    </div>
+    <div class="mb-3 register-submit-button-group">
+      <button type="submit" (click)="editStartup()" class="btn btn-primary mb-3 action-btn">Обновить</button>
+    </div>
+  </form>
+</div>
+

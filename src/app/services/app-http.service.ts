@@ -20,6 +20,10 @@ export class AppHttpService {
         return this.httpClient.put<T>(`${this.baseUrl}${action}`, body, options);
     }
 
+    patch<T>(action: string, body: {}|null, options?: {}) {
+      return this.httpClient.patch<T>(`${this.baseUrl}${action}`, body, options);
+    }
+
     delete<T>(action: string, body: {}|null = null) {
         return this.httpClient.delete<T>(`${this.baseUrl}${action}`, {body: body});
     }

@@ -8,8 +8,9 @@ export class LocalStorageService {
 
   constructor() { }
 
-  setUser(userJwtInfo: UserJwtInfo) {
+  setUser(userJwtInfo: UserJwtInfo, token: string) {
     localStorage.setItem("user", JSON.stringify(userJwtInfo));
+    localStorage.setItem("token", token);
   }
 
   getUser() {
@@ -20,7 +21,12 @@ export class LocalStorageService {
     return null;
   }
 
+  getToken() {
+    return localStorage.getItem("token");
+  }
+
   removeUser() {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   }
 }

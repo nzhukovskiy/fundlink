@@ -1,0 +1,6 @@
+<ng-container *ngIf="role && role === Roles.STARTUP; else investorProfile">
+  <app-startup-profile></app-startup-profile>
+</ng-container>
+<ng-template #investorProfile>
+  <app-investor-profile></app-investor-profile>
+</ng-template>

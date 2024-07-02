@@ -16,4 +16,8 @@ export class InvestorsService {
     getOne(id: number) {
       return this.appHttpService.get<Investor>(`investors/${id}`);
     }
+
+    getCurrentInvestor() {
+      return this.appHttpService.get<Investor>(`investors/current-investor`);
+    }
 }

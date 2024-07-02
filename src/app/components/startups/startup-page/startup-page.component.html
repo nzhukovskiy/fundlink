@@ -1,6 +1,6 @@
 <h3>{{startup?.title}}</h3>
 <h4>Общая цель: {{startup?.fundingGoal}}</h4>
-<p>{{startup?.description}}</p>
+<p style="white-space: pre-line;">{{startup?.description}}</p>
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
 <h4>Раунды инвестирования:
 </h4>

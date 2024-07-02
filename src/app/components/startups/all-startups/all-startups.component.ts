@@ -14,7 +14,7 @@ export class AllStartupsComponent implements OnInit {
     }
 
   totalBooksNumber : number = 0;
-  pageSize = 10;
+  pageSize = 8;
   pageIndex = 0;
   startups: Startup[] = [];
 

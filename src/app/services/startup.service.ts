@@ -5,6 +5,7 @@ import { Investor } from '../data/models/investor';
 import {HttpParams} from "@angular/common/http";
 import {PaginationResult} from "../data/dtos/pagination-result";
 import {UpdateStartupDto} from "../data/dtos/update-startup-dto";
+import { FundingRound } from '../data/models/funding-round';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,9 @@ export class StartupService {
       const formData = new FormData();
       formData.append("presentation", presentation);
       return this.appHttpService.post<Startup>(`startups/upload-presentation`, formData);
+    }
+
+    getCurrentFundingRound(startupId: number) {
+      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current-funding-round`);
     }
 }

@@ -18,9 +18,9 @@
               [(ngModel)]="startDate"
               [ngModelOptions]="{standalone: true}"
               ngbDatepicker
-              #d="ngbDatepicker"
+              #startDatePicker="ngbDatepicker"
             />
-            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startDatePicker.toggle()" type="button"></button>
           </div>
 
         </div>
@@ -40,9 +40,9 @@
                 [(ngModel)]="endDate"
                 [ngModelOptions]="{standalone: true}"
                 ngbDatepicker
-                #d="ngbDatepicker"
+                #endDatePicker="ngbDatepicker"
               />
-              <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+              <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endDatePicker.toggle()" type="button"></button>
             </div>
 
           </div>

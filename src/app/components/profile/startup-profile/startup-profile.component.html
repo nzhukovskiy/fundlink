@@ -5,7 +5,7 @@
   </div>
 </div>
 <h4>Общая цель: {{startup?.fundingGoal}}</h4>
-<p>{{startup?.description}}</p>
+<p style="white-space: pre-line;">{{startup?.description}}</p>
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
 <div class="mb-3">
   <label for="formFile" class="form-label">Загрузить презентацию</label>
@@ -34,8 +34,8 @@
     </div>
     <p>Цель: {{fundingRound.fundingGoal}}</p>
     <p>Собрано: {{fundingRound.currentRaised}}</p>
-    <p>Начало: {{fundingRound.startDate.toLocaleString('ru-RU')}}</p>
-    <p>Окончание: {{fundingRound.endDate.toLocaleString('ru-RU')}}</p>
+    <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>
+    <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>
   </div>
 </div>
 <div>

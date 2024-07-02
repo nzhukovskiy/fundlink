@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateInvestmentDto } from "../dtos/create-investment-dto";
 import { User } from "../../users/user/user";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -17,7 +17,9 @@ export class InvestmentService {
     }
     async create(fundingRoundId: number, createInvestmentDto: CreateInvestmentDto, investorData: User) {
         let fundingRound = await this.fundingRoundsService.getOne(fundingRoundId);
-        console.log(fundingRound);
+        if (!fundingRound.isCurrent) {
+            throw new BadRequestException("Cannot invest in rounds that are not current");
+        }
         let investor = await this.investorRepository.findOneBy({id: investorData.id});
         let investment = await this.investmentRepository.create({
             amount: createInvestmentDto.amount,
@@ -25,12 +27,10 @@ export class InvestmentService {
             investor: investor,
             fundingRound: fundingRound
         })
-        console.log(investment);
         await this.investmentRepository.save(investment);
         fundingRound.investments.push(investment);
         await this.investmentRepository.save(fundingRound.investments);
         await this.fundingRoundsService.addFunds(fundingRound, investment.amount);
-        console.log(investment);
         return investment;
     }
 }

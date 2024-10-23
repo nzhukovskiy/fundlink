@@ -14,6 +14,15 @@ export class Startup extends User {
     @Column({type: "decimal"})
     fundingGoal: string;
 
+    @Column({type: "decimal"})
+    tam_market: string;
+
+    @Column({type: "decimal"})
+    sam_market: string;
+
+    @Column({type: "decimal"})
+    som_market: string;
+
     @Column({ nullable: true })
     presentationPath: string;
 

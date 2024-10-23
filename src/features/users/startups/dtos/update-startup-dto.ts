@@ -13,4 +13,16 @@ export class UpdateStartupDto {
     @ApiProperty()
     @IsNumberString()
     fundingGoal: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    tam_market: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    sam_market: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    som_market: string;
 }

@@ -51,9 +51,12 @@ export class InvestorsService {
     }
 
     async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {
-        let investor = await this.getOne(investorData.id);
+        let investor = await this.investorRepository.findOne({ where: {id: investorData.id} });
+        if (!investor) {
+            throw new NotFoundException(`Investor with an id ${investorData.id} does not exist`);
+        }
         Object.assign(investor, updateInvestorDto);
-        return await this.investorRepository.save(investor);
+        return this.investorRepository.save(investor);
     }
 
     async getStartupsForInvestor(id: number) {

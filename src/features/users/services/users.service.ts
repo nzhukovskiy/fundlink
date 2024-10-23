@@ -27,22 +27,4 @@ export class UsersService {
         }
         return this.startupRepository.findOne({where: {email: email}, select: {password: true, email: true, id: true}})
     }
-
-    // async create(createDto: CreateStartupDto | CreateInvestorDto, repository: Repository<Startup> | Repository<Investor>) {
-    //     let dto = createDto;
-    //     dto.password = await bcrypt.hash(dto.password, 10);
-    //     let savedEntity = await repository.save(dto);
-    //     return {
-    //         accessToken: await this.jwtService.signAsync({id: savedEntity.id, email: savedEntity.email})
-    //     }
-    // }
-
-    // async update(id: number, updateDto: UpdateStartupDto | UpdateInvestorDto, repository: Repository<Startup> | Repository<Investor>) {
-    //     let startup = await repository.findOne({ where: {id: id} });
-    //     if (!startup) {
-    //         throw new NotFoundException("Startup does not exist")
-    //     }
-    //     Object.assign(startup, updateDto);
-    //     return repository.save(startup);
-    // }
 }

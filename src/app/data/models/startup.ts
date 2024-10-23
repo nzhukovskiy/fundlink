@@ -8,6 +8,12 @@ export interface Startup extends User {
 
     fundingGoal: string;
 
+    tam_market: string;
+
+    sam_market: string;
+
+    som_market: string;
+
     presentationPath: string;
 
     fundingRounds: FundingRound[];

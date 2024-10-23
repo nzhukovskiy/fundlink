@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AppHttpService } from './app-http.service';
 import { Investor } from '../data/models/investor';
 import {Investment} from "../data/models/investment";
+import { UpdateInvestorDto } from '../data/dtos/update-investor.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,9 @@ export class InvestorsService {
 
     getFullInvestmentsInfo() {
       return this.appHttpService.get<Investment[]>(`investors/investments`);
+    }
+
+    update(updateInvestorDto: UpdateInvestorDto) {
+      return this.appHttpService.patch<Investor>(`investors/`, updateInvestorDto);
     }
 }

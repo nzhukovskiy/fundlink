@@ -4,8 +4,11 @@
     <a [routerLink]="['/startups', startup?.id, 'edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
   </div>
 </div>
-<h4>Общая цель: {{startup?.fundingGoal}}</h4>
+<h4>Общая цель: {{startup?.fundingGoal!}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>
+<div>Объем рынка TAM {{startup?.tam_market}} млн руб.</div>
+<div>Объем рынка SAM {{startup?.sam_market}} млн руб.</div>
+<div>Объем рынка SOM {{startup?.som_market}} млн руб.</div>
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
 <div class="mb-3">
   <label for="formFile" class="form-label">Загрузить презентацию</label>
@@ -32,8 +35,8 @@
         </div>
       </div>
     </div>
-    <p>Цель: {{fundingRound.fundingGoal}}</p>
-    <p>Собрано: {{fundingRound.currentRaised}}</p>
+    <p>Цель: {{fundingRound.fundingGoal}} руб.</p>
+    <p>Собрано: {{fundingRound.currentRaised}} руб.</p>
     <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>
     <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>
   </div>

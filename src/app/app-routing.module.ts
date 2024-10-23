@@ -16,11 +16,13 @@ import {EditStartupComponent} from "./components/startups/edit-startup/edit-star
 import {rolesGuard} from "./guards/roles.guard";
 import {Roles} from "./constants/roles";
 import {PageNotFoundComponent} from "./components/common/page-not-found/page-not-found.component";
+import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
 
 const routes: Routes = [
     {path: '', component: AllStartupsComponent},
     {path: 'investors', component: AllInvestorsComponent},
     {path: 'investors/:id', component: InvestorPageComponent},
+    {path: 'investors/:id/edit', component: EditInvestorComponent, canActivate: [authGuard, rolesGuard(Roles.INVESTOR)]},
     {path: 'startups', component: AllStartupsComponent},
     {path: 'startups/:id', component: StartupPageComponent},
     {path: 'startups/:id/edit', component: EditStartupComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},

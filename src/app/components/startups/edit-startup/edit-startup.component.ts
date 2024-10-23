@@ -20,7 +20,10 @@ export class EditStartupComponent implements OnInit {
   startupEditFormGroup = new FormGroup({
     title: new FormControl<string>("", ),
     description: new FormControl<string>("", ),
-    fundingGoal: new FormControl<string>("", )
+    fundingGoal: new FormControl<string>("", ),
+    tam_market: new FormControl<string>("", ),
+    sam_market: new FormControl<string>("", ),
+    som_market: new FormControl<string>("", )
   })
 
   editStartup() {
@@ -28,6 +31,9 @@ export class EditStartupComponent implements OnInit {
       title: this.startupEditFormGroup.controls.title.getRawValue()!,
       description: this.startupEditFormGroup.controls.description.getRawValue()!,
       fundingGoal: this.startupEditFormGroup.controls.fundingGoal.getRawValue()!,
+      tam_market: this.startupEditFormGroup.controls.tam_market.getRawValue()!,
+      sam_market: this.startupEditFormGroup.controls.sam_market.getRawValue()!,
+      som_market: this.startupEditFormGroup.controls.som_market.getRawValue()!,
     }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
@@ -40,7 +46,10 @@ export class EditStartupComponent implements OnInit {
         this.startupEditFormGroup.setValue({
           fundingGoal: res.fundingGoal,
           title: res.title,
-          description: res.description
+          description: res.description,
+          tam_market: res.tam_market,
+          sam_market: res.sam_market,
+          som_market: res.som_market,
         })
       })
     })

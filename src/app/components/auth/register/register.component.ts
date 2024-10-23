@@ -27,7 +27,10 @@ export class RegisterComponent {
     password: new FormControl<string>("", ),
     title: new FormControl<string>("", ),
     description: new FormControl<string>("", ),
-    fundingGoal: new FormControl<string>("", )
+    fundingGoal: new FormControl<string>("", ),
+    tam_market: new FormControl<string>("", ),
+    sam_market: new FormControl<string>("", ),
+    som_market: new FormControl<string>("", )
   })
 
   registerStartup() {
@@ -37,6 +40,9 @@ export class RegisterComponent {
       email: this.startupRegisterFormGroup.controls.email.getRawValue()!,
       password: this.startupRegisterFormGroup.controls.password.getRawValue()!,
       fundingGoal: this.startupRegisterFormGroup.controls.fundingGoal.getRawValue()!,
+      tam_market: this.startupRegisterFormGroup.controls.tam_market.getRawValue()!,
+      sam_market: this.startupRegisterFormGroup.controls.sam_market.getRawValue()!,
+      som_market: this.startupRegisterFormGroup.controls.som_market.getRawValue()!,
     }).subscribe(res => {
       this.router.navigate(['']).then();
     })

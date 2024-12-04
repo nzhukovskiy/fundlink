@@ -19,7 +19,7 @@ export class InvestorsService {
     }
 
     getCurrentInvestor() {
-      return this.appHttpService.get<Investor>(`investors/current-investor`);
+      return this.appHttpService.get<Investor>(`investors/current_investor`);
     }
 
     getFullInvestmentsInfo() {

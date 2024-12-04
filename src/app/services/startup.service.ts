@@ -5,6 +5,9 @@ import { Investor } from '../data/models/investor';
 import {HttpParams} from "@angular/common/http";
 import {PaginationResult} from "../data/dtos/pagination-result";
 import {UpdateStartupDto} from "../data/dtos/update-startup-dto";
+import { plainToInstance } from 'class-transformer';
+import { Observable, map, tap } from 'rxjs';
+import { ObserversModule } from '@angular/cdk/observers';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +27,12 @@ export class StartupService {
       return this.appHttpService.get<PaginationResult<Startup>>("startups", query);
     }
 
-    getOne(id: number) {
-      return this.appHttpService.get<Startup>(`startups/${id}`);
+    getOne(id: number): Observable<Startup> {
+      return this.appHttpService.get<any>(`startups/${id}`).pipe(
+        map((apiResponse) => {
+          return plainToInstance(Startup, apiResponse) as unknown as Startup
+        })
+      );
     }
 
     getInvestors(id: number) {
@@ -33,7 +40,7 @@ export class StartupService {
     }
 
     getCurrentStartup() {
-      return this.appHttpService.get<Startup>(`startups/current-startup`);
+      return this.appHttpService.get<Startup>(`startups/current_startup`);
     }
 
     update(updateStartupDto: UpdateStartupDto) {

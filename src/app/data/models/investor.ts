@@ -1,7 +1,7 @@
 import { Investment } from "./investment";
 import { User } from "./user";
 
-export interface Investor extends User {
+export class Investor extends User {
     name: string;
 
     surname: string;
@@ -9,4 +9,14 @@ export interface Investor extends User {
     investments: Investment[];
 
     totalinvestment: string;
+
+    constructor(
+        id: number, email: string, password: string, name: string, surname: string, investments: Investment[], totalinvestment: string
+    ) {
+        super(id, email, password);
+        this.name = name;
+        this.surname = surname;
+        this.investments = investments;
+        this.totalinvestment = totalinvestment;
+    }
 }

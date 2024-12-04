@@ -16,9 +16,9 @@ export class AuthService {
               private readonly localStorageService: LocalStorageService) { }
 
   login(userLoginDto: LoginUserDto) {
-    return this.appHttpService.post<{accessToken: {access_token: string}}>(`auth/login`, userLoginDto).pipe(
+    return this.appHttpService.post<{access_token: string}>(`auth/login`, userLoginDto).pipe(
       tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+        jwtDecode(x.access_token), x.access_token)
       )
     )
   }

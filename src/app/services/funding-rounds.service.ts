@@ -11,18 +11,18 @@ export class FundingRoundsService {
   constructor(private readonly appHttpService: AppHttpService) { }
 
   getOne(id: number) {
-    return this.appHttpService.get<FundingRound>(`funding-rounds/${id}`);
+    return this.appHttpService.get<FundingRound>(`funding_rounds/${id}`);
   }
 
   create(createFundingRoundDto: CreateFundingRoundDto) {
-    return this.appHttpService.post<FundingRound>(`startups/funding-rounds/`, createFundingRoundDto);
+    return this.appHttpService.post<FundingRound>(`startups/funding_rounds/`, createFundingRoundDto);
   }
 
   update(id: number, updateFundingRoundDto: CreateFundingRoundDto) {
-    return this.appHttpService.put<FundingRound>(`funding-rounds/${id}`, updateFundingRoundDto);
+    return this.appHttpService.put<FundingRound>(`funding_rounds/${id}`, updateFundingRoundDto);
   }
 
   delete(id: number) {
-    return this.appHttpService.delete(`funding-rounds/${id}`);
+    return this.appHttpService.delete(`funding_rounds/${id}`);
   }
 }

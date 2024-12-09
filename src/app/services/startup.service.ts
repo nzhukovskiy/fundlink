@@ -55,6 +55,10 @@ export class StartupService {
     }
 
     getCurrentFundingRound(startupId: number) {
-      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current-funding-round`);
+      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current_funding_round`).pipe(
+        map((apiResponse) => {
+          return plainToInstance(FundingRound, apiResponse) as unknown as FundingRound
+        })
+      );
     }
 }

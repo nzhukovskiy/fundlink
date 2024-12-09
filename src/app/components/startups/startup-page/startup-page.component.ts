@@ -32,6 +32,7 @@ export class StartupPageComponent {
       let id = params.get("id");
       this.startupService.getOne(parseInt(id!)).subscribe(res => {
         this.startup = res;
+        this.startup.fundingRounds = this.startup.fundingRounds.sort((a,b) => a.id - b.id)
       });
       this.startupService.getInvestors(parseInt(id!)).subscribe(res => {
         this.investors = res;

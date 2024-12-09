@@ -13,15 +13,16 @@ export class AllStartupsComponent implements OnInit {
 
     }
 
-  totalBooksNumber : number = 0;
+  totalStartupsNumber : number = 0;
   pageSize = 8;
   pageIndex = 0;
   startups: Startup[] = [];
 
   ngOnInit(): void {
     this.startupService.getAll(this.pageIndex + 1, this.pageSize).subscribe(res => {
+      console.log(res.data)
       this.startups = res.data;
-      this.totalBooksNumber = res.meta.totalItems;
+      this.totalStartupsNumber = res.meta.totalItems;
     })
   }
 
@@ -30,7 +31,7 @@ export class AllStartupsComponent implements OnInit {
     this.pageIndex = event.pageIndex;
     this.startupService.getAll(event.pageIndex + 1, event.pageSize).subscribe(res => {
       this.startups = res.data;
-      this.totalBooksNumber = res.meta.totalItems;
+      this.totalStartupsNumber = res.meta.totalItems;
     });
   }
 }

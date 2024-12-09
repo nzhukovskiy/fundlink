@@ -17,6 +17,7 @@ export class SingleStartupComponent implements OnInit {
   }
   ngOnInit(): void {
     this.startupService.getCurrentFundingRound(this.startup!.id).subscribe(res => {
+      console.log(res)
       this.currentFundingRound = res;
     })
   }

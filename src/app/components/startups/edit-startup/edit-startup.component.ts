@@ -21,9 +21,9 @@ export class EditStartupComponent implements OnInit {
     title: new FormControl<string>("", ),
     description: new FormControl<string>("", ),
     fundingGoal: new FormControl<string>("", ),
-    tam_market: new FormControl<string>("", ),
-    sam_market: new FormControl<string>("", ),
-    som_market: new FormControl<string>("", )
+    tam: new FormControl<string>("", ),
+    sam: new FormControl<string>("", ),
+    som: new FormControl<string>("", )
   })
 
   editStartup() {
@@ -31,9 +31,9 @@ export class EditStartupComponent implements OnInit {
       title: this.startupEditFormGroup.controls.title.getRawValue()!,
       description: this.startupEditFormGroup.controls.description.getRawValue()!,
       fundingGoal: this.startupEditFormGroup.controls.fundingGoal.getRawValue()!,
-      tam_market: this.startupEditFormGroup.controls.tam_market.getRawValue()!,
-      sam_market: this.startupEditFormGroup.controls.sam_market.getRawValue()!,
-      som_market: this.startupEditFormGroup.controls.som_market.getRawValue()!,
+      tam: this.startupEditFormGroup.controls.tam.getRawValue()!,
+      sam: this.startupEditFormGroup.controls.sam.getRawValue()!,
+      som: this.startupEditFormGroup.controls.som.getRawValue()!,
     }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
@@ -47,9 +47,9 @@ export class EditStartupComponent implements OnInit {
           fundingGoal: res.fundingGoal,
           title: res.title,
           description: res.description,
-          tam_market: res.tam_market,
-          sam_market: res.sam_market,
-          som_market: res.som_market,
+          tam: res.tam,
+          sam: res.sam,
+          som: res.som,
         })
       })
     })

@@ -32,6 +32,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { EditStartupComponent } from './components/startups/edit-startup/edit-startup.component';
 import { CreateInvestmentComponent } from './components/dialogs/create-investment/create-investment.component';
 import { PageNotFoundComponent } from './components/common/page-not-found/page-not-found.component';
+import { MoneyConverterPipePipe } from './pipes/money-converter-pipe.pipe';
+import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { PageNotFoundComponent } from './components/common/page-not-found/page-n
     NumericOnlyDirective,
     EditStartupComponent,
     CreateInvestmentComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    MoneyConverterPipePipe,
+    EditInvestorComponent
   ],
   imports: [
     BrowserModule,

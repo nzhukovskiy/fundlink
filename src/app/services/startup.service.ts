@@ -8,6 +8,7 @@ import {UpdateStartupDto} from "../data/dtos/update-startup-dto";
 import { plainToInstance } from 'class-transformer';
 import { Observable, map, tap } from 'rxjs';
 import { ObserversModule } from '@angular/cdk/observers';
+import { FundingRound } from '../data/models/funding-round';
 
 @Injectable({
   providedIn: 'root'
@@ -51,5 +52,9 @@ export class StartupService {
       const formData = new FormData();
       formData.append("presentation", presentation);
       return this.appHttpService.post<Startup>(`startups/upload-presentation`, formData);
+    }
+
+    getCurrentFundingRound(startupId: number) {
+      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current-funding-round`);
     }
 }

@@ -1,0 +1,16 @@
+<div class="form-container">
+    <h3>Редактирование информации об инвесторе</h3>
+    <form class="register-form" [formGroup]="investorUpdateFormGroup">
+        <div class="mb-3">
+          <label for="investorUpdateNameField" class="form-label">Имя пользователя</label>
+          <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField" placeholder="Alexander">
+        </div>
+        <div class="mb-3">
+            <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя</label>
+            <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField" placeholder="Alexandrov">
+        </div>
+        <div class="mb-3 register-submit-button-group">
+          <button type="submit" (click)="updateInvestor()" class="btn btn-primary mb-3 action-btn">Обновить информацию</button>
+        </div>
+    </form>
+</div>

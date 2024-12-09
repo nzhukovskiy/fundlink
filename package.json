@@ -25,6 +25,7 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
     "class-transformer": "^0.5.1",
+    "decimal.js": "^10.4.3",
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
     "reflect-metadata": "^0.2.2",

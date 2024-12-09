@@ -10,7 +10,7 @@ export class Startup extends User {
         fundingGoal: string,
         presentationPath: string,
         fundingRounds: FundingRound[],
-        id: number, email: string, password: string
+        id: number, email: string, password: string,
     ) {
         super(id, email, password);
         this.title = title;

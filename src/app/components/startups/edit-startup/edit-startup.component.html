@@ -10,6 +10,12 @@
       <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     </div>
     <div class="mb-3">
+      <label for="industryTypeField" class="form-label">Сектор</label>
+      <select formControlName="industry" class="form-select" id="industryTypeField">
+        <option *ngFor="let industry of industryTypes">{{industry}}</option>
+      </select>
+    </div>
+    <div class="mb-3">
       <label for="registerNameField" class="form-label">Необходимое финансирование</label>
       <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalNameField" placeholder="50000">
     </div>

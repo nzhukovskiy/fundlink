@@ -5,7 +5,7 @@ import { Investor } from '../data/models/investor';
 import {HttpParams} from "@angular/common/http";
 import {PaginationResult} from "../data/dtos/pagination-result";
 import {UpdateStartupDto} from "../data/dtos/update-startup-dto";
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Observable, map, tap } from 'rxjs';
 import { ObserversModule } from '@angular/cdk/observers';
 import { FundingRound } from '../data/models/funding-round';
@@ -45,7 +45,7 @@ export class StartupService {
     }
 
     update(updateStartupDto: UpdateStartupDto) {
-      return this.appHttpService.patch<Startup>(`startups/`, updateStartupDto);
+      return this.appHttpService.put<Startup>(`startups/`, instanceToPlain(updateStartupDto));
     }
 
     uploadStartupPresentation(presentation: File) {

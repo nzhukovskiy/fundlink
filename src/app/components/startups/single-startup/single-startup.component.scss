@@ -4,3 +4,8 @@
 .card-body {
   height: 200px;
 }
+.card-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

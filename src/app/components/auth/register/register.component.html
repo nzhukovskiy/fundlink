@@ -21,6 +21,12 @@
             <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
           </div>
           <div class="mb-3">
+            <label for="industryTypeField" class="form-label">Сектор</label>
+            <select formControlName="industry" class="form-select" id="industryTypeField">
+              <option *ngFor="let industry of industryTypes">{{industry}}</option>
+            </select>
+          </div>
+          <div class="mb-3">
             <label for="fundingGoalNameField" class="form-label">Необходимое финансирование</label>
             <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalNameField" placeholder="50000">
           </div>
@@ -35,6 +41,10 @@
           <div class="mb-3">
             <label for="somField" class="form-label">Объем рынка SOM</label>
             <input type="text" formControlName="som" class="form-control" id="somField" placeholder="50000">
+          </div>
+          <div class="mb-3">
+            <label for="teamExperienceField" class="form-label">Опыт команды, лет</label>
+            <input type="number" formControlName="teamExperience" class="form-control" id="teamExperienceField" placeholder="4">
           </div>
           <div class="mb-3 register-submit-button-group">
             <button type="submit" (click)="registerStartup()" class="btn btn-primary mb-3 action-btn">Регистрация</button>

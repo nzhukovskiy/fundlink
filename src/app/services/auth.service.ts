@@ -6,6 +6,7 @@ import {CreateStartupDto} from "../data/dtos/create-startup.dto";
 import {LocalStorageService} from "./local-storage.service";
 import {CreateInvestorDto} from "../data/dtos/create-investor.dto";
 import {jwtDecode} from "jwt-decode";
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +25,20 @@ export class AuthService {
   }
 
   registerStartup(createStartupDto: CreateStartupDto) {
-    return this.appHttpService.post<{accessToken: {access_token: string}}>(`startups`, createStartupDto).pipe(
+    console.log(createStartupDto)
+    const payload = instanceToPlain(createStartupDto);
+    console.log(payload)
+    return this.appHttpService.post<{access_token: string}>(`startups`, payload).pipe(
       tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+        jwtDecode(x.access_token), x.access_token)
       )
     )
   }
 
   registerInvestor(createInvestorDto: CreateInvestorDto) {
-    return this.appHttpService.post<{accessToken: {access_token: string}}>(`investors`, createInvestorDto).pipe(
+    return this.appHttpService.post<{access_token: string}>(`investors`, createInvestorDto).pipe(
       tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+        jwtDecode(x.access_token), x.access_token)
       )
     )
   }

@@ -11,7 +11,8 @@ export class Startup extends User {
         presentationPath: string,
         fundingRounds: FundingRound[],
         id: number, email: string, password: string,
-        tam: string, sam: string, som: string
+        tam: string, sam: string, som: string,
+        teamExperience: string, industry: string
     ) {
         super(id, email, password);
         this.title = title;
@@ -22,6 +23,8 @@ export class Startup extends User {
         this.tam = tam;
         this.sam = sam;
         this.som = som;
+        this.teamExperience = teamExperience;
+        this.industry = industry;
     }
 
     title: string;
@@ -33,6 +36,11 @@ export class Startup extends User {
 
     @Expose({ name: 'presentation_path' })
     presentationPath: string;
+
+    @Expose({ name: 'team_experience' })
+    teamExperience: string;
+
+    industry: string;
 
     tam: string;
 

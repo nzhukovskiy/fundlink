@@ -51,7 +51,7 @@ export class StartupService {
     uploadStartupPresentation(presentation: File) {
       const formData = new FormData();
       formData.append("presentation", presentation);
-      return this.appHttpService.post<Startup>(`startups/upload-presentation`, formData);
+      return this.appHttpService.post<Startup>(`startups/upload_presentation`, formData);
     }
 
     getCurrentFundingRound(startupId: number) {

@@ -23,7 +23,8 @@ export class EditStartupComponent implements OnInit {
     fundingGoal: new FormControl<string>("", ),
     tam: new FormControl<string>("", ),
     sam: new FormControl<string>("", ),
-    som: new FormControl<string>("", )
+    som: new FormControl<string>("", ),
+    teamExperience: new FormControl<string>("", )
   })
 
   editStartup() {
@@ -34,6 +35,8 @@ export class EditStartupComponent implements OnInit {
       tam: this.startupEditFormGroup.controls.tam.getRawValue()!,
       sam: this.startupEditFormGroup.controls.sam.getRawValue()!,
       som: this.startupEditFormGroup.controls.som.getRawValue()!,
+      teamExperience: this.startupEditFormGroup.controls.teamExperience.getRawValue()!,
+      industry: "dkhfdfh"
     }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
@@ -50,6 +53,7 @@ export class EditStartupComponent implements OnInit {
           tam: res.tam,
           sam: res.sam,
           som: res.som,
+          teamExperience: res.teamExperience
         })
       })
     })

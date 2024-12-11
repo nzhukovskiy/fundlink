@@ -1,6 +1,6 @@
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 [routerLink]="['/startups', startup?.id]" class="card-title startup-card-title">{{startup?.title}}</h5>
+      <h5><a [routerLink]="['/startups', startup?.id]" class="card-title startup-card-title">{{startup?.title}}</a></h5>
       <strong>Текущий раунд: {{currentFundingRound?.stage}}</strong>
       <p>
         Необходимо на текущем раунде: <strong>{{getRemainingFunding()}}</strong>

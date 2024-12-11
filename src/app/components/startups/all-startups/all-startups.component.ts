@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Startup } from 'src/app/data/models/startup';
 import { StartupService } from 'src/app/services/startup.service';
 import {PageEvent} from "@angular/material/paginator";
+import { InvestorsService } from 'src/app/services/investors.service';
+import { plainToInstance } from 'class-transformer';
 
 @Component({
   selector: 'app-all-startups',
@@ -20,8 +22,7 @@ export class AllStartupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.startupService.getAll(this.pageIndex + 1, this.pageSize).subscribe(res => {
-      console.log(res.data)
-      this.startups = res.data;
+      this.startups = plainToInstance(Startup, res.data);
       this.totalStartupsNumber = res.meta.totalItems;
     })
   }
@@ -30,7 +31,7 @@ export class AllStartupsComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.startupService.getAll(event.pageIndex + 1, event.pageSize).subscribe(res => {
-      this.startups = res.data;
+      this.startups = plainToInstance(Startup, res.data);
       this.totalStartupsNumber = res.meta.totalItems;
     });
   }

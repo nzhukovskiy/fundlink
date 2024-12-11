@@ -25,9 +25,7 @@ export class AuthService {
   }
 
   registerStartup(createStartupDto: CreateStartupDto) {
-    console.log(createStartupDto)
     const payload = instanceToPlain(createStartupDto);
-    console.log(payload)
     return this.appHttpService.post<{access_token: string}>(`startups`, payload).pipe(
       tap(x => this.localStorageService.setUser(
         jwtDecode(x.access_token), x.access_token)

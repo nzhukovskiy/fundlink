@@ -30,4 +30,8 @@ export class InvestorsService {
     update(updateInvestorDto: UpdateInvestorDto) {
       return this.appHttpService.put<Investor>(`investors/`, updateInvestorDto);
     }
+
+    getRecommendations() {
+      return this.appHttpService.get(`investors/recommendations`);
+    }
 }

@@ -34,6 +34,8 @@ import { CreateInvestmentComponent } from './components/dialogs/create-investmen
 import { PageNotFoundComponent } from './components/common/page-not-found/page-not-found.component';
 import { MoneyConverterPipePipe } from './pipes/money-converter-pipe.pipe';
 import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
+import { RecommendedStartupsComponent } from './components/startups/recommended-startups/recommended-startups.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { EditInvestorComponent } from './components/investors/edit-investor/edit
     CreateInvestmentComponent,
     PageNotFoundComponent,
     MoneyConverterPipePipe,
-    EditInvestorComponent
+    EditInvestorComponent,
+    RecommendedStartupsComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

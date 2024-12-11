@@ -35,6 +35,7 @@ export class StartupProfileComponent implements OnInit {
     this.startupService.getCurrentStartup().subscribe(res => {
       this.startup = res;
       this.startupService.getInvestors(res.id).subscribe(res => {
+        console.log(res)
         this.investors = res;
       })
     });

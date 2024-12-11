@@ -5,6 +5,8 @@ import {InvestorsService} from "../../../services/investors.service";
 import {FundingRoundsService} from "../../../services/funding-rounds.service";
 import {NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
 import {ngbDateFormat} from "../../../converters/ngb-date-format";
+import { plainToInstance } from 'class-transformer';
+import { CreateFundingRoundDto } from 'src/app/data/dtos/create-funding-round.dto';
 
 @Component({
   selector: 'app-edit-funding-round',
@@ -51,11 +53,11 @@ export class EditFundingRoundComponent implements OnInit {
   }
 
   updateFundingRound() {
-    this.fundingRoundsService.update(this.id!, {
-      fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
-      startDate: ngbDateFormat(this.startDate!),
-      endDate: ngbDateFormat(this.endDate!),
-    }).subscribe(res => {
+    this.fundingRoundsService.update(this.id!, plainToInstance(CreateFundingRoundDto, {
+      funding_goal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+      start_date: ngbDateFormat(this.startDate!),
+      end_date: ngbDateFormat(this.endDate!),
+    })).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
   }

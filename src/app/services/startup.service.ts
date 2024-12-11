@@ -41,7 +41,11 @@ export class StartupService {
     }
 
     getCurrentStartup() {
-      return this.appHttpService.get<Startup>(`startups/current_startup`);
+      return this.appHttpService.get<Startup>(`startups/current_startup`).pipe(
+        map((apiResponse) => {
+          return plainToInstance(Startup, apiResponse) as unknown as Startup
+        })
+      );
     }
 
     update(updateStartupDto: UpdateStartupDto) {

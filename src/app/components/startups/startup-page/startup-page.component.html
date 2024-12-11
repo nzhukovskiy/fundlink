@@ -1,4 +1,7 @@
 <h3>{{startup?.title}}</h3>
+<h4 class="tags-container">
+  <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</div>
+</h4>
 <h4>Общая цель: {{startup?.fundingGoal}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>
 <div>Объем рынка TAM {{startup?.tam}} млн руб.</div>

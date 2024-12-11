@@ -4,6 +4,9 @@
     <a [routerLink]="['/startups', startup?.id, 'edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
   </div>
 </div>
+<h4 class="tags-container">
+  <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</div>
+</h4>
 <h4>Общая цель: {{startup?.fundingGoal!}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>
 <div>Объем рынка TAM {{startup?.tam}} млн руб.</div>
@@ -55,7 +58,7 @@
     <tr *ngFor="let investor of investors">
       <td>{{investor.name}}</td>
       <td>{{investor.surname}}</td>
-      <td>{{investor.totalinvestment}}</td>
+      <td>{{investor.totalInvestment}}</td>
     </tr>
     </tbody>
   </table>

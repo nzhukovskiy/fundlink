@@ -1,0 +1,6 @@
+<p>recommended-startups works!</p>
+<div class="startups-list" >
+    <div *ngFor="let startup of recommendedStartups">
+      <app-single-startup [startup]="startup"></app-single-startup>
+    </div>
+  </div>

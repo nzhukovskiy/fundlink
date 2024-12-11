@@ -17,9 +17,10 @@ import {rolesGuard} from "./guards/roles.guard";
 import {Roles} from "./constants/roles";
 import {PageNotFoundComponent} from "./components/common/page-not-found/page-not-found.component";
 import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
 
 const routes: Routes = [
-    {path: '', component: AllStartupsComponent},
+    {path: '', component: MainPageComponent},
     {path: 'investors', component: AllInvestorsComponent},
     {path: 'investors/:id', component: InvestorPageComponent},
     {path: 'investors/:id/edit', component: EditInvestorComponent, canActivate: [authGuard, rolesGuard(Roles.INVESTOR)]},

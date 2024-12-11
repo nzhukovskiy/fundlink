@@ -8,7 +8,7 @@ export class Investor extends User {
 
     investments: Investment[];
 
-    totalinvestment: string;
+    totalInvestment: string;
 
     constructor(
         id: number, email: string, password: string, name: string, surname: string, investments: Investment[], totalinvestment: string
@@ -17,6 +17,6 @@ export class Investor extends User {
         this.name = name;
         this.surname = surname;
         this.investments = investments;
-        this.totalinvestment = totalinvestment;
+        this.totalInvestment = totalinvestment;
     }
 }

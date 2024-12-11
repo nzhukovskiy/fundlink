@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ɵgetUnknownElementStrictMode } from '@angular/core';
 import Decimal from 'decimal.js';
 import { FundingRound } from 'src/app/data/models/funding-round';
 import { Startup } from 'src/app/data/models/startup';
@@ -16,10 +16,14 @@ export class SingleStartupComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.startupService.getCurrentFundingRound(this.startup!.id).subscribe(res => {
-      console.log(res)
-      this.currentFundingRound = res;
-    })
+    if (this.startup?.fundingRounds == undefined) {
+      this.startupService.getCurrentFundingRound(this.startup!.id).subscribe(res => {
+        this.currentFundingRound = res;
+      })
+    }
+    else {
+      this.currentFundingRound = this.startup?.fundingRounds.filter(x => x.isCurrent == true)[0];
+    }
   }
 
   @Input()

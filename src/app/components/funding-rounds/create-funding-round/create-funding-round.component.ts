@@ -4,6 +4,8 @@ import {FundingRoundsService} from "../../../services/funding-rounds.service";
 import {NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ngbDateFormat} from "../../../converters/ngb-date-format";
+import { plainToInstance } from 'class-transformer';
+import { CreateFundingRoundDto } from 'src/app/data/dtos/create-funding-round.dto';
 
 @Component({
   selector: 'app-create-funding-round',
@@ -30,11 +32,11 @@ export class CreateFundingRoundComponent implements OnInit {
   }
 
   createFundingRound() {
-    this.fundingRoundsService.create({
-      fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
-      startDate: ngbDateFormat(this.startDate!),
-      endDate: ngbDateFormat(this.endDate!),
-    }).subscribe(res => {
+    this.fundingRoundsService.create(plainToInstance(CreateFundingRoundDto,{
+      funding_goal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+      start_date: ngbDateFormat(this.startDate!),
+      end_date: ngbDateFormat(this.endDate!),
+    })).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
   }

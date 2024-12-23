@@ -9,6 +9,7 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Observable, map, tap } from 'rxjs';
 import { ObserversModule } from '@angular/cdk/observers';
 import { FundingRound } from '../data/models/funding-round';
+import { Tag } from '../data/models/tag';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,22 @@ export class StartupService {
       return this.appHttpService.get<FundingRound>(`startups/${startupId}/current_funding_round`).pipe(
         map((apiResponse) => {
           return plainToInstance(FundingRound, apiResponse) as unknown as FundingRound
+        })
+      );
+    }
+
+    addTag(tagId: number) {
+      return this.appHttpService.post<Startup>(`startups/assign_tag`, {tag_id: tagId}).pipe(
+        map((apiResponse) => {
+          return plainToInstance(Startup, apiResponse) as unknown as Startup
+        })
+      );
+    }
+
+    removeTag(tagId: number) {
+      return this.appHttpService.post<Startup>(`startups/remove_tag`, {tag_id: tagId}).pipe(
+        map((apiResponse) => {
+          return plainToInstance(Startup, apiResponse) as unknown as Startup
         })
       );
     }

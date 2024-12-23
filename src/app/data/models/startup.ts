@@ -14,7 +14,8 @@ export class Startup extends User {
         id: number, email: string, password: string,
         tam: string, sam: string, som: string,
         teamExperience: string, industry: string,
-        tags: Tag[]
+        tags: Tag[],
+        dcf: string
     ) {
         super(id, email, password);
         this.title = title;
@@ -28,6 +29,7 @@ export class Startup extends User {
         this.teamExperience = teamExperience;
         this.industry = industry;
         this.tags = tags;
+        this.dcf = dcf;
     }
 
     title: string;
@@ -56,4 +58,6 @@ export class Startup extends User {
     fundingRounds: FundingRound[];
 
     tags: Tag[];
+    
+    dcf: string
 }

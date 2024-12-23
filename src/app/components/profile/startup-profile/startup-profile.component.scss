@@ -25,3 +25,17 @@
   display: flex;
   gap: 20px;
 }
+.tag-menu-item {
+  cursor: pointer;
+}
+.tag-delete-icon-circle {
+  width: 20px;
+    height: 20px;
+    padding: 0 !important;
+    cursor: pointer;
+}
+.tag-delete-icon {
+  font-size: 10px;
+  height: unset;
+  width: unset;
+}

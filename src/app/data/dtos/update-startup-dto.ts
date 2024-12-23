@@ -17,6 +17,9 @@ export class UpdateStartupDto {
     sam: string;
     som: string;
 
+    @Expose({ name: 'capital_expenditures' })
+    capitalExpenditures: number[];
+
     constructor(
         title: string,
         description: string,
@@ -25,7 +28,8 @@ export class UpdateStartupDto {
         sam: string,
         som: string,
         teamExperience: string,
-        industry: string
+        industry: string,
+        capitalExpenditures: number[]
     ) {
         this.title = title;
         this.description = description;
@@ -35,5 +39,6 @@ export class UpdateStartupDto {
         this.som = som;
         this.teamExperience = teamExperience;
         this.industry = industry;
+        this.capitalExpenditures = capitalExpenditures;
     }
 }

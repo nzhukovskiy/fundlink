@@ -32,8 +32,38 @@
       <input type="text" formControlName="som" class="form-control" id="somField" placeholder="50000">
     </div>
     <div class="mb-3">
-      <label for="somField" class="form-label">Опыт команды</label>
-      <input type="number" formControlName="teamExperience" class="form-control" id="somField" placeholder="50000">
+      <label for="teamExperienceField" class="form-label">Опыт команды</label>
+      <input type="number" formControlName="teamExperience" class="form-control" id="teamExperienceField" placeholder="50000">
+    </div>
+
+    <p>Ниже вам необходимо ввести прогнозирумые метрики на срок в 5 лет. Эти данные используются для вычисления стоимости стартапа, что облегчит задачу инвесторам. Если у вас нет прогнозируемых оценок, оставьте поля пустыми</p>
+    <p>Прибыль до вычета процентов и налогов</p>
+    <div class="five-years-metrics-container" formArrayName="revenue_per_year">
+      <div *ngFor="let control of revenuePerYear.controls; let i = index" class="mb-3">
+        <label [for]="'arrayField' + i" class="form-label">{{ i + 1 }} год</label>
+        <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
+      </div>
+    </div>
+    <p>вложения в основные средства компании</p>
+    <div class="five-years-metrics-container" formArrayName="capital_expenditures">
+      <div *ngFor="let control of capitalExpenditures.controls; let i = index" class="mb-3">
+        <label [for]="'arrayField' + i" class="form-label">{{ i + 1 }} год</label>
+        <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
+      </div>
+    </div>
+    <p>Изменения в оборотном капитале</p>
+    <div class="five-years-metrics-container" formArrayName="changes_in_working_capital">
+      <div *ngFor="let control of capitalExpenditures.controls; let i = index" class="mb-3">
+        <label [for]="'arrayField' + i" class="form-label">{{ i + 1 }} год</label>
+        <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
+      </div>
+    </div>
+    <p>Амортизационные расходы</p>
+    <div class="five-years-metrics-container" formArrayName="deprecation_and_amortization">
+      <div *ngFor="let control of capitalExpenditures.controls; let i = index" class="mb-3">
+        <label [for]="'arrayField' + i" class="form-label">{{ i + 1 }} год</label>
+        <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
+      </div>
     </div>
     <div class="mb-3 register-submit-button-group">
       <button type="submit" (click)="editStartup()" class="btn btn-primary mb-3 action-btn">Обновить</button>

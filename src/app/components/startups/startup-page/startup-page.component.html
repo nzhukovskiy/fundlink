@@ -9,7 +9,7 @@
 <div>Объем рынка SOM {{startup?.som}} млн руб.</div>
 <div>Сектор {{startup?.industry}}</div>
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:5000/' + startup?.presentationPath">Презентация</a>
-<div *ngIf="startup?.dcf">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
+<div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
 <h4>Раунды инвестирования:
 </h4>
 <div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">

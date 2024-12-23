@@ -15,7 +15,11 @@ export class Startup extends User {
         tam: string, sam: string, som: string,
         teamExperience: string, industry: string,
         tags: Tag[],
-        dcf: string
+        dcf: string,
+        revenuePerYear: number[],
+        capitalExpenditures: number[],
+        changesInWorkingCapital: number[],
+        deprecationAndAmortization: number[]
     ) {
         super(id, email, password);
         this.title = title;
@@ -30,6 +34,10 @@ export class Startup extends User {
         this.industry = industry;
         this.tags = tags;
         this.dcf = dcf;
+        this.revenuePerYear = revenuePerYear;
+        this.capitalExpenditures = capitalExpenditures;
+        this.changesInWorkingCapital = changesInWorkingCapital;
+        this.deprecationAndAmortization = deprecationAndAmortization;
     }
 
     title: string;
@@ -58,6 +66,18 @@ export class Startup extends User {
     fundingRounds: FundingRound[];
 
     tags: Tag[];
-    
+
     dcf: string
+
+    @Expose({ name: 'revenue_per_year' })
+    revenuePerYear: number[];
+
+    @Expose({ name: 'capital_expenditures' })
+    capitalExpenditures: number[];
+
+    @Expose({ name: 'changes_in_working_capital' })
+    changesInWorkingCapital: number[];
+
+    @Expose({ name: 'deprecation_and_amortization' })
+    deprecationAndAmortization: number[];
 }

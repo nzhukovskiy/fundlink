@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth.service";
 import {Router} from "@angular/router";
 import {InvestorsService} from "../../../services/investors.service";
@@ -44,7 +44,19 @@ export class RegisterComponent implements OnInit {
     sam: new FormControl<string>("", ),
     som: new FormControl<string>("", ),
     teamExperience: new FormControl<number>(0, ),
-    industry: new FormControl<string>("", )
+    industry: new FormControl<string>("", ),
+    revenue_per_year: new FormArray(
+      Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
+    ),
+    capital_expenditures: new FormArray(
+      Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
+    ),
+    changes_in_working_capital: new FormArray(
+      Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
+    ),
+    deprecation_and_amortization: new FormArray(
+      Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
+    ),
   })
 
   registerStartup() {
@@ -59,7 +71,11 @@ export class RegisterComponent implements OnInit {
       sam: this.startupRegisterFormGroup.controls.sam.getRawValue()!,
       som: this.startupRegisterFormGroup.controls.som.getRawValue()!,
       team_experience: this.startupRegisterFormGroup.controls.teamExperience.getRawValue()!,
-      industry: this.startupRegisterFormGroup.controls.industry.getRawValue()!
+      industry: this.startupRegisterFormGroup.controls.industry.getRawValue()!,
+      revenue_per_year: this.startupRegisterFormGroup.controls.revenue_per_year.getRawValue()!,
+      capital_expenditures: this.startupRegisterFormGroup.controls.capital_expenditures.getRawValue()!,
+      changes_in_working_capital: this.startupRegisterFormGroup.controls.changes_in_working_capital.getRawValue()!,
+      deprecation_and_amortization: this.startupRegisterFormGroup.controls.deprecation_and_amortization.getRawValue()!,
     })).subscribe(res => {
       this.router.navigate(['']).then();
     })
@@ -74,5 +90,21 @@ export class RegisterComponent implements OnInit {
     }).subscribe(res => {
       this.router.navigate(['']).then();
     })
+  }
+
+  get revenuePerYear(): FormArray {
+    return this.startupRegisterFormGroup.get('revenue_per_year') as FormArray;
+  }
+
+  get capitalExpenditures(): FormArray {
+    return this.startupRegisterFormGroup.get('capital_expenditures') as FormArray;
+  }
+
+  get changesInWorkingCapital(): FormArray {
+    return this.startupRegisterFormGroup.get('changes_in_working_capital') as FormArray;
+  }
+
+  get deprecationAndAmortization(): FormArray {
+    return this.startupRegisterFormGroup.get('deprecation_and_amortization') as FormArray;
   }
 }

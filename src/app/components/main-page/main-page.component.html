@@ -2,7 +2,7 @@
     <h3>Рекомендации</h3>
     <app-recommended-startups></app-recommended-startups>
 </div>
-<div *ngIf="role == Roles.STARTUP">startup</div>
+<div *ngIf="role == Roles.STARTUP"><app-all-startups></app-all-startups></div>
 <div *ngIf="role == undefined">
     <app-all-startups></app-all-startups>
 </div>

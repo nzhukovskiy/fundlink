@@ -14,9 +14,10 @@ import { FundingRound } from "../investments/entities/funding-round/funding-roun
 import { InvestmentModule } from "../investments/investment.module";
 import { JwtTokenModule } from "../token/jwt-token.module";
 import { Investment } from "../investments/entities/investment/investment";
+import { Tag } from "../tags/entities/tag/tag";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment]),
+    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag]),
       InvestmentModule,
       JwtTokenModule
     ],

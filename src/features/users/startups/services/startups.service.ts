@@ -12,11 +12,13 @@ import { JwtTokenService } from "../../../token/services/jwt-token.service";
 import { Investor } from "../../investors/entities/investor";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../user/user";
+import { Tag } from "../../../tags/entities/tag/tag";
 
 @Injectable()
 export class StartupsService {
     constructor(@InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
                 @InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
+                @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
                 private readonly usersService: UsersService,
                 private readonly jwtTokenService: JwtTokenService,
                 private readonly paginateService: PaginateService,
@@ -32,6 +34,8 @@ export class StartupsService {
           .leftJoinAndSelect('startup.fundingRounds', 'fundingRound')
           .where('startup.id = :id', { id })
           .orderBy('fundingRound.startDate', 'ASC')
+          .leftJoinAndSelect('startup.tags', 'tag')
+          .where('startup.id = :id', { id })
           .getOne();
         if (!startup) {
             throw new NotFoundException(`Startup with an id ${id} does not exist`);
@@ -92,6 +96,14 @@ export class StartupsService {
             throw new NotFoundException('Startup with this id not found');
         }
         startup.presentationPath = fileName;
+        return this.startupRepository.save(startup);
+    }
+
+    async assignTag(tagId: number, startupId: number) {
+        let startup = await this.getOne(startupId);
+        let tag = await this.tagRepository.findOneBy({id: tagId});
+        console.log(startup);
+        startup.tags.push(tag);
         return this.startupRepository.save(startup);
     }
 }

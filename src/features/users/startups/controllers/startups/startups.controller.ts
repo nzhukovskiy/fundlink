@@ -24,6 +24,7 @@ import { RolesGuard } from "../../../../auth/guards/roles.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { fileFilter } from "../../presentations/constants/file-filter";
 import { presentationStorage } from "../../presentations/constants/presentation-storage";
+import { AssignTagDto } from "../../dtos/assign-tag-dto";
 
 
 @Controller('startups')
@@ -116,5 +117,12 @@ export class StartupsController {
         }
         const user = req.token.payload;
         return this.startupsService.uploadPresentation(user.id, file.filename);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post("assignTag")
+    assignTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
+        return this.startupsService.assignTag(assignTagDto.tagId, req.token.payload.id);
     }
 }

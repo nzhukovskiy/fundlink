@@ -15,6 +15,8 @@ import { JwtTokenModule } from './features/token/jwt-token.module';
 import { Investment } from "./features/investments/entities/investment/investment";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from 'path';
+import { Tag } from "./features/tags/entities/tag/tag";
+import { TagsModule } from './features/tags/tags.module';
 
 @Module({
     imports: [
@@ -33,7 +35,7 @@ import { join } from 'path';
                 username: configService.get("POSTGRES_USER"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DB").toString(),
-                entities: [Startup, Investor, FundingRound, Investment],
+                entities: [Startup, Investor, FundingRound, Investment, Tag],
                 synchronize: true,
             }),
         }),
@@ -41,6 +43,7 @@ import { join } from 'path';
         InvestmentModule,
         AuthModule,
         JwtTokenModule,
+        TagsModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

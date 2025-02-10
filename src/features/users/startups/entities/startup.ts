@@ -1,7 +1,8 @@
 import { User } from "../../user/user";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 import { Roles } from "../../constants/roles";
+import { Tag } from "../../../tags/entities/tag/tag";
 
 @Entity()
 export class Startup extends User {
@@ -15,19 +16,23 @@ export class Startup extends User {
     fundingGoal: string;
 
     @Column({type: "decimal"})
-    tam_market: string;
+    tamMarket: string;
 
     @Column({type: "decimal"})
-    sam_market: string;
+    samMarket: string;
 
     @Column({type: "decimal"})
-    som_market: string;
+    somMarket: string;
 
     @Column({ nullable: true })
     presentationPath: string;
 
     @OneToMany(() => FundingRound, (fundingRound) => fundingRound.startup)
     fundingRounds: FundingRound[];
+
+    @ManyToMany(() => Tag, tag => tag.startups)
+    @JoinTable()
+    tags: Tag[]
 
     getRole(): Roles {
         return Roles.STARTUP;

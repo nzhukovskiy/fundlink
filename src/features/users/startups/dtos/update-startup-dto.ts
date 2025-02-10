@@ -16,13 +16,13 @@ export class UpdateStartupDto {
 
     @ApiProperty()
     @IsNumberString()
-    tam_market: string;
+    tamMarket: string;
 
     @ApiProperty()
     @IsNumberString()
-    sam_market: string;
+    samMarket: string;
 
     @ApiProperty()
     @IsNumberString()
-    som_market: string;
+    somMarket: string;
 }

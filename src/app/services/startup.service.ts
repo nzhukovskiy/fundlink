@@ -18,23 +18,19 @@ export class StartupService {
 
   constructor(private readonly appHttpService: AppHttpService) { }
 
-    getAll(page?: number, per_page?: number) {
+    getAll(page?: number, itemsPerPage?: number) {
       let query = new HttpParams();
       if (typeof page !== "undefined") {
         query = query.append("page", page);
       }
-      if (typeof per_page !== "undefined") {
-        query = query.append("limit", per_page);
+      if (typeof itemsPerPage !== "undefined") {
+        query = query.append("limit", itemsPerPage);
       }
       return this.appHttpService.get<PaginationResult<Startup>>("startups", query);
     }
 
-    getOne(id: number): Observable<Startup> {
-      return this.appHttpService.get<any>(`startups/${id}`).pipe(
-        map((apiResponse) => {
-          return plainToInstance(Startup, apiResponse) as unknown as Startup
-        })
-      );
+    getOne(id: number) {
+      return this.appHttpService.get<Startup>(`startups/${id}`);
     }
 
     getInvestors(id: number) {
@@ -42,44 +38,28 @@ export class StartupService {
     }
 
     getCurrentStartup() {
-      return this.appHttpService.get<Startup>(`startups/current_startup`).pipe(
-        map((apiResponse) => {
-          return plainToInstance(Startup, apiResponse) as unknown as Startup
-        })
-      );
+      return this.appHttpService.get<Startup>(`startups/current-startup`);
     }
 
     update(updateStartupDto: UpdateStartupDto) {
-      return this.appHttpService.put<Startup>(`startups/`, instanceToPlain(updateStartupDto));
+      return this.appHttpService.patch<Startup>(`startups/`, updateStartupDto);
     }
 
     uploadStartupPresentation(presentation: File) {
       const formData = new FormData();
       formData.append("presentation", presentation);
-      return this.appHttpService.post<Startup>(`startups/upload_presentation`, formData);
+      return this.appHttpService.post<Startup>(`startups/upload-presentation`, formData);
     }
 
     getCurrentFundingRound(startupId: number) {
-      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current_funding_round`).pipe(
-        map((apiResponse) => {
-          return plainToInstance(FundingRound, apiResponse) as unknown as FundingRound
-        })
-      );
+      return this.appHttpService.get<FundingRound>(`startups/${startupId}/current-funding-round`);
     }
 
     addTag(tagId: number) {
-      return this.appHttpService.post<Startup>(`startups/assign_tag`, {tag_id: tagId}).pipe(
-        map((apiResponse) => {
-          return plainToInstance(Startup, apiResponse) as unknown as Startup
-        })
-      );
+      return this.appHttpService.post<Startup>(`startups/assign-tag`, {tagId});
     }
 
     removeTag(tagId: number) {
-      return this.appHttpService.post<Startup>(`startups/remove_tag`, {tag_id: tagId}).pipe(
-        map((apiResponse) => {
-          return plainToInstance(Startup, apiResponse) as unknown as Startup
-        })
-      );
+      return this.appHttpService.post<Startup>(`startups/remove-tag`, {tagId});
     }
 }

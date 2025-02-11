@@ -20,7 +20,7 @@ export class InvestorsService {
     }
 
     getCurrentInvestor() {
-      return this.appHttpService.get<Investor>(`investors/current_investor`);
+      return this.appHttpService.get<Investor>(`investors/current-investor`);
     }
 
     getFullInvestmentsInfo() {
@@ -28,7 +28,7 @@ export class InvestorsService {
     }
 
     update(updateInvestorDto: UpdateInvestorDto) {
-      return this.appHttpService.put<Investor>(`investors/`, updateInvestorDto);
+      return this.appHttpService.patch<Investor>(`investors/`, updateInvestorDto);
     }
 
     getRecommendations() {

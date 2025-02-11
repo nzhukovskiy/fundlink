@@ -11,12 +11,12 @@ export class Investor extends User {
     totalInvestment: string;
 
     constructor(
-        id: number, email: string, password: string, name: string, surname: string, investments: Investment[], totalinvestment: string
+        id: number, email: string, password: string, name: string, surname: string, investments: Investment[], totalInvestment: string
     ) {
         super(id, email, password);
         this.name = name;
         this.surname = surname;
         this.investments = investments;
-        this.totalInvestment = totalinvestment;
+        this.totalInvestment = totalInvestment;
     }
 }

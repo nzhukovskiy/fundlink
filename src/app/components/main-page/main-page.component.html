@@ -1,6 +1,7 @@
 <div *ngIf="role == Roles.INVESTOR">
-    <h3>Рекомендации</h3>
-    <app-recommended-startups></app-recommended-startups>
+<!--    <h3>Рекомендации</h3>-->
+<!--    <app-recommended-startups></app-recommended-startups>-->
+  <app-all-startups></app-all-startups>
 </div>
 <div *ngIf="role == Roles.STARTUP"><app-all-startups></app-all-startups></div>
 <div *ngIf="role == undefined">

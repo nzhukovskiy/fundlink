@@ -32,11 +32,11 @@ export class CreateFundingRoundComponent implements OnInit {
   }
 
   createFundingRound() {
-    this.fundingRoundsService.create(plainToInstance(CreateFundingRoundDto,{
-      funding_goal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
-      start_date: ngbDateFormat(this.startDate!),
-      end_date: ngbDateFormat(this.endDate!),
-    })).subscribe(res => {
+    this.fundingRoundsService.create({
+      fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+      startDate: ngbDateFormat(this.startDate!),
+      endDate: ngbDateFormat(this.endDate!),
+    }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
   }

@@ -5,7 +5,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
   providedIn: 'root'
 })
 export class AppHttpService {
-    private readonly baseUrl = "http://localhost:5000/";
+    private readonly baseUrl = "http://localhost:3000/";
     constructor(private readonly httpClient: HttpClient) { }
 
     post<T>(action: string, body: {}|null) {

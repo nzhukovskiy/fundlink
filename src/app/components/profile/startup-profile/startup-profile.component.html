@@ -23,10 +23,10 @@
 
 <h4>Общая цель: {{startup?.fundingGoal!}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>
-<div>Объем рынка TAM {{startup?.tam}} млн руб.</div>
-<div>Объем рынка SAM {{startup?.sam}} млн руб.</div>
-<div>Объем рынка SOM {{startup?.som}} млн руб.</div>
-<a *ngIf="startup?.presentationPath" [href]="'http://localhost:5000/' + startup?.presentationPath">Презентация</a>
+<div>Объем рынка TAM {{startup?.tamMarket}} млн руб.</div>
+<div>Объем рынка SAM {{startup?.samMarket}} млн руб.</div>
+<div>Объем рынка SOM {{startup?.somMarket}} млн руб.</div>
+<a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
 <div class="mb-3">
   <label for="formFile" class="form-label">Загрузить презентацию</label>
   <div class="book-image-group">

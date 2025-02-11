@@ -29,45 +29,45 @@ export class EditStartupComponent implements OnInit {
     sam: new FormControl<string>("", ),
     som: new FormControl<string>("", ),
     teamExperience: new FormControl<string>("", ),
-    industry: new FormControl<string>("", ),
-    revenue_per_year: new FormArray(
+    // industry: new FormControl<string>("", ),
+    revenuePerYear: new FormArray(
       Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
     ),
-    capital_expenditures: new FormArray(
+    capitalExpenditures: new FormArray(
       Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
     ),
-    changes_in_working_capital: new FormArray(
+    changesInWorkingCapital: new FormArray(
       Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
     ),
-    deprecation_and_amortization: new FormArray(
+    deprecationAndAmortization: new FormArray(
       Array(5).fill(null).map(() => new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }))
     ),
   })
 
   editStartup() {
-    this.startupService.update(plainToInstance(UpdateStartupDto, {
+    this.startupService.update( {
       title: this.startupEditFormGroup.controls.title.getRawValue()!,
       description: this.startupEditFormGroup.controls.description.getRawValue()!,
-      funding_goal: this.startupEditFormGroup.controls.fundingGoal.getRawValue()!,
-      tam: this.startupEditFormGroup.controls.tam.getRawValue()!,
-      sam: this.startupEditFormGroup.controls.sam.getRawValue()!,
-      som: this.startupEditFormGroup.controls.som.getRawValue()!,
-      team_experience: this.startupEditFormGroup.controls.teamExperience.getRawValue()!,
-      industry: this.startupEditFormGroup.controls.industry.getRawValue()!,
-      revenue_per_year: this.startupEditFormGroup.controls.revenue_per_year.getRawValue()!,
-      capital_expenditures: this.startupEditFormGroup.controls.capital_expenditures.getRawValue()!,
-      changes_in_working_capital: this.startupEditFormGroup.controls.changes_in_working_capital.getRawValue()!,
-      deprecation_and_amortization: this.startupEditFormGroup.controls.deprecation_and_amortization.getRawValue()!,
-    })).subscribe(res => {
+      fundingGoal: this.startupEditFormGroup.controls.fundingGoal.getRawValue()!,
+      tamMarket: this.startupEditFormGroup.controls.tam.getRawValue()!,
+      samMarket: this.startupEditFormGroup.controls.sam.getRawValue()!,
+      somMarket: this.startupEditFormGroup.controls.som.getRawValue()!,
+      teamExperience: this.startupEditFormGroup.controls.teamExperience.getRawValue()!,
+      // industry: this.startupEditFormGroup.controls.industry.getRawValue()!,
+      revenuePerYear: this.startupEditFormGroup.controls.revenuePerYear.getRawValue()!,
+      capitalExpenditures: this.startupEditFormGroup.controls.capitalExpenditures.getRawValue()!,
+      changesInWorkingCapital: this.startupEditFormGroup.controls.changesInWorkingCapital.getRawValue()!,
+      deprecationAndAmortization: this.startupEditFormGroup.controls.deprecationAndAmortization.getRawValue()!,
+    }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
   }
 
   ngOnInit(): void {
-    this.constantsService.getIndustryTypes().subscribe(res => {
-      this.industryTypes = res;
-      // this.startupEditFormGroup.controls.industry.setValue(this.industryTypes[0])
-    })
+    // this.constantsService.getIndustryTypes().subscribe(res => {
+    //   this.industryTypes = res;
+    //   // this.startupEditFormGroup.controls.industry.setValue(this.industryTypes[0])
+    // })
     this.route.paramMap.subscribe(params => {
       this.id = parseInt(params.get("id")!);
       this.startupService.getOne(this.id).subscribe(res => {
@@ -76,15 +76,15 @@ export class EditStartupComponent implements OnInit {
           fundingGoal: res.fundingGoal,
           title: res.title,
           description: res.description,
-          tam: res.tam,
-          sam: res.sam,
-          som: res.som,
+          tam: res.tamMarket,
+          sam: res.samMarket,
+          som: res.somMarket,
           teamExperience: res.teamExperience,
-          industry: res.industry,
-          revenue_per_year: res.revenuePerYear,
-          capital_expenditures: res.capitalExpenditures,
-          changes_in_working_capital: res.changesInWorkingCapital,
-          deprecation_and_amortization: res.deprecationAndAmortization
+          // industry: res.industry,
+          revenuePerYear: res.revenuePerYear,
+          capitalExpenditures: res.capitalExpenditures,
+          changesInWorkingCapital: res.changesInWorkingCapital,
+          deprecationAndAmortization: res.deprecationAndAmortization
         })
       })
     })
@@ -93,18 +93,18 @@ export class EditStartupComponent implements OnInit {
   industryTypes: string[] = [];
 
   get revenuePerYear(): FormArray {
-    return this.startupEditFormGroup.get('revenue_per_year') as FormArray;
+    return this.startupEditFormGroup.get('revenuePerYear') as FormArray;
   }
 
   get capitalExpenditures(): FormArray {
-    return this.startupEditFormGroup.get('capital_expenditures') as FormArray;
+    return this.startupEditFormGroup.get('capitalExpenditures') as FormArray;
   }
 
   get changesInWorkingCapital(): FormArray {
-    return this.startupEditFormGroup.get('changes_in_working_capital') as FormArray;
+    return this.startupEditFormGroup.get('changesInWorkingCapital') as FormArray;
   }
 
   get deprecationAndAmortization(): FormArray {
-    return this.startupEditFormGroup.get('deprecation_and_amortization') as FormArray;
+    return this.startupEditFormGroup.get('deprecationAndAmortization') as FormArray;
   }
 }

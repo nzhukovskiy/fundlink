@@ -12,8 +12,11 @@ export class CreateStartupDto extends UpdateStartupDto {
         sam: string,
         som: string,
         teamExperience: string,
-        industry: string,
-        capitalExpenditures: number[]) {
+        // industry: string,
+        revenuePerYear: number[],
+        capitalExpenditures: number[],
+        changesInWorkingCapital: number[],
+        deprecationAndAmortization: number[]) {
     super(title,
       description,
       fundingGoal,
@@ -21,8 +24,11 @@ export class CreateStartupDto extends UpdateStartupDto {
       sam,
       som,
       teamExperience,
-      industry,
-      capitalExpenditures);
+      revenuePerYear,
+      capitalExpenditures,
+      changesInWorkingCapital,
+      deprecationAndAmortization
+      );
     this.email = email;
     this.password = password;
   }

@@ -53,11 +53,11 @@ export class EditFundingRoundComponent implements OnInit {
   }
 
   updateFundingRound() {
-    this.fundingRoundsService.update(this.id!, plainToInstance(CreateFundingRoundDto, {
-      funding_goal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
-      start_date: ngbDateFormat(this.startDate!),
-      end_date: ngbDateFormat(this.endDate!),
-    })).subscribe(res => {
+    this.fundingRoundsService.update(this.id!, {
+      fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+      startDate: ngbDateFormat(this.startDate!),
+      endDate: ngbDateFormat(this.endDate!),
+    }).subscribe(res => {
       this.router.navigate(['/profile']).then();
     })
   }

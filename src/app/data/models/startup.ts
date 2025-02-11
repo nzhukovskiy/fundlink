@@ -27,9 +27,9 @@ export class Startup extends User {
         this.fundingGoal = fundingGoal;
         this.presentationPath = presentationPath;
         this.fundingRounds = fundingRounds;
-        this.tam = tam;
-        this.sam = sam;
-        this.som = som;
+        this.tamMarket = tam;
+        this.samMarket = sam;
+        this.somMarket = som;
         this.teamExperience = teamExperience;
         this.industry = industry;
         this.tags = tags;
@@ -55,11 +55,11 @@ export class Startup extends User {
 
     industry: string;
 
-    tam: string;
+    tamMarket: string;
 
-    sam: string;
+    samMarket: string;
 
-    som: string;
+    somMarket: string;
 
     @Expose({ name: 'funding_rounds' })
     @Type(() => FundingRound)

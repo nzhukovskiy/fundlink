@@ -121,8 +121,15 @@ export class StartupsController {
 
     @Roles('startup')
     @UseGuards(AuthGuard, RolesGuard)
-    @Post("assignTag")
+    @Post("assign-tag")
     assignTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
         return this.startupsService.assignTag(assignTagDto.tagId, req.token.payload.id);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post("remove-tag")
+    removeTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
+        return this.startupsService.removeTag(assignTagDto.tagId, req.token.payload.id);
     }
 }

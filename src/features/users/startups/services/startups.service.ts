@@ -48,8 +48,7 @@ export class StartupsService {
         if (!startup) {
             throw new NotFoundException(`Startup with an id ${id} does not exist`);
         }
-        console.log(this.calculateDcf(startup))
-        return startup;
+        return {...startup, dcf: this.calculateDcf(startup)};
     }
 
     async getCurrent(userData: User) {
@@ -92,7 +91,7 @@ export class StartupsService {
           .innerJoin('fundingRound.startup', 'startup')
           .where('startup.id = :id', { id })
           .select(['investor.id as id', 'investor.name as name', 'investor.surname as surname', 'investor.email as email',
-              'SUM(investment.amount) AS totalInvestment'])
+              'SUM(investment.amount) AS "totalInvestment"'])
           .groupBy('investor.id')
           .addGroupBy('investor.name')
           .distinct(true)
@@ -113,6 +112,12 @@ export class StartupsService {
         let tag = await this.tagRepository.findOneBy({id: tagId});
         console.log(startup);
         startup.tags.push(tag);
+        return this.startupRepository.save(startup);
+    }
+
+    async removeTag(tagId: number, startupId: number) {
+        let startup = await this.getOne(startupId);
+        startup.tags = startup.tags.filter(tag => tag.id !== tagId);
         return this.startupRepository.save(startup);
     }
 
@@ -147,4 +152,6 @@ export class StartupsService {
         let costOfEquity = new Decimal(this.bonds10YearsYield).plus(new Decimal(this.beta).mul((new Decimal(this.stockMarketAverageReturn).minus(new Decimal(this.bonds10YearsYield)))));
         return (totalInvestments.div(v).mul(costOfEquity)).plus((new Decimal(startup.debtAmount).div(v).mul(new Decimal(this.interestRate))).mul(new Decimal(1).minus(new Decimal(this.incomeTaxRate))));
     }
+
+
 }

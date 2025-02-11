@@ -13,6 +13,8 @@ import { Investor } from "../../investors/entities/investor";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../user/user";
 import { Tag } from "../../../tags/entities/tag/tag";
+import Decimal from "decimal.js";
+import { sampleTime } from "rxjs";
 
 @Injectable()
 export class StartupsService {
@@ -24,6 +26,12 @@ export class StartupsService {
                 private readonly paginateService: PaginateService,
                 private readonly fundingRoundsService: FundingRoundsService) {
     }
+
+    incomeTaxRate = "0.18";
+    interestRate = "0.18";
+    bonds10YearsYield = "0.16";
+    beta = "1.3";
+    stockMarketAverageReturn = "0.083";
 
     getAll(query: PaginateQuery) {
         return this.paginateService.paginate(query, this.startupRepository);
@@ -40,6 +48,7 @@ export class StartupsService {
         if (!startup) {
             throw new NotFoundException(`Startup with an id ${id} does not exist`);
         }
+        console.log(this.calculateDcf(startup))
         return startup;
     }
 
@@ -105,5 +114,37 @@ export class StartupsService {
         console.log(startup);
         startup.tags.push(tag);
         return this.startupRepository.save(startup);
+    }
+
+    calculateDcf(startup: Startup) {
+
+        let dcf = new Decimal(0);
+        if (!startup.revenuePerYear || !startup.capitalExpenditures
+          || !startup.changesInWorkingCapital || !startup.deprecationAndAmortization) {
+            return;
+        }
+        let totalInvestments = new Decimal("0");
+        startup.fundingRounds.forEach(round => {
+            totalInvestments = totalInvestments.plus(new Decimal(round.currentRaised));
+        })
+        console.log(totalInvestments);
+        if (totalInvestments.equals(0)) {
+            return dcf;
+        }
+        console.log(startup.revenuePerYear)
+        startup.revenuePerYear.forEach((revenue, i) => {
+            let fcf = new Decimal(revenue).mul(new Decimal("1")
+              .minus(new Decimal(this.incomeTaxRate))).plus(new Decimal(startup.deprecationAndAmortization[i]))
+              .minus(new Decimal(startup.capitalExpenditures[i])).minus(new Decimal(startup.changesInWorkingCapital[i]))
+            dcf = dcf.plus(fcf.div((new Decimal(1).plus(this.calculateDiscountRate(startup, totalInvestments))).pow(new Decimal(i).plus(1))));
+            console.log(this.calculateDiscountRate(startup, totalInvestments))
+        })
+        return dcf;
+    }
+
+    private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {
+        let v = totalInvestments.plus(new Decimal(startup.debtAmount));
+        let costOfEquity = new Decimal(this.bonds10YearsYield).plus(new Decimal(this.beta).mul((new Decimal(this.stockMarketAverageReturn).minus(new Decimal(this.bonds10YearsYield)))));
+        return (totalInvestments.div(v).mul(costOfEquity)).plus((new Decimal(startup.debtAmount).div(v).mul(new Decimal(this.interestRate))).mul(new Decimal(1).minus(new Decimal(this.incomeTaxRate))));
     }
 }

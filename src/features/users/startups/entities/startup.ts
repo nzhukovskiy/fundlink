@@ -15,6 +15,9 @@ export class Startup extends User {
     @Column({type: "decimal"})
     fundingGoal: string;
 
+    @Column()
+    teamExperience: number;
+
     @Column({type: "decimal"})
     tamMarket: string;
 
@@ -23,6 +26,21 @@ export class Startup extends User {
 
     @Column({type: "decimal"})
     somMarket: string;
+
+    @Column({ type: 'decimal', default: 0 })
+    debtAmount: string;
+
+    @Column({ nullable: true, type: 'json' })
+    revenuePerYear?: string[];
+
+    @Column({ nullable: true, type: 'json' })
+    capitalExpenditures?: string[];
+
+    @Column({ nullable: true, type: 'json' })
+    changesInWorkingCapital?: string[];
+
+    @Column({ nullable: true, type: 'json' })
+    deprecationAndAmortization?: string[];
 
     @Column({ nullable: true })
     presentationPath: string;

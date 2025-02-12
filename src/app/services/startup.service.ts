@@ -18,8 +18,11 @@ export class StartupService {
 
   constructor(private readonly appHttpService: AppHttpService) { }
 
-    getAll(page?: number, itemsPerPage?: number) {
+    getAll(page?: number, itemsPerPage?: number, searchPattern?: string, ) {
       let query = new HttpParams();
+      if (typeof searchPattern !== "undefined") {
+        query = query.append("title", searchPattern);
+      }
       if (typeof page !== "undefined") {
         query = query.append("page", page);
       }

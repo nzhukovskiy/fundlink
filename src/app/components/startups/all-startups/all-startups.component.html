@@ -1,3 +1,10 @@
+<form>
+  <div class="mb-3">
+    <label for="startupTitleSearch" class="form-label">Поиск стартапов</label>
+    <input type="text" [formControl]="startupTitleSearch" class="form-control" id="startupTitleSearch" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text"></div>
+  </div>
+</form>
 <div class="startups-list" >
   <div *ngFor="let startup of startups">
     <app-single-startup [startup]="startup"></app-single-startup>

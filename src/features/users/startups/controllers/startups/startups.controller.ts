@@ -5,7 +5,7 @@ import {
     Get,
     Param,
     Patch,
-    Post,
+    Post, Query,
     Req,
     UploadedFile,
     UseGuards,
@@ -25,6 +25,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { fileFilter } from "../../presentations/constants/file-filter";
 import { presentationStorage } from "../../presentations/constants/presentation-storage";
 import { AssignTagDto } from "../../dtos/assign-tag-dto";
+import { Like } from "typeorm";
 
 
 @Controller('startups')
@@ -35,8 +36,8 @@ export class StartupsController {
                 private readonly fundingRoundsService: FundingRoundsService) {
     }
     @Get()
-    findAll(@Paginate() query: PaginateQuery) {
-        return this.startupsService.getAll(query);
+    findAll(@Paginate() query: PaginateQuery, @Query('title') title: string) {
+        return this.startupsService.getAll(query, title);
     }
 
     @ApiBearerAuth()

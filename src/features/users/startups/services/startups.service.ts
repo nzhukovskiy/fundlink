@@ -33,8 +33,17 @@ export class StartupsService {
     beta = "1.3";
     stockMarketAverageReturn = "0.083";
 
-    getAll(query: PaginateQuery) {
-        return this.paginateService.paginate(query, this.startupRepository);
+    async getAll(query: PaginateQuery, title = "", params = {}) {
+        const startupsQuery = this.startupRepository.createQueryBuilder("startup")
+        if (title) {
+            startupsQuery.where("to_tsvector('simple', startup.title) @@ plainto_tsquery('simple', :title)", { title });
+        }
+
+        return this.paginateService.paginate(query, startupsQuery,
+          {
+              ...params,
+              relations: ["fundingRounds"]
+          });
     }
 
     async getOne(id: number) {

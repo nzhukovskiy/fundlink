@@ -45,6 +45,9 @@ export class Startup extends User {
     @Column({ nullable: true })
     presentationPath: string;
 
+    @Column({ nullable: true })
+    logoPath: string;
+
     @OneToMany(() => FundingRound, (fundingRound) => fundingRound.startup)
     fundingRounds: FundingRound[];
 

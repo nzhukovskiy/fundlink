@@ -22,10 +22,11 @@ import { AuthGuard } from "../../../../auth/guards/auth.guard";
 import { Roles } from "../../../../auth/decorators/roles.decorator";
 import { RolesGuard } from "../../../../auth/guards/roles.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { fileFilter } from "../../presentations/constants/file-filter";
-import { presentationStorage } from "../../presentations/constants/presentation-storage";
+import { presentationFileFilter } from "../../storage/presentations/presentation-file-filter";
+import { fileStorage } from "../../storage/file-storage";
 import { AssignTagDto } from "../../dtos/assign-tag-dto";
 import { Like } from "typeorm";
+import { logoFileFilter } from "../../storage/logos/logo-file-filter";
 
 
 @Controller('startups')
@@ -109,8 +110,8 @@ export class StartupsController {
     @UseGuards(AuthGuard, RolesGuard)
     @Post('upload-presentation')
     @UseInterceptors(FileInterceptor('presentation', {
-        storage: presentationStorage,
-        fileFilter: fileFilter
+        storage: fileStorage("presentations"),
+        fileFilter: presentationFileFilter
     }))
     async uploadStartupPresentation(@UploadedFile() file: Express.Multer.File, @Req() req) {
         if (!file) {
@@ -132,5 +133,21 @@ export class StartupsController {
     @Post("remove-tag")
     removeTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
         return this.startupsService.removeTag(assignTagDto.tagId, req.token.payload.id);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post('upload-logo')
+    @UseInterceptors(FileInterceptor('logo', {
+        storage: fileStorage("logos"),
+        fileFilter: logoFileFilter
+    }))
+    async uploadLogo(@UploadedFile() file: Express.Multer.File, @Req() req) {
+        console.log(file)
+        if (!file) {
+            throw new BadRequestException("No file provided");
+        }
+        const user = req.token.payload;
+        return this.startupsService.uploadLogo(user.id, file.filename);
     }
 }

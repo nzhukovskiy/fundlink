@@ -160,6 +160,15 @@ export class StartupsService {
         return dcf;
     }
 
+    async uploadLogo(startupId: number, fileName: string) {
+        const startup = await this.startupRepository.findOneBy({id: startupId});
+        if (!startup) {
+            throw new NotFoundException('Startup with this id not found');
+        }
+        startup.logoPath = fileName;
+        return this.startupRepository.save(startup);
+    }
+
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {
         let v = totalInvestments.plus(new Decimal(startup.debtAmount));
         let costOfEquity = new Decimal(this.bonds10YearsYield).plus(new Decimal(this.beta).mul((new Decimal(this.stockMarketAverageReturn).minus(new Decimal(this.bonds10YearsYield)))));

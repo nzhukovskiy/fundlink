@@ -10,6 +10,7 @@ export class Startup extends User {
         description: string,
         fundingGoal: string,
         presentationPath: string,
+        logoPath: string,
         fundingRounds: FundingRound[],
         id: number, email: string, password: string,
         tam: string, sam: string, som: string,
@@ -26,6 +27,7 @@ export class Startup extends User {
         this.description = description;
         this.fundingGoal = fundingGoal;
         this.presentationPath = presentationPath;
+        this.logoPath = logoPath;
         this.fundingRounds = fundingRounds;
         this.tamMarket = tam;
         this.samMarket = sam;
@@ -49,6 +51,9 @@ export class Startup extends User {
 
     @Expose({ name: 'presentation_path' })
     presentationPath: string;
+
+    @Expose({ name: 'presentation_path' })
+    logoPath: string;
 
     @Expose({ name: 'team_experience' })
     teamExperience: string;

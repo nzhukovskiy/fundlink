@@ -2,13 +2,14 @@
 <h4 class="tags-container">
   <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>
 </h4>
+<img width="100" [src]="'http://localhost:3000/uploads/logos/' + startup?.logoPath" alt="">
 <h4>Общая цель: {{startup?.fundingGoal}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>
 <div>Объем рынка TAM {{startup?.tamMarket}} млн руб.</div>
 <div>Объем рынка SAM {{startup?.samMarket}} млн руб.</div>
 <div>Объем рынка SOM {{startup?.somMarket}} млн руб.</div>
 <!--<div>Сектор {{startup?.industry}}</div>-->
-<a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/' + startup?.presentationPath">Презентация</a>
+<a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
 <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
 <h4>Раунды инвестирования:
 </h4>

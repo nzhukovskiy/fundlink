@@ -36,8 +36,8 @@ export class StartupsController {
                 private readonly fundingRoundsService: FundingRoundsService) {
     }
     @Get()
-    findAll(@Paginate() query: PaginateQuery, @Query('title') title: string) {
-        return this.startupsService.getAll(query, title);
+    findAll(@Paginate() query: PaginateQuery, @Query('title') title: string, @Query('tag') tag: string) {
+        return this.startupsService.getAll(query, title, tag);
     }
 
     @ApiBearerAuth()

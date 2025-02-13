@@ -1,6 +1,6 @@
 <h3>{{startup?.title}}</h3>
 <h4 class="tags-container">
-  <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</div>
+  <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>
 </h4>
 <h4>Общая цель: {{startup?.fundingGoal}} руб.</h4>
 <p style="white-space: pre-line;">{{startup?.description}}</p>

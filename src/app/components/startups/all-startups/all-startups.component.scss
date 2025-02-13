@@ -8,3 +8,11 @@
 .startups-paginator {
   margin-bottom: 15px;
 }
+.tag-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tag-filter-group mat-icon {
+  cursor: pointer;
+}

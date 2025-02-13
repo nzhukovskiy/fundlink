@@ -5,6 +5,16 @@
     <div id="emailHelp" class="form-text"></div>
   </div>
 </form>
+<div class="mb-3">
+  <label for="tag" class="form-label">Тег</label>
+  <div class="tag-filter-group">
+    <select [formControl]="startupTagSearch" class="form-select" id="tag">
+      <option *ngFor="let tag of allTags" [value]="tag.title">{{tag.title}}</option>
+    </select>
+    <mat-icon (click)="clearTagSelection()" class="tag-delete-icon">close</mat-icon>
+  </div>
+
+</div>
 <div class="startups-list" >
   <div *ngFor="let startup of startups">
     <app-single-startup [startup]="startup"></app-single-startup>

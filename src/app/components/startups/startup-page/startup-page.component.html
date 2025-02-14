@@ -11,8 +11,7 @@
 <!--<div>Сектор {{startup?.industry}}</div>-->
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
 <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
-<h4>Раунды инвестирования:
-</h4>
+<h4>Раунды инвестирования:</h4>
 <div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">
     <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
       <div class="flex-horizontal-container">

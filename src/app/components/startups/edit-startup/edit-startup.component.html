@@ -1,6 +1,17 @@
 <div class="form-container">
-  <h3>Редактирование информации о стартапе</h3>
+  <h3 *ngIf="formType === FormType.UPDATE">Редактирование информации о стартапе</h3>
   <form class="register-form" [formGroup]="startupEditFormGroup">
+    <ng-container *ngIf="formType === FormType.CREATE">
+      <div class="mb-3">
+        <label for="registerEmailField" class="form-label">Адрес электронной почты</label>
+        <input type="email" formControlName="email" class="form-control" id="registerEmailField" placeholder="name@example.com">
+      </div>
+      <div class="mb-3">
+        <label for="registerPasswordField" class="form-label">Пароль</label>
+        <input class="form-control" formControlName="password" type="password" id="registerPasswordField">
+      </div>
+    </ng-container>
+
     <div class="mb-3">
       <label for="registerNameField" class="form-label">Название</label>
       <input type="text" formControlName="title" class="form-control" id="registerNameField" placeholder="Мой стартап">
@@ -8,6 +19,14 @@
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label">Описание стартапа</label>
       <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="formFile" class="form-label">Логотип</label>
+      <div class="startup-logo-group">
+        <input #startupLogoInput (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
+        <mat-icon (click)="removeImage()">close</mat-icon>
+      </div>
+      <img #startupLogoPreview class="startup-logo-preview" alt="" src="">
     </div>
 <!--    <div class="mb-3">-->
 <!--      <label for="industryTypeField" class="form-label">Сектор</label>-->
@@ -66,7 +85,7 @@
       </div>
     </div>
     <div class="mb-3 register-submit-button-group">
-      <button type="submit" (click)="editStartup()" class="btn btn-primary mb-3 action-btn">Обновить</button>
+      <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">Обновить</button>
     </div>
   </form>
 </div>

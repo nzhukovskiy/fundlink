@@ -68,4 +68,12 @@ export class StartupService {
     removeTag(tagId: number) {
       return this.appHttpService.post<Startup>(`startups/remove-tag`, {tagId});
     }
+
+  uploadStartupImage(image: File | null | undefined) {
+    const formData = new FormData();
+    if (image) {
+      formData.append("logo", image);
+    }
+    return this.appHttpService.post<Startup>(`startups/upload-logo`, formData);
+  }
 }

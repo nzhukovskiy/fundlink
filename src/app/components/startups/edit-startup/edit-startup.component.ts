@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FundingRoundsService} from "../../../services/funding-rounds.service";
 import {StartupService} from "../../../services/startup.service";
-import { ConstantsService } from 'src/app/services/constants.service';
-import { plainToInstance } from 'class-transformer';
-import { UpdateStartupDto } from 'src/app/data/dtos/update-startup-dto';
+import {ConstantsService} from 'src/app/services/constants.service';
+import {RemoteFileService} from "../../../services/remote-file.service";
+import {environment} from "../../../../environments/environment";
+import {FormType} from "../../../constants/form-type";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-edit-startup',
@@ -17,13 +18,21 @@ export class EditStartupComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute,
               private readonly router: Router,
               private readonly startupService: StartupService,
-              private readonly constantsService: ConstantsService) {
+              private readonly constantsService: ConstantsService,
+              private readonly remoteFileService: RemoteFileService,
+              private readonly authService: AuthService) {
   }
+  @Input() formType = FormType.UPDATE;
   id?: number;
+  @ViewChild('startupLogoInput') fileInput?: ElementRef;
+  @ViewChild('startupLogoPreview') imagePreview?: ElementRef;
 
   startupEditFormGroup = new FormGroup({
+    email: new FormControl<string>("", ),
+    password: new FormControl<string>("", ),
     title: new FormControl<string>("", ),
     description: new FormControl<string>("", ),
+    logo: new FormControl<File|undefined>(undefined),
     fundingGoal: new FormControl<string>("", ),
     tam: new FormControl<string>("", ),
     sam: new FormControl<string>("", ),
@@ -44,6 +53,15 @@ export class EditStartupComponent implements OnInit {
     ),
   })
 
+  handleFormSubmission() {
+    if (this.formType === FormType.CREATE) {
+      this.createStartup();
+    }
+    else {
+      this.editStartup();
+    }
+  }
+
   editStartup() {
     this.startupService.update( {
       title: this.startupEditFormGroup.controls.title.getRawValue()!,
@@ -58,9 +76,37 @@ export class EditStartupComponent implements OnInit {
       capitalExpenditures: this.startupEditFormGroup.controls.capitalExpenditures.getRawValue()!,
       changesInWorkingCapital: this.startupEditFormGroup.controls.changesInWorkingCapital.getRawValue()!,
       deprecationAndAmortization: this.startupEditFormGroup.controls.deprecationAndAmortization.getRawValue()!,
-    }).subscribe(res => {
+    }).subscribe(this.uploadLogo)
+  }
+
+  createStartup() {
+    this.authService.registerStartup( {
+      title: this.startupEditFormGroup.controls.title.getRawValue()!,
+      description: this.startupEditFormGroup.controls.description.getRawValue()!,
+      email: this.startupEditFormGroup.controls.email.getRawValue()!,
+      password: this.startupEditFormGroup.controls.password.getRawValue()!,
+      fundingGoal: this.startupEditFormGroup.controls.fundingGoal.getRawValue()!,
+      tamMarket: this.startupEditFormGroup.controls.tam.getRawValue()!,
+      samMarket: this.startupEditFormGroup.controls.sam.getRawValue()!,
+      somMarket: this.startupEditFormGroup.controls.som.getRawValue()!,
+      teamExperience: this.startupEditFormGroup.controls.teamExperience.getRawValue()!,
+      //industry: this.startupEditFormGroup.controls.industry.getRawValue()!,
+      revenuePerYear: this.startupEditFormGroup.controls.revenuePerYear.getRawValue()!,
+      capitalExpenditures: this.startupEditFormGroup.controls.capitalExpenditures.getRawValue()!,
+      changesInWorkingCapital: this.startupEditFormGroup.controls.changesInWorkingCapital.getRawValue()!,
+      deprecationAndAmortization: this.startupEditFormGroup.controls.deprecationAndAmortization.getRawValue()!,
+    }).subscribe(this.uploadLogo);
+  }
+
+  uploadLogo = () => {
+    if (this.startupEditFormGroup.controls.logo.getRawValue()) {
+      this.startupService.uploadStartupImage(this.startupEditFormGroup.controls.logo.getRawValue()).subscribe(startup => {
+        this.router.navigate(['/profile']).then();
+      })
+    }
+    else {
       this.router.navigate(['/profile']).then();
-    })
+    }
   }
 
   ngOnInit(): void {
@@ -68,26 +114,61 @@ export class EditStartupComponent implements OnInit {
     //   this.industryTypes = res;
     //   // this.startupEditFormGroup.controls.industry.setValue(this.industryTypes[0])
     // })
-    this.route.paramMap.subscribe(params => {
-      this.id = parseInt(params.get("id")!);
-      this.startupService.getOne(this.id).subscribe(res => {
-        console.log(res);
-        this.startupEditFormGroup.setValue({
-          fundingGoal: res.fundingGoal,
-          title: res.title,
-          description: res.description,
-          tam: res.tamMarket,
-          sam: res.samMarket,
-          som: res.somMarket,
-          teamExperience: res.teamExperience,
-          // industry: res.industry,
-          revenuePerYear: res.revenuePerYear,
-          capitalExpenditures: res.capitalExpenditures,
-          changesInWorkingCapital: res.changesInWorkingCapital,
-          deprecationAndAmortization: res.deprecationAndAmortization
+    if (this.formType === FormType.UPDATE) {
+      this.route.paramMap.subscribe(params => {
+        this.id = parseInt(params.get("id")!);
+        this.startupService.getOne(this.id).subscribe(startup => {
+          console.log(startup);
+          if (!startup.logoPath) {
+            this.startupEditFormGroup.setValue({
+              email: null,
+              password: null,
+              fundingGoal: startup.fundingGoal,
+              title: startup.title,
+              description: startup.description,
+              logo: null,
+              tam: startup.tamMarket,
+              sam: startup.samMarket,
+              som: startup.somMarket,
+              teamExperience: startup.teamExperience,
+              // industry: startup.industry,
+              revenuePerYear: startup.revenuePerYear,
+              capitalExpenditures: startup.capitalExpenditures,
+              changesInWorkingCapital: startup.changesInWorkingCapital,
+              deprecationAndAmortization: startup.deprecationAndAmortization
+            })
+          }
+          else {
+            this.remoteFileService.getImage(`${environment.apiUrl}uploads/logos/${startup.logoPath}`).subscribe(blobImage => {
+              let imageFullPath = startup.logoPath.split(/\\/);
+              let imageName = imageFullPath![imageFullPath!.length - 1];
+              let image = new File([blobImage], imageName);
+              this.startupEditFormGroup.setValue({
+                email: null,
+                password: null,
+                fundingGoal: startup.fundingGoal,
+                title: startup.title,
+                description: startup.description,
+                logo: image,
+                tam: startup.tamMarket,
+                sam: startup.samMarket,
+                som: startup.somMarket,
+                teamExperience: startup.teamExperience,
+                // industry: startup.industry,
+                revenuePerYear: startup.revenuePerYear,
+                capitalExpenditures: startup.capitalExpenditures,
+                changesInWorkingCapital: startup.changesInWorkingCapital,
+                deprecationAndAmortization: startup.deprecationAndAmortization
+              })
+              let fileList = new DataTransfer();
+              fileList.items.add(image);
+              this.fileInput!.nativeElement.files = fileList.files;
+              this.fileInput!.nativeElement.dispatchEvent(new Event('change'));
+            })
+          }
         })
       })
-    })
+    }
   }
 
   industryTypes: string[] = [];
@@ -107,4 +188,28 @@ export class EditStartupComponent implements OnInit {
   get deprecationAndAmortization(): FormArray {
     return this.startupEditFormGroup.get('deprecationAndAmortization') as FormArray;
   }
+
+  onImageChanged(event: Event) {
+    const file = (event.target as HTMLInputElement).files![0];
+    if (file) {
+      let reader = new FileReader();
+      reader.addEventListener("load", () => {
+        this.imagePreview!.nativeElement.src = reader.result;
+      })
+      reader.readAsDataURL(file);
+    }
+    else {
+      this.imagePreview!.nativeElement.src = "";
+    }
+    this.startupEditFormGroup.patchValue({ logo: file});
+  }
+
+  removeImage() {
+    let fileList = new DataTransfer();
+    this.fileInput!.nativeElement.files = fileList.files;
+    this.fileInput!.nativeElement.dispatchEvent(new Event('change'));
+    this.startupEditFormGroup.patchValue({ logo: null});
+  }
+
+  protected readonly FormType = FormType;
 }

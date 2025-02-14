@@ -1,4 +1,9 @@
 <div class="card" style="width: 18rem;">
+  <div class="startup-img-container">
+    <img *ngIf="startup?.logoPath" [src]="'http://localhost:3000/uploads/logos/' + startup!.logoPath" class="card-img-top startup-card-img">
+    <img *ngIf="!startup?.logoPath" src="assets/no-image.jpg" class="card-img-top startup-card-img" alt="...">
+  </div>
+
     <div class="card-body">
       <h5><a [routerLink]="['/startups', startup?.id]" class="card-title startup-card-title">{{startup?.title}}</a></h5>
       <strong>Текущий раунд: {{currentFundingRound?.stage}}</strong>

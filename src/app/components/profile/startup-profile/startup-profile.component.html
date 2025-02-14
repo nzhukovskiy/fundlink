@@ -29,7 +29,7 @@
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
 <div class="mb-3">
   <label for="formFile" class="form-label">Загрузить презентацию</label>
-  <div class="book-image-group">
+  <div class="startup-logo-group">
     <input (change)="onImageChanged($event)"  class="form-control" type="file" id="formFile">
   </div>
 </div>

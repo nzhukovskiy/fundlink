@@ -94,6 +94,9 @@ export class StartupsService {
             throw new NotFoundException(`Startup with an id ${id} does not exist`);
         }
         Object.assign(startup, updateStartupDto);
+        if (!updateStartupDto.logoPath) {
+            startup.logoPath = null;
+        }
         return this.startupRepository.save(startup);
     }
 

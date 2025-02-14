@@ -20,6 +20,10 @@ export class UpdateStartupDto {
     description: string;
 
     @ApiProperty()
+    @IsOptional()
+    logoPath: string;
+
+    @ApiProperty()
     @IsNumberString()
     fundingGoal: string;
 

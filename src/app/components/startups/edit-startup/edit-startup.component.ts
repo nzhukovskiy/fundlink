@@ -142,7 +142,7 @@ export class EditStartupComponent implements OnInit {
             this.remoteFileService.getImage(`${environment.apiUrl}uploads/logos/${startup.logoPath}`).subscribe(blobImage => {
               let imageFullPath = startup.logoPath.split(/\\/);
               let imageName = imageFullPath![imageFullPath!.length - 1];
-              let image = new File([blobImage], imageName);
+              let image = new File([blobImage], imageName, { type: blobImage.type || 'image/jpeg' });
               this.startupEditFormGroup.setValue({
                 email: null,
                 password: null,

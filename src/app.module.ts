@@ -17,6 +17,9 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from 'path';
 import { Tag } from "./features/tags/entities/tag/tag";
 import { TagsModule } from './features/tags/tags.module';
+import { ChatsModule } from './features/chats/chats.module';
+import { Chat } from "./features/chats/entities/chat/chat";
+import { Message } from "./features/chats/entities/message/message";
 
 @Module({
     imports: [
@@ -35,7 +38,7 @@ import { TagsModule } from './features/tags/tags.module';
                 username: configService.get("POSTGRES_USER"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DB").toString(),
-                entities: [Startup, Investor, FundingRound, Investment, Tag],
+                entities: [Startup, Investor, FundingRound, Investment, Tag, Chat, Message],
                 synchronize: true,
             }),
         }),
@@ -44,6 +47,7 @@ import { TagsModule } from './features/tags/tags.module';
         AuthModule,
         JwtTokenModule,
         TagsModule,
+        ChatsModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

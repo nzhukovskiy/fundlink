@@ -6,7 +6,7 @@ import { Message } from "../message/message";
 @Entity()
 export class Chat {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @ManyToOne(() => Startup, { eager: true })
     startup: Startup;

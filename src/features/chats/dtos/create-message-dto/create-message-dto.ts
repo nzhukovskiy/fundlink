@@ -1,9 +1,14 @@
-import { IsNumber, IsString } from "class-validator"
+import { IsNumber, IsOptional, IsString } from "class-validator"
 
 export class CreateMessageDto {
     @IsNumber()
-    chatId: number;
+    @IsOptional()
+    chatId: number
+
+    @IsNumber()
+    @IsOptional()
+    receiverId: number
 
     @IsString()
-    text: string;
+    text: string
 }

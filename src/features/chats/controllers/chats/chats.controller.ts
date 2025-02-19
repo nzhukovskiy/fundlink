@@ -12,6 +12,7 @@ import { CreateChatDto } from "../../dtos/create-chat-dto"
 import { AuthGuard } from "../../../auth/guards/auth.guard"
 import { Roles } from "../../../users/constants/roles"
 import { ChatsService } from "../../services/chats/chats.service"
+import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 
 @Controller("chats")
 export class ChatsController {
@@ -38,9 +39,9 @@ export class ChatsController {
         }
     }
 
-    @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard, ChatAccessGuard)
     @Get(":id")
     getChatMessages(@Param("id") id: number, @Req() req) {
-        return this.chatsService.getChat(id, req.token.payload.id)
+        return this.chatsService.getChat(id)
     }
 }

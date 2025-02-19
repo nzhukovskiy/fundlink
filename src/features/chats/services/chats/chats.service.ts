@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { Repository } from "typeorm"
 import { Chat } from "../../entities/chat/chat"
 import { InjectRepository } from "@nestjs/typeorm"
+import { Socket } from "socket.io"
 
 @Injectable()
 export class ChatsService {
@@ -25,14 +26,14 @@ export class ChatsService {
         return chat
     }
 
-    async getChat(chatId: number, userId: number) {
-        const chat = await this.chatRepository.findOne({
+    async getChat(chatId: number) {
+        return await this.chatRepository.findOne({
             where: { id: chatId },
             relations: ["messages"],
         })
-        if (chat.startup.id !== userId && chat.investor.id !== userId) {
-            throw new NotFoundException("Invalid chat")
-        }
-        return chat
+    }
+
+    async joinChat(chatId: number, client: Socket) {
+        client.join(`chat-${chatId}`)
     }
 }

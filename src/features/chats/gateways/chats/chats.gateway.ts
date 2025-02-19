@@ -12,6 +12,9 @@ import { JwtTokenService } from "../../../token/services/jwt-token.service"
 import { CreateMessageDto } from "../../dtos/create-message-dto/create-message-dto"
 import { MessagesService } from "../../services/messages/messages.service"
 import { JoinChatDto } from "../../dtos/join-chat-dto/join-chat-dto"
+import { ChatsService } from "../../services/chats/chats.service"
+import { UseGuards } from "@nestjs/common"
+import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 
 @WebSocketGateway(3001)
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -20,9 +23,11 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     constructor(
         private readonly jwtTokenService: JwtTokenService,
-        private readonly messagesService: MessagesService
+        private readonly messagesService: MessagesService,
+        private readonly chatsService: ChatsService
     ) {}
 
+    @UseGuards(ChatAccessGuard)
     @SubscribeMessage("message")
     async handleMessage(
         @MessageBody() createMessageDto: CreateMessageDto,
@@ -33,17 +38,17 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             client.data.user.role,
             client.data.user.id
         )
-        console.log(message, `chat-${createMessageDto.chatId}`);
-        this.server.to(`chat-${createMessageDto.chatId}`).emit("message", createMessageDto.text)
+        this.chatsService.joinChat(message.chat.id, client).then()
+        this.server.to(`chat-${message.chat.id}`).emit("message", message.text)
     }
 
+    @UseGuards(ChatAccessGuard)
     @SubscribeMessage("joinChat")
     handleJoinChat(
         @MessageBody() joinChatDto: JoinChatDto,
         @ConnectedSocket() client: Socket
     ) {
-        console.log("Joined chat ", joinChatDto.chatId)
-        client.join(`chat-${joinChatDto.chatId}`)
+        this.chatsService.joinChat(joinChatDto.chatId, client).then()
     }
 
     async handleConnection(client: Socket) {

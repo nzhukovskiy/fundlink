@@ -16,7 +16,7 @@ import { ChatsService } from "../../services/chats/chats.service"
 import { UseGuards } from "@nestjs/common"
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 
-@WebSocketGateway(3001)
+@WebSocketGateway(3001, { cors: true })
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server: Server
@@ -39,7 +39,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             client.data.user.id
         )
         this.chatsService.joinChat(message.chat.id, client).then()
-        this.server.to(`chat-${message.chat.id}`).emit("message", message.text)
+        this.server.to(`chat-${message.chat.id}`).emit("message", message)
     }
 
     @UseGuards(ChatAccessGuard)
@@ -52,6 +52,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     async handleConnection(client: Socket) {
+        console.log("Trying to connect")
         try {
             const token =
                 client.handshake.auth.token ||
@@ -64,7 +65,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             const tokenData = await this.jwtTokenService.verifyToken(token)
 
             client.data.user = tokenData.payload
-            console.log(`User ${client.data.user.id} connected via WebSocket`)
+            console.log(`${client.data.user.role} ${client.data.user.id} connected via WebSocket`)
         } catch (error) {
             console.error("WebSocket Authentication Failed:", error.message)
             client.disconnect()

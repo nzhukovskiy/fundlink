@@ -36,6 +36,10 @@ import { MoneyConverterPipePipe } from './pipes/money-converter-pipe.pipe';
 import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
 import { RecommendedStartupsComponent } from './components/startups/recommended-startups/recommended-startups.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
+import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
+import {AppSocketService} from "./services/app-socket.service";
+
+const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
 @NgModule({
   declarations: [
@@ -75,14 +79,16 @@ import { MainPageComponent } from './components/main-page/main-page.component';
     ToastrModule.forRoot(),
     MatIconModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    SocketIoModule.forRoot(socketIoConfig),
   ],
   providers: [AppHttpService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    },],
+    },
+    AppSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

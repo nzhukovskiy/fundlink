@@ -23,7 +23,9 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
-        this.toastrService.error(JSON.stringify(err.error));
+        if (!authReq.url.includes('chatBetweenUsers')) {
+          this.toastrService.error(JSON.stringify(err.error));
+        }
         return throwError(() => err);
       })
     );

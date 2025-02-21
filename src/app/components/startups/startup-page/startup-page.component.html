@@ -1,11 +1,6 @@
 <div class="title-group">
   <h3>{{startup?.title}}</h3>
-  <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR" class="mb-3 button-group">
-    <a (click)="sendMessage()" class="btn btn-primary mb-3 action-btn"><mat-icon>send</mat-icon>Написать</a>
-  </div>
-</div>
-<div *ngFor="let message of chat?.messages">
-  {{message.text}}
+  <app-goto-chat *ngIf="startupLoaded | async" [userToChatWith]="startup"></app-goto-chat>
 </div>
 <h4 class="tags-container">
   <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>

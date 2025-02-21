@@ -1,0 +1,11 @@
+<ng-container *ngIf="chatExists; else chatDoesNotExist">
+  <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR" class="mb-3 button-group">
+    <a [routerLink]="['/chats', chat?.id]" class="btn btn-primary mb-3 action-btn"><mat-icon>send</mat-icon>Написать</a>
+  </div>
+</ng-container>
+<ng-template #chatDoesNotExist>
+  <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR" class="mb-3 button-group">
+    <a [routerLink]="['/chats/new']" [queryParams]="paramsToPass" class="btn btn-primary mb-3 action-btn"><mat-icon>send</mat-icon>Написать</a>
+  </div>
+</ng-template>
+

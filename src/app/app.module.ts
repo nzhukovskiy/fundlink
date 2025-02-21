@@ -38,6 +38,9 @@ import { RecommendedStartupsComponent } from './components/startups/recommended-
 import { MainPageComponent } from './components/main-page/main-page.component';
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {AppSocketService} from "./services/app-socket.service";
+import { ChatComponent } from './components/chat/chat/chat.component';
+import { MessageComponent } from './components/chat/message/message.component';
+import { GotoChatComponent } from './components/common/goto-chat/goto-chat.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -65,7 +68,10 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     MoneyConverterPipePipe,
     EditInvestorComponent,
     RecommendedStartupsComponent,
-    MainPageComponent
+    MainPageComponent,
+    ChatComponent,
+    MessageComponent,
+    GotoChatComponent
   ],
   imports: [
     BrowserModule,

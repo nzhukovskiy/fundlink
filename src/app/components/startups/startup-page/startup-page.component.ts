@@ -13,6 +13,7 @@ import {CreateMessageDto} from "../../../data/dtos/create-message.dto";
 import {Message} from "../../../data/models/message";
 import {ChatService} from "../../../services/chat.service";
 import {Chat} from "../../../data/models/chat";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-startup-page',
@@ -31,6 +32,8 @@ export class StartupPageComponent implements OnInit {
   startup?: Startup;
   investors?: Investor[];
   chat?: Chat;
+
+  startupLoaded = new BehaviorSubject(false);
 
   ngOnInit(): void {
     this.loadStartupAndInvestors();
@@ -51,7 +54,8 @@ export class StartupPageComponent implements OnInit {
       this.startupService.getOne(parseInt(id!)).subscribe(res => {
         this.startup = res;
         this.startup.fundingRounds = this.startup.fundingRounds.sort((a,b) => a.id - b.id)
-      });
+        this.startupLoaded.next(true)
+      }).add(() => {});
       this.startupService.getInvestors(parseInt(id!)).subscribe(res => {
         this.investors = res;
       })

@@ -10,10 +10,14 @@ export class ChatAccessGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         let chatId: number
         let user: any
+        let startupId: number
+        let investorId: number
         if (context.getType() === "http") {
             const request = context.switchToHttp().getRequest()
             user = request.token.payload
             chatId = request.params.id
+            startupId = request.body.startupId
+            investorId = request.body.investorId
         } else if (context.getType() === "ws") {
             const client = context.switchToWs().getClient() as Socket
             user = client.data.user
@@ -26,7 +30,15 @@ export class ChatAccessGuard implements CanActivate {
                 client.disconnect()
             }
         }
-        const chat = await this.chatService.getChat(chatId)
+        let chat
+        if (chatId) {
+            chat = await this.chatService.getChat(chatId)
+        } else {
+            chat = await this.chatService.getChatBetweenUsers({
+                startupId: startupId,
+                investorId: investorId,
+            })
+        }
         if (this.ensureUserAccess(chat, user)) {
             return true
         }

@@ -5,6 +5,7 @@ import {
     Get,
     Param,
     Post,
+    Query,
     Req,
     UseGuards,
 } from "@nestjs/common"
@@ -13,6 +14,7 @@ import { AuthGuard } from "../../../auth/guards/auth.guard"
 import { Roles } from "../../../users/constants/roles"
 import { ChatsService } from "../../services/chats/chats.service"
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
+import { ChatBetweenUsersDto } from "../../dtos/chat-between-users-dto/chat-between-users-dto"
 
 @Controller("chats")
 export class ChatsController {
@@ -39,9 +41,24 @@ export class ChatsController {
         }
     }
 
+    @UseGuards(AuthGuard)
+    @Get("chatsForUser")
+    getChatsForUser(@Req() req) {
+        return this.chatsService.getChatsForUser(req.token.payload)
+    }
+
+    @UseGuards(AuthGuard, ChatAccessGuard)
+    @Get("chatBetweenUsers")
+    getChatBetweenUsers(
+        @Query("startupId") startupId: number,
+        @Query("investorId") investorId: number
+    ) {
+        return this.chatsService.getChatBetweenUsers({ startupId, investorId })
+    }
+
     @UseGuards(AuthGuard, ChatAccessGuard)
     @Get(":id")
-    getChatMessages(@Param("id") id: number, @Req() req) {
+    getChat(@Param("id") id: number) {
         return this.chatsService.getChat(id)
     }
 }

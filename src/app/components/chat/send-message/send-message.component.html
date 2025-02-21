@@ -1,0 +1,7 @@
+<div class="mb-3">
+  <label for="exampleFormControlTextarea1" class="form-label">Текст сообщения</label>
+  <textarea [formControl]="messageFormControl" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+</div>
+<div class="mb-3 register-submit-button-group">
+  <button (click)="sendMessage()" type="submit" class="btn btn-primary mb-3 action-btn">Отправить</button>
+</div>

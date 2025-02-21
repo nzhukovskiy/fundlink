@@ -1,4 +1,5 @@
 <h3>{{investor?.name}} {{investor?.surname}}</h3>
+<app-goto-chat *ngIf="(investorLoaded | async) && localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.INVESTOR" [userToChatWith]="investor"></app-goto-chat>
 <p>Email: {{investor?.email}}</p>
 <!--<div>-->
 <!--    <h4>Совершенные инвестиции</h4>-->

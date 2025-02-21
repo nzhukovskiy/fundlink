@@ -52,9 +52,7 @@ export class GotoChatComponent implements OnInit {
         this.chatExists = true;
       },
       error: error => {
-        console.log(error)
         if (error.status === 404) {
-          console.log("gf")
           this.chatExists = false;
           this.paramsToPass = getChatDTO;
         }

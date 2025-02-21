@@ -1,4 +1,10 @@
-<p>chat works!</p>
-<div *ngFor="let message of chat?.messages">
-  {{message.text}}
-</div>
+<ng-container *ngIf="chat; else newChat">
+  <p>Чат с {{getMemberName()}}</p>
+  <div class="messages-container">
+    <app-message *ngFor="let message of chat?.messages" [message]="message"></app-message>
+  </div>
+</ng-container>
+<ng-template #newChat>
+  Новый чат, тут пока что пусто
+</ng-template>
+<app-send-message (message)="sendMessage($event)"></app-send-message>

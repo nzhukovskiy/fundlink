@@ -1,6 +1,6 @@
 <div class="title-group">
   <h3>{{startup?.title}}</h3>
-  <app-goto-chat *ngIf="startupLoaded | async" [userToChatWith]="startup"></app-goto-chat>
+  <app-goto-chat *ngIf="(startupLoaded | async) && localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.STARTUP" [userToChatWith]="startup"></app-goto-chat>
 </div>
 <h4 class="tags-container">
   <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>

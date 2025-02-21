@@ -37,15 +37,6 @@ export class StartupPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStartupAndInvestors();
-    this.socket.on("message", (msg: Message) => {
-      this.chat?.messages.push(msg);
-    })
-    this.socket.emit('joinChat', {
-      chatId: 1
-    });
-    this.chatService.getChat(1).subscribe(chat => {
-      this.chat = chat;
-    })
   }
 
   loadStartupAndInvestors() {

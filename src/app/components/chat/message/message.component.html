@@ -1,1 +1,7 @@
-<p>message works!</p>
+<div class="message-row" [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.payload!.role}">
+  <div class="message-box">
+    <p class="message-timestamp">{{message?.timestamp}}</p>
+    <p>{{message?.text}}</p>
+  </div>
+</div>
+

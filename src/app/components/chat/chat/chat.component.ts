@@ -36,12 +36,18 @@ export class ChatComponent implements OnInit {
       let chatId = params.get("id");
       console.log(chatId);
       if (chatId) {
-        this.chatService.getChat(parseInt(chatId)).subscribe(res => {
-          this.chat = res;
+        this.route.data.subscribe(({chat}) => {
+          this.chat = chat;
           this.socket.emit('joinChat', {
-            chatId: this.chat.id,
+            chatId: this.chat!.id,
           });
         })
+        // this.chatService.getChat(parseInt(chatId)).subscribe(res => {
+        //   this.chat = res;
+        //   this.socket.emit('joinChat', {
+        //     chatId: this.chat.id,
+        //   });
+        // })
       }
       else {
         this.route.queryParamMap.subscribe(queryParams => {

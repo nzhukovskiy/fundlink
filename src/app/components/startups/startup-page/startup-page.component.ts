@@ -36,7 +36,13 @@ export class StartupPageComponent implements OnInit {
   startupLoaded = new BehaviorSubject(false);
 
   ngOnInit(): void {
-    this.loadStartupAndInvestors();
+    this.route.data.subscribe(({ startup }) => {
+      this.startup = startup;
+      this.startup!.fundingRounds = this.startup!.fundingRounds.sort((a,b) => a.id - b.id)
+      this.startupService.getInvestors(this.startup!.id).subscribe(res => {
+        this.investors = res;
+      })
+    })
   }
 
   loadStartupAndInvestors() {

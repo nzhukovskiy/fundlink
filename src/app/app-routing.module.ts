@@ -19,6 +19,8 @@ import {PageNotFoundComponent} from "./components/common/page-not-found/page-not
 import { EditInvestorComponent } from './components/investors/edit-investor/edit-investor.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import {ChatComponent} from "./components/chat/chat/chat.component";
+import {chatResolver} from "./resolvers/chat.resolver";
+import {startupResolver} from "./resolvers/startup.resolver";
 
 const routes: Routes = [
     {path: '', component: MainPageComponent},
@@ -26,7 +28,7 @@ const routes: Routes = [
     {path: 'investors/:id', component: InvestorPageComponent},
     {path: 'investors/:id/edit', component: EditInvestorComponent, canActivate: [authGuard, rolesGuard(Roles.INVESTOR)]},
     {path: 'startups', component: AllStartupsComponent},
-    {path: 'startups/:id', component: StartupPageComponent},
+    {path: 'startups/:id', component: StartupPageComponent, resolve: {startup: startupResolver}},
     {path: 'startups/:id/edit', component: EditStartupComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
@@ -34,7 +36,7 @@ const routes: Routes = [
     {path: 'fundingRounds/:id/edit', component: EditFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'fundingRounds/create', component: CreateFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'chats/new', component: ChatComponent, canActivate: [authGuard]},
-    {path: 'chats/:id', component: ChatComponent, canActivate: [authGuard]},
+    {path: 'chats/:id', component: ChatComponent, canActivate: [authGuard], resolve: {chat: chatResolver}},
     {path: '**', component: PageNotFoundComponent}
 ];
 

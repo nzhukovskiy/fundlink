@@ -1,7 +1,7 @@
 <div class="investor-profile-top-group">
   <h3>{{investor?.name}} {{investor?.surname}}</h3>
   <div class="mb-3 button-group">
-    <a [routerLink]="['/investors', investor?.id, 'edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
+    <a [routerLink]="['/investors/edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
   </div>
 </div>
 <p>Email: {{investor?.email}}</p>

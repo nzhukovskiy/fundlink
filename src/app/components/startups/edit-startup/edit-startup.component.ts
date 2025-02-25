@@ -7,6 +7,7 @@ import {RemoteFileService} from "../../../services/remote-file.service";
 import {environment} from "../../../../environments/environment";
 import {FormType} from "../../../constants/form-type";
 import {AuthService} from "../../../services/auth.service";
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
   selector: 'app-edit-startup',
@@ -20,7 +21,8 @@ export class EditStartupComponent implements OnInit {
               private readonly startupService: StartupService,
               private readonly constantsService: ConstantsService,
               private readonly remoteFileService: RemoteFileService,
-              private readonly authService: AuthService) {
+              private readonly authService: AuthService,
+              private readonly localStorageService: LocalStorageService,) {
   }
   @Input() formType = FormType.UPDATE;
   id?: number;
@@ -115,59 +117,57 @@ export class EditStartupComponent implements OnInit {
     //   // this.startupEditFormGroup.controls.industry.setValue(this.industryTypes[0])
     // })
     if (this.formType === FormType.UPDATE) {
-      this.route.paramMap.subscribe(params => {
-        this.id = parseInt(params.get("id")!);
-        this.startupService.getOne(this.id).subscribe(startup => {
-          console.log(startup);
-          if (!startup.logoPath) {
-            this.startupEditFormGroup.setValue({
-              email: null,
-              password: null,
-              fundingGoal: startup.fundingGoal,
-              title: startup.title,
-              description: startup.description,
-              logo: null,
-              tam: startup.tamMarket,
-              sam: startup.samMarket,
-              som: startup.somMarket,
-              teamExperience: startup.teamExperience,
-              // industry: startup.industry,
-              revenuePerYear: startup.revenuePerYear,
-              capitalExpenditures: startup.capitalExpenditures,
-              changesInWorkingCapital: startup.changesInWorkingCapital,
-              deprecationAndAmortization: startup.deprecationAndAmortization
-            })
-          }
-          else {
-            this.remoteFileService.getImage(`${environment.apiUrl}uploads/logos/${startup.logoPath}`).subscribe(blobImage => {
-              let imageFullPath = startup.logoPath.split(/\\/);
-              let imageName = imageFullPath![imageFullPath!.length - 1];
-              let image = new File([blobImage], imageName, { type: blobImage.type || 'image/jpeg' });
-              this.startupEditFormGroup.setValue({
-                email: null,
-                password: null,
-                fundingGoal: startup.fundingGoal,
-                title: startup.title,
-                description: startup.description,
-                logo: image,
-                tam: startup.tamMarket,
-                sam: startup.samMarket,
-                som: startup.somMarket,
-                teamExperience: startup.teamExperience,
-                // industry: startup.industry,
-                revenuePerYear: startup.revenuePerYear,
-                capitalExpenditures: startup.capitalExpenditures,
-                changesInWorkingCapital: startup.changesInWorkingCapital,
-                deprecationAndAmortization: startup.deprecationAndAmortization
-              })
-              let fileList = new DataTransfer();
-              fileList.items.add(image);
-              this.fileInput!.nativeElement.files = fileList.files;
-              this.fileInput!.nativeElement.dispatchEvent(new Event('change'));
-            })
-          }
+        let user = this.localStorageService.getUser();
+        this.startupService.getOne(user!.payload!.id).subscribe(startup => {
+            console.log(startup);
+            if (!startup.logoPath) {
+                this.startupEditFormGroup.setValue({
+                    email: null,
+                    password: null,
+                    fundingGoal: startup.fundingGoal,
+                    title: startup.title,
+                    description: startup.description,
+                    logo: null,
+                    tam: startup.tamMarket,
+                    sam: startup.samMarket,
+                    som: startup.somMarket,
+                    teamExperience: startup.teamExperience,
+                    // industry: startup.industry,
+                    revenuePerYear: startup.revenuePerYear,
+                    capitalExpenditures: startup.capitalExpenditures,
+                    changesInWorkingCapital: startup.changesInWorkingCapital,
+                    deprecationAndAmortization: startup.deprecationAndAmortization
+                })
+            }
+            else {
+                this.remoteFileService.getImage(`${environment.apiUrl}uploads/logos/${startup.logoPath}`).subscribe(blobImage => {
+                    let imageFullPath = startup.logoPath.split(/\\/);
+                    let imageName = imageFullPath![imageFullPath!.length - 1];
+                    let image = new File([blobImage], imageName, { type: blobImage.type || 'image/jpeg' });
+                    this.startupEditFormGroup.setValue({
+                        email: null,
+                        password: null,
+                        fundingGoal: startup.fundingGoal,
+                        title: startup.title,
+                        description: startup.description,
+                        logo: image,
+                        tam: startup.tamMarket,
+                        sam: startup.samMarket,
+                        som: startup.somMarket,
+                        teamExperience: startup.teamExperience,
+                        // industry: startup.industry,
+                        revenuePerYear: startup.revenuePerYear,
+                        capitalExpenditures: startup.capitalExpenditures,
+                        changesInWorkingCapital: startup.changesInWorkingCapital,
+                        deprecationAndAmortization: startup.deprecationAndAmortization
+                    })
+                    let fileList = new DataTransfer();
+                    fileList.items.add(image);
+                    this.fileInput!.nativeElement.files = fileList.files;
+                    this.fileInput!.nativeElement.dispatchEvent(new Event('change'));
+                })
+            }
         })
-      })
     }
   }
 

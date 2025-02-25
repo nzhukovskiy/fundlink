@@ -1,16 +1,32 @@
 <div class="form-container">
-    <h3>Редактирование информации об инвесторе</h3>
-    <form class="register-form" [formGroup]="investorUpdateFormGroup">
+    <h3 *ngIf="formType === FormType.UPDATE">Редактирование информации об инвесторе</h3>
+    <form class="register-form" [formGroup]="investorFormGroup">
+        <ng-container *ngIf="formType === FormType.CREATE">
+            <div class="mb-3">
+                <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты</label>
+                <input type="email" formControlName="email" class="form-control" id="investorRegisterEmailField"
+                       placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+                <label for="investorRegisterPasswordField" class="form-label">Пароль</label>
+                <input class="form-control" formControlName="password" type="password"
+                       id="investorRegisterPasswordField">
+            </div>
+        </ng-container>
         <div class="mb-3">
-          <label for="investorUpdateNameField" class="form-label">Имя пользователя</label>
-          <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField" placeholder="Alexander">
+            <label for="investorUpdateNameField" class="form-label">Имя пользователя</label>
+            <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField"
+                   placeholder="Alexander">
         </div>
         <div class="mb-3">
             <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя</label>
-            <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField" placeholder="Alexandrov">
+            <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField"
+                   placeholder="Alexandrov">
         </div>
         <div class="mb-3 register-submit-button-group">
-          <button type="submit" (click)="updateInvestor()" class="btn btn-primary mb-3 action-btn">Обновить информацию</button>
+            <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">
+                {{formType === FormType.UPDATE ? "Обновить информацию": "Зарегистрироваться"}}
+            </button>
         </div>
     </form>
 </div>

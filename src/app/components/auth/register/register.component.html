@@ -9,27 +9,7 @@
     <li ngbNavItem>
       <button ngbNavLink>Инвестор</button>
       <ng-template ngbNavContent>
-        <form class="register-form" [formGroup]="investorRegisterFormGroup">
-          <div class="mb-3">
-            <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты</label>
-            <input type="email" formControlName="email" class="form-control" id="investorRegisterEmailField" placeholder="name@example.com">
-          </div>
-          <div class="mb-3">
-            <label for="investorRegisterPasswordField" class="form-label">Пароль</label>
-            <input class="form-control" formControlName="password" type="password" id="investorRegisterPasswordField">
-          <div class="mb-3">
-            <label for="investorRegisterNameField" class="form-label">Имя пользователя</label>
-            <input type="text" formControlName="name" class="form-control" id="investorRegisterNameField" placeholder="Alexander">
-          </div>
-            <div class="mb-3">
-              <label for="investorRegisterSurnameField" class="form-label">Фамилия пользователя</label>
-              <input type="text" formControlName="surname" class="form-control" id="investorRegisterSurnameField" placeholder="Alexandrov">
-            </div>
-          </div>
-          <div class="mb-3 register-submit-button-group">
-            <button type="submit" (click)="registerInvestor()" class="btn btn-primary mb-3 action-btn">Регистрация</button>
-          </div>
-        </form>
+          <app-edit-investor [formType]="FormType.CREATE"></app-edit-investor>
       </ng-template>
     </li>
   </ul>

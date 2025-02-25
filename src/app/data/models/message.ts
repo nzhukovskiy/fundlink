@@ -20,6 +20,6 @@ export class Message {
     this.senderType = senderType;
     this.senderId = senderId;
     this.text = text;
-    this.timestamp = timestamp;
+    this.timestamp = new Date(timestamp);
   }
 }

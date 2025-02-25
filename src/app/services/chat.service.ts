@@ -18,4 +18,8 @@ export class ChatService {
   getChatBetweenUsers(getChatDTO: GetChatDTO) {
     return this.appHttpService.get<Chat>(`chats/chatBetweenUsers`, new HttpParams().set("startupId", getChatDTO.startupId).set("investorId", getChatDTO.investorId));
   }
+
+  getChatsForUser() {
+      return this.appHttpService.get<Chat[]>(`chats/chatsForUser`);
+  }
 }

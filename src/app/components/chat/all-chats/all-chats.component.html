@@ -1,1 +1,20 @@
-<p>all-chats works!</p>
+<!--<a [routerLink]="['/chats', chat.id]" class="single-chat" *ngFor="let chat of chats">-->
+<!--    <div>-->
+<!--        {{getMemberName(chat)}}-->
+<!--    </div>-->
+<!--    <div class="last-message-preview">-->
+<!--        {{getLastMessage(chat).text}}-->
+<!--    </div>-->
+<!--</a>-->
+<ul class="chat-list">
+    <li [routerLink]="['/chats', chat.id]"  *ngFor="let chat of chats" class="chat-item">
+        <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR" class="chat-avatar">
+            <img *ngIf="chat.startup.logoPath" [src]="'http://localhost:3000/uploads/logos/' + chat.startup.logoPath" alt="User Avatar">
+            <img *ngIf="!chat.startup.logoPath" src="assets/no-image.jpg" alt="User Avatar">
+        </div>
+        <div class="chat-info">
+            <div class="chat-name">{{getMemberName(chat)}}</div>
+            <div class="chat-preview">{{getLastMessage(chat).text}}</div>
+        </div>
+    </li>
+</ul>

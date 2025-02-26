@@ -46,17 +46,24 @@ export class ChatsService {
     }
 
     async getChatsForUser(user: any) {
+        let whereClause = {}
         if (user.role === Roles.STARTUP) {
-            return await this.chatRepository.find({
-                where: { startup: { id: user.id } },
-                relations: ["messages"],
-            })
+            whereClause = { startupId: user.id }
         } else if (user.role === Roles.INVESTOR) {
-            return await this.chatRepository.find({
-                where: { investor: { id: user.id } },
-                relations: ["messages"],
-            })
+            whereClause = { investorId: user.id }
         }
+        return await this.chatRepository
+            .createQueryBuilder("chat")
+            .leftJoinAndSelect("chat.investor", "investor")
+            .leftJoinAndSelect("chat.startup", "startup")
+            .leftJoinAndSelect(
+                "chat.messages",
+                "message",
+                'message.timestamp = (SELECT MAX(m.timestamp) FROM message m WHERE m."chatId" = chat.id)'
+            )
+            .where("investor.id = :investorId", whereClause)
+            .orderBy("message.timestamp", "DESC")
+            .getMany()
     }
 
     async getChatBetweenUsers(chatBetweenUsersDto: ChatBetweenUsersDto) {
@@ -67,6 +74,11 @@ export class ChatsService {
                     investor: { id: chatBetweenUsersDto.investorId },
                 },
                 relations: ["messages"],
+                order: {
+                    messages: {
+                        timestamp: "ASC",
+                    },
+                },
             })
             .catch(() => {
                 throw new NotFoundException(

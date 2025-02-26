@@ -89,8 +89,8 @@ export class StartupsController {
     }
 
     @Get(':id/investors')
-    getStartupInvestors(@Param('id') id: number) {
-        return this.startupsService.getInvestors(id);
+    getStartupInvestors(@Param('id') id: number, @Query('fundingRoundId') fundingRoundId: number) {
+        return this.startupsService.getInvestors(id, fundingRoundId);
     }
 
     @ApiBearerAuth()

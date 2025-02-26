@@ -100,18 +100,25 @@ export class StartupsService {
         return this.startupRepository.save(startup);
     }
 
-    async getInvestors(id: number) {
+    async getInvestors(id: number, fundingRoundId?: number) {
+        let whereClause: string;
+        if (fundingRoundId) {
+            whereClause = 'startup.id = :id and fundingRound.id = :fundingRoundId';
+        }
+        else {
+            whereClause = 'startup.id = :id';
+        }
         return this.investorRepository.createQueryBuilder('investor')
-          .innerJoin('investor.investments', 'investment')
-          .innerJoin('investment.fundingRound', 'fundingRound')
-          .innerJoin('fundingRound.startup', 'startup')
-          .where('startup.id = :id', { id })
-          .select(['investor.id as id', 'investor.name as name', 'investor.surname as surname', 'investor.email as email',
-              'SUM(investment.amount) AS "totalInvestment"'])
-          .groupBy('investor.id')
-          .addGroupBy('investor.name')
-          .distinct(true)
-          .getRawMany();
+            .innerJoin('investor.investments', 'investment')
+            .innerJoin('investment.fundingRound', 'fundingRound')
+            .innerJoin('fundingRound.startup', 'startup')
+            .where(whereClause, { id, fundingRoundId })
+            .select(['investor.id as id', 'investor.name as name', 'investor.surname as surname', 'investor.email as email',
+                'SUM(investment.amount) AS "totalInvestment"'])
+            .groupBy('investor.id')
+            .addGroupBy('investor.name')
+            .distinct(true)
+            .getRawMany();
     }
 
     async uploadPresentation(startupId: number, fileName: string) {

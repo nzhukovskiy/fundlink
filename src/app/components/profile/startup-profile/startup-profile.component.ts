@@ -10,6 +10,7 @@ import {Investor} from "../../../data/models/investor";
 import {FormControl, FormGroup} from "@angular/forms";
 import { TagService } from 'src/app/services/tag.service';
 import { Tag } from 'src/app/data/models/tag';
+import { ChartConfiguration, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-startup-profile',
@@ -23,9 +24,19 @@ export class StartupProfileComponent implements OnInit {
               public dialog: MatDialog) {
   }
 
+
+
+    public lineChartType: ChartType = 'line';
+
   startup?: Startup;
   investors: Investor[] = [];
   tags: Tag[] = [];
+
+    public lineChartData?: ChartConfiguration<'pie'>['data'];
+
+    public lineChartOptions: ChartConfiguration<'pie'>['options'] = {
+        responsive: true,
+    };
 
   presentationFormGroup = new FormGroup({
     presentation: new FormControl<File|undefined>(undefined)
@@ -42,6 +53,13 @@ export class StartupProfileComponent implements OnInit {
       this.startupService.getInvestors(res.id).subscribe(res => {
         console.log(res)
         this.investors = res;
+          this.lineChartData = {
+              labels: this.investors.map(x => x.name + " " + x.surname),
+              datasets: [{
+                  data: this.investors.map(x => parseInt(x.totalInvestment))
+              }]
+          }
+          console.log(this.lineChartData);
       })
     });
   }

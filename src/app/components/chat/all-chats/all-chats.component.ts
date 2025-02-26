@@ -49,7 +49,7 @@ export class AllChatsComponent implements OnInit {
     }
 
     getLastMessage(chat: Chat) {
-        return chat.messages.sort((a, b) => a.timestamp.getMilliseconds() - b.timestamp.getMilliseconds())[0];
+        return chat.messages[0];
     }
 
     protected readonly Roles = Roles;

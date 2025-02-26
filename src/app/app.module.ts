@@ -43,6 +43,7 @@ import { MessageComponent } from './components/chat/message/message.component';
 import { GotoChatComponent } from './components/common/goto-chat/goto-chat.component';
 import { SendMessageComponent } from './components/chat/send-message/send-message.component';
 import { AllChatsComponent } from './components/chat/all-chats/all-chats.component';
+import { NgChartsModule } from 'ng2-charts';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -78,19 +79,20 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     AllChatsComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatPaginatorModule,
-    ReactiveFormsModule,
-    MatSlideToggleModule,
-    NgbModule,
-    ToastrModule.forRoot(),
-    MatIconModule,
-    FormsModule,
-    MatDialogModule,
-    SocketIoModule.forRoot(socketIoConfig),
+      BrowserModule,
+      AppRoutingModule,
+      HttpClientModule,
+      BrowserAnimationsModule,
+      MatPaginatorModule,
+      ReactiveFormsModule,
+      MatSlideToggleModule,
+      NgbModule,
+      ToastrModule.forRoot(),
+      MatIconModule,
+      FormsModule,
+      MatDialogModule,
+      SocketIoModule.forRoot(socketIoConfig),
+      NgChartsModule
   ],
   providers: [AppHttpService,
     {

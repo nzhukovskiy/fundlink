@@ -1,44 +1,58 @@
 .funding-round-card {
-  width: 100% !important;
-  margin-bottom: 20px;
+    width: 100% !important;
+    margin-bottom: 20px;
 }
+
 .current-round-card {
-  border: 2px solid greenyellow;
+    border: 2px solid greenyellow;
 }
+
 .funding-round-top-group {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
+
 .edit-funding-round-button-group a {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
+
 .startup-profile-top-group {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
+
 .buttons {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
 }
+
 .tags-container {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 }
+
 .tag-menu-item {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .tag-delete-icon-circle {
-  width: 20px;
+    width: 20px;
     height: 20px;
     padding: 0 !important;
     cursor: pointer;
 }
+
 .tag-delete-icon {
-  font-size: 10px;
-  height: unset;
-  width: unset;
+    font-size: 10px;
+    height: unset;
+    width: unset;
 }
+
 .investors-chart-container {
     width: 50%;
+}
+
+.investment-info-container {
+    margin: 20px 0;
 }

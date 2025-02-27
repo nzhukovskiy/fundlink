@@ -39,8 +39,12 @@ export class StartupService {
       return this.appHttpService.get<Startup>(`startups/${id}`);
     }
 
-    getInvestors(id: number) {
-      return this.appHttpService.get<Investor[]>(`startups/${id}/investors`);
+    getInvestors(id: number, fundingRoundId?: string) {
+      let params = new HttpParams();
+      if (fundingRoundId !== undefined) {
+          params = params.append("fundingRoundId", fundingRoundId)
+      }
+      return this.appHttpService.get<Investor[]>(`startups/${id}/investors`, params);
     }
 
     getCurrentStartup() {

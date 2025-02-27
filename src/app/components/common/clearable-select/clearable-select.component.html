@@ -1,0 +1,9 @@
+<div class="mb-3">
+    <label for="tag" class="form-label">{{label}}</label>
+    <div class="select-group">
+        <select [formControl]="selectFormControl" class="form-select" id="tag">
+            <option *ngFor="let option of options" [value]="option.identifier">{{option.text}}</option>
+        </select>
+        <mat-icon (click)="clearSelection()" class="clear-select-icon">close</mat-icon>
+    </div>
+</div>

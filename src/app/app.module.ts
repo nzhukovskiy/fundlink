@@ -44,6 +44,7 @@ import { GotoChatComponent } from './components/common/goto-chat/goto-chat.compo
 import { SendMessageComponent } from './components/chat/send-message/send-message.component';
 import { AllChatsComponent } from './components/chat/all-chats/all-chats.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ClearableSelectComponent } from './components/common/clearable-select/clearable-select.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -76,7 +77,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     MessageComponent,
     GotoChatComponent,
     SendMessageComponent,
-    AllChatsComponent
+    AllChatsComponent,
+    ClearableSelectComponent
   ],
   imports: [
       BrowserModule,

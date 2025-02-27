@@ -46,11 +46,14 @@ export class ChatsService {
     }
 
     async getChatsForUser(user: any) {
-        let whereClause = {}
+        let whereParams = {}
+        let whereString = ""
         if (user.role === Roles.STARTUP) {
-            whereClause = { startupId: user.id }
+            whereParams = { startupId: user.id }
+            whereString = "startup.id = :startupId"
         } else if (user.role === Roles.INVESTOR) {
-            whereClause = { investorId: user.id }
+            whereParams = { investorId: user.id }
+            whereString = "investor.id = :investorId"
         }
         return await this.chatRepository
             .createQueryBuilder("chat")
@@ -61,7 +64,7 @@ export class ChatsService {
                 "message",
                 'message.timestamp = (SELECT MAX(m.timestamp) FROM message m WHERE m."chatId" = chat.id)'
             )
-            .where("investor.id = :investorId", whereClause)
+            .where(whereString, whereParams)
             .orderBy("message.timestamp", "DESC")
             .getMany()
     }

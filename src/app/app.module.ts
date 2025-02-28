@@ -45,6 +45,9 @@ import { SendMessageComponent } from './components/chat/send-message/send-messag
 import { AllChatsComponent } from './components/chat/all-chats/all-chats.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ClearableSelectComponent } from './components/common/clearable-select/clearable-select.component';
+import { SingleFundingRoundComponent } from './components/funding-rounds/single-funding-round/single-funding-round.component';
+import { FundingRoundsListComponent } from './components/funding-rounds/funding-rounds-list/funding-rounds-list.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -78,24 +81,27 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     GotoChatComponent,
     SendMessageComponent,
     AllChatsComponent,
-    ClearableSelectComponent
+    ClearableSelectComponent,
+    SingleFundingRoundComponent,
+    FundingRoundsListComponent
   ],
-  imports: [
-      BrowserModule,
-      AppRoutingModule,
-      HttpClientModule,
-      BrowserAnimationsModule,
-      MatPaginatorModule,
-      ReactiveFormsModule,
-      MatSlideToggleModule,
-      NgbModule,
-      ToastrModule.forRoot(),
-      MatIconModule,
-      FormsModule,
-      MatDialogModule,
-      SocketIoModule.forRoot(socketIoConfig),
-      NgChartsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatPaginatorModule,
+        ReactiveFormsModule,
+        MatSlideToggleModule,
+        NgbModule,
+        ToastrModule.forRoot(),
+        MatIconModule,
+        FormsModule,
+        MatDialogModule,
+        SocketIoModule.forRoot(socketIoConfig),
+        NgChartsModule,
+        MatTooltipModule,
+    ],
   providers: [AppHttpService,
     {
       provide: HTTP_INTERCEPTORS,

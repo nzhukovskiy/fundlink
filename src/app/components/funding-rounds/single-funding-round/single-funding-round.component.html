@@ -1,0 +1,35 @@
+<!--<div *ngIf="fundingRound" class="card funding-round-card" style="width: 18rem;">-->
+<!--    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">-->
+<!--        <div class="flex-horizontal-container">-->
+<!--            <h5 class="card-title">{{fundingRound.stage}}</h5>-->
+<!--            <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group">-->
+<!--                <a (click)="openInvestmentDialog()" class="btn btn-primary mb-3 action-btn"><mat-icon>payment</mat-icon>Инвестировать</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <p>Цель: {{fundingRound.fundingGoal}} руб.</p>-->
+<!--        <p>Собрано: {{fundingRound.currentRaised}}</p>-->
+<!--        <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>-->
+<!--        <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>-->
+<!--    </div>-->
+<!--</div>-->
+<div *ngIf="fundingRound" class="funding-card" [ngClass]="{'current': fundingRound.isCurrent}">
+    <div class="stage-badge">{{fundingRound.stage}}</div>
+    <div class="round-details">
+        <div matTooltip="Собрано на данный момент" class="round-target">{{fundingRound.currentRaised}}</div>
+        <div matTooltip="Цель раунда" class="round-goal">{{fundingRound.fundingGoal}}</div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" [ngStyle]="{'width': fundingPercent + '%'}"></div>
+    </div>
+
+    <div class="round-dates">
+        <span class="start-date">• Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</span>
+        <span class="end-date">• Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</span>
+    </div>
+
+    <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group invest-btn">
+        <a (click)="openInvestmentDialog()" ><mat-icon>payment</mat-icon>Инвестировать</a>
+    </div>
+</div>

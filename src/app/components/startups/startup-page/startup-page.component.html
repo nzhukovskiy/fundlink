@@ -17,18 +17,20 @@
 <a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
 <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
 <h4>Раунды инвестирования:</h4>
-<div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">
-    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
-      <div class="flex-horizontal-container">
-        <h5 class="card-title">{{fundingRound.stage}}</h5>
-        <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group">
-          <a (click)="openInvestmentDialog(fundingRound.id)" class="btn btn-primary mb-3 action-btn"><mat-icon>payment</mat-icon>Инвестировать</a>
-        </div>
-      </div>
+<app-funding-rounds-list *ngIf="startup" [fundingRounds]="startup.fundingRounds" (newInvestment)="openInvestmentDialog($event)"></app-funding-rounds-list>
+<!--<app-single-funding-round *ngFor="let fundingRound of startup?.fundingRounds" [fundingRound]="fundingRound" (newInvestment)="openInvestmentDialog($event)"></app-single-funding-round>-->
+<!--<div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">-->
+<!--    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">-->
+<!--      <div class="flex-horizontal-container">-->
+<!--        <h5 class="card-title">{{fundingRound.stage}}</h5>-->
+<!--        <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group">-->
+<!--          <a (click)="openInvestmentDialog(fundingRound.id)" class="btn btn-primary mb-3 action-btn"><mat-icon>payment</mat-icon>Инвестировать</a>-->
+<!--        </div>-->
+<!--      </div>-->
 
-        <p>Цель: {{fundingRound.fundingGoal}} руб.</p>
-        <p>Собрано: {{fundingRound.currentRaised}}</p>
-        <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>
-        <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>
-    </div>
-</div>
+<!--        <p>Цель: {{fundingRound.fundingGoal}} руб.</p>-->
+<!--        <p>Собрано: {{fundingRound.currentRaised}}</p>-->
+<!--        <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>-->
+<!--        <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>-->
+<!--    </div>-->
+<!--</div>-->

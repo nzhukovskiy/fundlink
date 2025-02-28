@@ -1,0 +1,3 @@
+<div class="funding-rounds-container">
+    <app-single-funding-round *ngFor="let fundingRound of fundingRounds" [fundingRound]="fundingRound" (newInvestment)="openInvestmentDialog($event)"></app-single-funding-round>
+</div>

@@ -32,21 +32,21 @@ export class EditFundingRoundComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.id = parseInt(params.get("id")!);
-      this.fundingRoundsService.getOne(this.id).subscribe(res => {
+      this.route.data.subscribe(({fundingRound}) => {
         this.fundingRoundFormGroup.setValue({
-          fundingGoal: res.fundingGoal,
-          startDate: res.startDate,
-          endDate: res.endDate
+          fundingGoal: fundingRound.fundingGoal,
+          startDate: fundingRound.startDate,
+          endDate: fundingRound.endDate
         })
         this.startDate = {
-          day:  (new Date(res.startDate.toLocaleString())).getDate(),
-          month: (new Date(res.startDate.toLocaleString())).getMonth() + 1,
-          year: (new Date(res.startDate.toLocaleString())).getFullYear(),
+          day:  (new Date(fundingRound.startDate.toLocaleString())).getDate(),
+          month: (new Date(fundingRound.startDate.toLocaleString())).getMonth() + 1,
+          year: (new Date(fundingRound.startDate.toLocaleString())).getFullYear(),
         }
         this.endDate = {
-          day:  (new Date(res.endDate)).getDate(),
-          month: (new Date(res.endDate)).getMonth() + 1,
-          year: (new Date(res.endDate)).getFullYear(),
+          day:  (new Date(fundingRound.endDate)).getDate(),
+          month: (new Date(fundingRound.endDate)).getMonth() + 1,
+          year: (new Date(fundingRound.endDate)).getFullYear(),
         }
       })
     })

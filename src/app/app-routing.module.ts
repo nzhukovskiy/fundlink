@@ -23,6 +23,7 @@ import {chatResolver} from "./resolvers/chat.resolver";
 import {startupResolver} from "./resolvers/startup.resolver";
 import {investorResolver} from "./resolvers/investor.resolver";
 import { AllChatsComponent } from './components/chat/all-chats/all-chats.component';
+import { fundingRoundResolver } from './resolvers/funding-round.resolver';
 
 const routes: Routes = [
     {path: '', component: MainPageComponent},
@@ -35,7 +36,7 @@ const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
-    {path: 'fundingRounds/:id/edit', component: EditFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
+    {path: 'fundingRounds/:id/edit', component: EditFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)], resolve: {fundingRound: fundingRoundResolver}},
     {path: 'fundingRounds/create', component: CreateFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'chats', component: AllChatsComponent, canActivate: [authGuard]},
     {path: 'chats/new', component: ChatComponent, canActivate: [authGuard]},

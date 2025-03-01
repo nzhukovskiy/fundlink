@@ -48,6 +48,7 @@ import { ClearableSelectComponent } from './components/common/clearable-select/c
 import { SingleFundingRoundComponent } from './components/funding-rounds/single-funding-round/single-funding-round.component';
 import { FundingRoundsListComponent } from './components/funding-rounds/funding-rounds-list/funding-rounds-list.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TagsListComponent } from './components/startups/tags-list/tags-list.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -83,7 +84,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     AllChatsComponent,
     ClearableSelectComponent,
     SingleFundingRoundComponent,
-    FundingRoundsListComponent
+    FundingRoundsListComponent,
+    TagsListComponent
   ],
     imports: [
         BrowserModule,

@@ -6,24 +6,25 @@
             Редактировать</a>
     </div>
 </div>
-<h4 class="tags-container">
-    <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary position-relative">
-        {{ tag.title }}
-        <span (click)="removeTag(tag.id)"
-              class="tag-delete-icon-circle position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-      <mat-icon class="tag-delete-icon">close</mat-icon>
-    </span>
-    </div>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Добавить тег
-        </button>
-        <ul class="dropdown-menu">
-            <li (click)="addTag(tag.id)" *ngFor="let tag of tags"><a
-                class="dropdown-item tag-menu-item">{{ tag.title }}</a></li>
-        </ul>
-    </div>
-</h4>
+<app-tags-list [tags]="startup!.tags" [editAllowed]="true" (tagAddEvent)="addTag($event)" (tagRemoveEvent)="removeTag($event)"></app-tags-list>
+<!--<h4 class="tags-container">-->
+<!--    <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary position-relative">-->
+<!--        {{ tag.title }}-->
+<!--        <span (click)="removeTag(tag.id)"-->
+<!--              class="tag-delete-icon-circle position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">-->
+<!--      <mat-icon class="tag-delete-icon">close</mat-icon>-->
+<!--    </span>-->
+<!--    </div>-->
+<!--    <div class="dropdown">-->
+<!--        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Добавить тег-->
+<!--        </button>-->
+<!--        <ul class="dropdown-menu">-->
+<!--            <li (click)="addTag(tag.id)" *ngFor="let tag of tags"><a-->
+<!--                class="dropdown-item tag-menu-item">{{ tag.title }}</a></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</h4>-->
 
 <h4>Общая цель: {{ startup?.fundingGoal! }} руб.</h4>
 <p style="white-space: pre-line;">{{ startup?.description }}</p>

@@ -1,36 +1,55 @@
-<div class="title-group">
-  <h3>{{startup?.title}}</h3>
-  <app-goto-chat *ngIf="(startupLoaded | async) && localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.STARTUP" [userToChatWith]="startup"></app-goto-chat>
+<div class="header-section">
+    <img class="logo" *ngIf="startup?.logoPath" [src]="'http://localhost:3000/uploads/logos/' + startup?.logoPath" alt="">
+    <img class="logo" *ngIf="!startup?.logoPath" src="assets/no-image.jpg" alt="">
+    <div class="startup-info">
+        <h1 class="title">{{startup?.title}}</h1>
+<!--        <h4 class="tags-container">-->
+<!--            <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>-->
+<!--        </h4>-->
+        <app-tags-list [tags]="startup!.tags"></app-tags-list>
+        <div class="funding-goal">Общая цель: {{startup?.fundingGoal}} руб.</div>
+        <div class="progress-bar">
+            <div class="progress" style="width: 60%; background: #27ae60; height: 8px; border-radius: 4px;"></div>
+        </div>
+    </div>
 </div>
-<h4 class="tags-container">
-  <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>
-</h4>
+<div class="stats-container">
+    <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'" class="stat-card">
+        <div class="stat-label">Оценка по методу DCF</div>
+        <div class="stat-value">{{startup?.dcf | number:'1.2-2'}} млн руб.</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">TAM</div>
+        <div class="stat-value">{{startup?.tamMarket}} млн руб.</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">SAM</div>
+        <div class="stat-value">{{startup?.samMarket}} млн руб.</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">SOM</div>
+        <div class="stat-value">{{startup?.somMarket}} млн руб.</div>
+    </div>
+</div>
 
-<img width="100" *ngIf="startup?.logoPath" [src]="'http://localhost:3000/uploads/logos/' + startup?.logoPath" alt="">
-<img width="100" *ngIf="!startup?.logoPath" src="assets/no-image.jpg" alt="">
-<h4>Общая цель: {{startup?.fundingGoal}} руб.</h4>
-<p style="white-space: pre-line;">{{startup?.description}}</p>
-<div>Объем рынка TAM {{startup?.tamMarket}} млн руб.</div>
-<div>Объем рынка SAM {{startup?.samMarket}} млн руб.</div>
-<div>Объем рынка SOM {{startup?.somMarket}} млн руб.</div>
-<!--<div>Сектор {{startup?.industry}}</div>-->
-<a *ngIf="startup?.presentationPath" [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
-<div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу DCF: {{startup?.dcf | number:'1.2-2'}} млн руб.</div>
+<h2 class="section-title">О стартапе</h2>
+<div class="description">
+    <p style="white-space: pre-line;">{{startup?.description}}</p>
+</div>
+
+<ng-container *ngIf="startup?.presentationPath">
+    <h2 class="section-title">Презентация</h2>
+    <div class="attachment-section">
+        <div class="attachment">
+            <mat-icon>insert_drive_file</mat-icon>
+            <span>{{startup?.presentationPath}}</span>
+            <a [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath" class="download-btn">
+                <mat-icon>download</mat-icon>
+                Загрузить презентацию
+            </a>
+        </div>
+    </div>
+</ng-container>
+
 <h4>Раунды инвестирования:</h4>
 <app-funding-rounds-list *ngIf="startup" [fundingRounds]="startup.fundingRounds" (newInvestment)="openInvestmentDialog($event)"></app-funding-rounds-list>
-<!--<app-single-funding-round *ngFor="let fundingRound of startup?.fundingRounds" [fundingRound]="fundingRound" (newInvestment)="openInvestmentDialog($event)"></app-single-funding-round>-->
-<!--<div *ngFor="let fundingRound of startup?.fundingRounds" class="card funding-round-card" style="width: 18rem;">-->
-<!--    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">-->
-<!--      <div class="flex-horizontal-container">-->
-<!--        <h5 class="card-title">{{fundingRound.stage}}</h5>-->
-<!--        <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group">-->
-<!--          <a (click)="openInvestmentDialog(fundingRound.id)" class="btn btn-primary mb-3 action-btn"><mat-icon>payment</mat-icon>Инвестировать</a>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--        <p>Цель: {{fundingRound.fundingGoal}} руб.</p>-->
-<!--        <p>Собрано: {{fundingRound.currentRaised}}</p>-->
-<!--        <p>Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</p>-->
-<!--        <p>Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</p>-->
-<!--    </div>-->
-<!--</div>-->

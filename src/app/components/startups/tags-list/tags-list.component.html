@@ -1,0 +1,20 @@
+<h4 class="tags-container">
+    <div *ngFor="let tag of tags" class="position-relative">
+        <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}"  class="badge text-bg-secondary">
+            {{tag.title}}
+        </a>
+        <span *ngIf="editAllowed" (click)="removeTag(tag.id)" class="tag-delete-icon-circle position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <mat-icon class="tag-delete-icon">close</mat-icon>
+        </span>
+    </div>
+
+    <div *ngIf="editAllowed" class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle badge" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Добавить тег
+        </button>
+        <ul class="dropdown-menu">
+            <li (click)="addTag(tag.id)" *ngFor="let tag of allTags"><a
+                class="dropdown-item tag-menu-item">{{ tag.title }}</a></li>
+        </ul>
+    </div>
+</h4>

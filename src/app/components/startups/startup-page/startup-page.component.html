@@ -3,9 +3,6 @@
     <img class="logo" *ngIf="!startup?.logoPath" src="assets/no-image.jpg" alt="">
     <div class="startup-info">
         <h1 class="title">{{startup?.title}}</h1>
-<!--        <h4 class="tags-container">-->
-<!--            <a [routerLink]="['/startups']" [queryParams]="{tag: tag.title}" *ngFor="let tag of startup?.tags" class="badge text-bg-secondary">{{tag.title}}</a>-->
-<!--        </h4>-->
         <app-tags-list [tags]="startup!.tags"></app-tags-list>
         <div class="funding-goal">Общая цель: {{startup?.fundingGoal}} руб.</div>
         <div class="progress-bar">

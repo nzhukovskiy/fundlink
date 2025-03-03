@@ -67,7 +67,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   getMemberName() {
     if (this.chat) {
       if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
-        return this.chat.investor.name;
+        return `${this.chat.investor.name} ${this.chat.investor.surname}`;
       }
       else if (this.localStorageService.getUser()?.payload.role === Roles.INVESTOR) {
         return this.chat.startup.title;

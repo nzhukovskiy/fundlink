@@ -8,7 +8,7 @@
         </span>
     </div>
 
-    <div *ngIf="editAllowed" class="dropdown">
+    <div *ngIf="editAllowed && allTags.length" class="dropdown">
         <button class="btn btn-secondary dropdown-toggle badge" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Добавить тег
         </button>

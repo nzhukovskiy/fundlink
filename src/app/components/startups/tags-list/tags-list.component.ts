@@ -7,7 +7,7 @@ import { TagService } from '../../../services/tag.service';
   templateUrl: './tags-list.component.html',
   styleUrls: ['./tags-list.component.scss']
 })
-export class TagsListComponent implements OnInit {
+export class TagsListComponent {
 
     constructor(private readonly tagService: TagService) {
     }
@@ -24,6 +24,7 @@ export class TagsListComponent implements OnInit {
     @Output()
     tagAddEvent = new EventEmitter<number>();
 
+    @Input()
     allTags: Tag[] = [];
 
     removeTag(tagId: number) {
@@ -32,11 +33,5 @@ export class TagsListComponent implements OnInit {
 
     addTag(tagId: number) {
         this.tagAddEvent.emit(tagId);
-    }
-
-    ngOnInit(): void {
-        if (this.editAllowed) {
-            this.tagService.getAllTags().subscribe(res => this.allTags = res);
-        }
     }
 }

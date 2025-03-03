@@ -3,7 +3,7 @@ import { Startup } from '../../../data/models/startup';
 import { StartupService } from '../../../services/startup.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SubmitDialogComponent } from '../../../dialogs/submit-dialog/submit-dialog.component';
-import { filter } from 'rxjs';
+import { filter, forkJoin } from 'rxjs';
 import { SubmitDialogReturn } from '../../../constants/submit-dialog-return';
 import { FundingRoundsService } from '../../../services/funding-rounds.service';
 import { Investor } from '../../../data/models/investor';
@@ -26,7 +26,8 @@ export class StartupProfileComponent implements OnInit {
 
     startup?: Startup;
     investors: Investor[] = [];
-    tags: Tag[] = [];
+    allTags: Tag[] = [];
+    filteredTags: Tag[] = [];
 
     public lineChartData?: ChartConfiguration<'pie'>['data'];
 
@@ -41,25 +42,62 @@ export class StartupProfileComponent implements OnInit {
     selectOptions: { identifier: string, text: string }[] = [];
 
     ngOnInit(): void {
-        this.getCurrentStartup();
-        this.tagService.getAllTags().subscribe(res => this.tags = res);
+        forkJoin({
+            tags: this.tagService.getAllTags(),
+            startup: this.startupService.getCurrentStartup(),
+        }).subscribe(({tags, startup}) => {
+            this.startup = startup;
+            this.allTags = tags;
+            this.filterTags();
+            this.getInvestorsForStartup();
+        })
+    }
+
+    filterTags() {
+        this.filteredTags = this.allTags.filter(tag => !this.startup?.tags.some(x => x.id === tag.id))
     }
 
     getCurrentStartup() {
         this.startupService.getCurrentStartup().subscribe(res => {
             this.startup = res;
-            this.startupService.getInvestors(res.id).subscribe(res => {
-                this.investors = res;
-                this.lineChartData = {
-                    labels: this.investors.map(x => x.name + ' ' + x.surname),
-                    datasets: [{
-                        data: this.investors.map(x => parseInt(x.totalInvestment)),
-                    }],
-                };
-                this.selectOptions = this.getSelectOptions();
-            });
+            this.getInvestorsForStartup();
         });
     }
+
+    getInvestorsForStartup() {
+        this.startupService.getInvestors(this.startup!.id).subscribe(res => {
+            this.investors = res;
+            this.lineChartData = {
+                labels: this.investors.map(x => x.name + ' ' + x.surname),
+                datasets: [{
+                    data: this.investors.map(x => parseInt(x.totalInvestment)),
+                }],
+            };
+            this.selectOptions = this.getSelectOptions();
+        });
+    }
+
+    // getCurrentStartupAndTags() {
+    //     forkJoin({
+    //         tags: this.tagService.getAllTags(),
+    //         startup: this.startupService.getCurrentStartup(),
+    //     }).subscribe(({tags, startup}) => {
+    //         this.startup = startup;
+    //         this.allTags = tags;
+    //         this.allTags = this.allTags.filter(tag => !this.startup?.tags.some(x => x.id === tag.id))
+    //         console.log(this.allTags)
+    //         this.startupService.getInvestors(startup.id).subscribe(res => {
+    //             this.investors = res;
+    //             this.lineChartData = {
+    //                 labels: this.investors.map(x => x.name + ' ' + x.surname),
+    //                 datasets: [{
+    //                     data: this.investors.map(x => parseInt(x.totalInvestment)),
+    //                 }],
+    //             };
+    //             this.selectOptions = this.getSelectOptions();
+    //         });
+    //     })
+    // }
 
     deleteFundingRound(id: number) {
         const dialogRef = this.dialog.open(SubmitDialogComponent);
@@ -82,11 +120,17 @@ export class StartupProfileComponent implements OnInit {
     }
 
     addTag(tagId: number) {
-        this.startupService.addTag(tagId).subscribe(res => this.startup = res);
+        this.startupService.addTag(tagId).subscribe(res => {
+            this.startup = res;
+            this.filterTags();
+        });
     }
 
     removeTag(tagId: number) {
-        this.startupService.removeTag(tagId).subscribe(res => this.startup = res);
+        this.startupService.removeTag(tagId).subscribe(res => {
+            this.startup = res;
+            this.filterTags();
+        });
     }
 
 

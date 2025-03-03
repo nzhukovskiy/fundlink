@@ -6,26 +6,7 @@
             Редактировать</a>
     </div>
 </div>
-<app-tags-list [tags]="startup!.tags" [editAllowed]="true" (tagAddEvent)="addTag($event)" (tagRemoveEvent)="removeTag($event)"></app-tags-list>
-<!--<h4 class="tags-container">-->
-<!--    <div *ngFor="let tag of startup?.tags" class="badge text-bg-secondary position-relative">-->
-<!--        {{ tag.title }}-->
-<!--        <span (click)="removeTag(tag.id)"-->
-<!--              class="tag-delete-icon-circle position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">-->
-<!--      <mat-icon class="tag-delete-icon">close</mat-icon>-->
-<!--    </span>-->
-<!--    </div>-->
-<!--    <div class="dropdown">-->
-<!--        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--            Добавить тег-->
-<!--        </button>-->
-<!--        <ul class="dropdown-menu">-->
-<!--            <li (click)="addTag(tag.id)" *ngFor="let tag of tags"><a-->
-<!--                class="dropdown-item tag-menu-item">{{ tag.title }}</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</h4>-->
-
+<app-tags-list *ngIf="startup" [tags]="startup!.tags" [allTags]="filteredTags" [editAllowed]="true" (tagAddEvent)="addTag($event)" (tagRemoveEvent)="removeTag($event)"></app-tags-list>
 <h4>Общая цель: {{ startup?.fundingGoal! }} руб.</h4>
 <p style="white-space: pre-line;">{{ startup?.description }}</p>
 <div>Объем рынка TAM {{ startup?.tamMarket }} млн руб.</div>
@@ -75,21 +56,18 @@
     </div>
 </div>
 <h4>Инвесторы</h4>
-<!--<div>-->
-<!--    <select [formControl]="fundingRoundFormControl" class="form-select" id="funding-round-selection">-->
-<!--        <option *ngFor="let fundingRound of startup?.fundingRounds" [value]="fundingRound.id">{{fundingRound.stage}}</option>-->
-<!--    </select>-->
-<!--    <mat-icon (click)="clearTagSelection()" class="tag-delete-icon">close</mat-icon>-->
-<!--</div>-->
 <app-clearable-select *ngIf="startup" [options]="selectOptions" [selectInitialValue]="''"
                       (selectChanged)="loadInvestmentsData($event)" label="Раунд финансирования"></app-clearable-select>
 <div class="investors-chart-container">
-    <canvas
+    <canvas *ngIf="investors.length; else noInvestmentsData"
         baseChart
         [data]="lineChartData"
         [type]="'pie'"
         [options]="lineChartOptions"
     ></canvas>
+    <ng-template #noInvestmentsData>
+        В рамках данного раунда пока не было совершено ни одной инвестиции
+    </ng-template>
 </div>
 <div class="accordion investment-info-container" id="accordionExample">
     <div class="accordion-item">

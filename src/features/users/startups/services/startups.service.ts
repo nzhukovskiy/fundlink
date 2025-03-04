@@ -93,7 +93,7 @@ export class StartupsService {
         startupDto.password = await bcrypt.hash(startupDto.password, 10)
         const savedStartup = await this.startupRepository.save(startupDto)
         await this.fundingRoundsService.create(savedStartup.id, {
-            fundingGoal: "10000",
+            fundingGoal: createStartupDto.initialFundingGoal,
             startDate: new Date(),
             endDate: new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)

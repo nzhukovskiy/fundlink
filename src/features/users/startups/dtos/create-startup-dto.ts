@@ -1,4 +1,4 @@
-import { IsEmail, MinLength } from "class-validator";
+import { IsEmail, IsNumberString, MinLength } from "class-validator"
 import { UpdateStartupDto } from "./update-startup-dto";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -10,4 +10,8 @@ export class CreateStartupDto extends UpdateStartupDto {
     @ApiProperty()
     @MinLength(8)
     password: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    initialFundingGoal: string;
 }

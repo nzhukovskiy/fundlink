@@ -4,9 +4,15 @@
     <div class="startup-info">
         <h1 class="title">{{startup?.title}}</h1>
         <app-tags-list [tags]="startup!.tags"></app-tags-list>
-        <div class="funding-goal">Общая цель: {{startup?.fundingGoal}} руб.</div>
+        <div>Общая цель: {{startup?.fundingGoal}} руб.
+            <app-input-help-tooltip tooltipMessage="Долгосрочная цель"></app-input-help-tooltip>
+        </div>
+        <div class="funding-goal">Текущая цель: {{getTotalFundingGoalByRounds()}} руб.
+            <app-input-help-tooltip tooltipMessage="Сумма целей всех раундов финансирования"></app-input-help-tooltip>
+        </div>
+        <div>Всего собрано: {{getCurrentFundingByRounds()}} руб.</div>
         <div class="progress-bar">
-            <div class="progress" style="width: 60%; background: #27ae60; height: 8px; border-radius: 4px;"></div>
+            <div class="progress" [ngStyle]="{'width': getOverallFundingProgress() + '%'}"></div>
         </div>
     </div>
 </div>

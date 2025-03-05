@@ -1,5 +1,6 @@
 import { FundingRound } from "./funding-round";
 import { Investor } from "./investor";
+import {InvestmentStage} from "../../constants/investment-stage";
 
 export class Investment {
     id: number;
@@ -12,6 +13,8 @@ export class Investment {
 
     fundingRound: FundingRound;
 
+    stage: InvestmentStage;
+
     startup_id: number;
 
     startup_title: string;
@@ -22,6 +25,7 @@ export class Investment {
         date: Date,
         investor: Investor,
         fundingRound: FundingRound,
+        investmentStage: InvestmentStage,
         startup_id: number,
         startup_title: string
     ) {
@@ -30,6 +34,7 @@ export class Investment {
         this.date = date;
         this.investor = investor;
         this.fundingRound = fundingRound;
+        this.stage = investmentStage;
         this.startup_id = startup_id;
         this.startup_title = startup_title;
     }

@@ -11,6 +11,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { TagService } from 'src/app/services/tag.service';
 import { Tag } from 'src/app/data/models/tag';
 import { ChartConfiguration, ChartType } from 'chart.js';
+import {InvestmentsService} from "../../../services/investments.service";
+import {InvestmentStage} from "../../../constants/investment-stage";
 
 @Component({
     selector: 'app-startup-profile',
@@ -21,6 +23,7 @@ export class StartupProfileComponent implements OnInit {
     constructor(private readonly startupService: StartupService,
                 private readonly fundingRoundsService: FundingRoundsService,
                 private readonly tagService: TagService,
+                private readonly investmentsService: InvestmentsService,
                 public dialog: MatDialog) {
     }
 
@@ -154,4 +157,12 @@ export class StartupProfileComponent implements OnInit {
             };
         });
     }
+
+    approveInvestment(investmentId: number) {
+        this.investmentsService.approveInvestment(investmentId).subscribe(investment => {
+            this.getCurrentStartup();
+        })
+    }
+
+    protected readonly InvestmentStage = InvestmentStage;
 }

@@ -10,6 +10,7 @@ export class UpdateStartupDto {
     tamMarket: string;
     samMarket: string;
     somMarket: string;
+    autoApproveInvestments: boolean;
     revenuePerYear: number[];
     capitalExpenditures: number[];
     changesInWorkingCapital: number[];
@@ -25,6 +26,7 @@ export class UpdateStartupDto {
         som: string,
         teamExperience: string,
         // industry: string,
+        autoApproveInvestments: boolean,
         revenuePerYear: number[],
         capitalExpenditures: number[],
         changesInWorkingCapital: number[],
@@ -38,6 +40,7 @@ export class UpdateStartupDto {
         this.somMarket = som;
         this.teamExperience = teamExperience;
         // this.industry = industry;
+        this.autoApproveInvestments = autoApproveInvestments;
         this.revenuePerYear = revenuePerYear;
         this.capitalExpenditures = capitalExpenditures;
         this.changesInWorkingCapital = changesInWorkingCapital;

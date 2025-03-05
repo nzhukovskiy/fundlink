@@ -11,6 +11,7 @@ export class Startup extends User {
         fundingGoal: string,
         presentationPath: string,
         logoPath: string,
+        autoApproveInvestments: boolean,
         fundingRounds: FundingRound[],
         id: number, email: string, password: string,
         tam: string, sam: string, som: string,
@@ -28,6 +29,7 @@ export class Startup extends User {
         this.fundingGoal = fundingGoal;
         this.presentationPath = presentationPath;
         this.logoPath = logoPath;
+        this.autoApproveInvestments = autoApproveInvestments;
         this.fundingRounds = fundingRounds;
         this.tamMarket = tam;
         this.samMarket = sam;
@@ -54,6 +56,8 @@ export class Startup extends User {
 
     @Expose({ name: 'presentation_path' })
     logoPath: string;
+
+    autoApproveInvestments: boolean;
 
     @Expose({ name: 'team_experience' })
     teamExperience: string;

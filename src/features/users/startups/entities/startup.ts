@@ -3,6 +3,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 import { Roles } from "../../constants/roles";
 import { Tag } from "../../../tags/entities/tag/tag";
+import { InvestmentApprovalType } from "../../../investments/constants/investment-approval-type";
 
 @Entity()
 export class Startup extends User {
@@ -47,6 +48,9 @@ export class Startup extends User {
 
     @Column({ nullable: true })
     logoPath: string;
+
+    @Column({ default: true })
+    autoApproveInvestments: boolean;
 
     @OneToMany(() => FundingRound, (fundingRound) => fundingRound.startup)
     fundingRounds: FundingRound[];

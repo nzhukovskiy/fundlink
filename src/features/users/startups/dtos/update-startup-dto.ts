@@ -1,7 +1,7 @@
 import {
     ArrayMaxSize,
     ArrayMinSize,
-    IsArray,
+    IsArray, IsBoolean,
     IsInt,
     IsNotEmpty,
     IsNumber,
@@ -22,6 +22,10 @@ export class UpdateStartupDto {
     @ApiProperty()
     @IsOptional()
     logoPath: string;
+
+    @ApiProperty()
+    @IsBoolean()
+    autoApproveInvestments: boolean;
 
     @ApiProperty()
     @IsNumberString()

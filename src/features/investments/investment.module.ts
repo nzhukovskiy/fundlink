@@ -8,11 +8,12 @@ import { Investment } from "./entities/investment/investment";
 import { InvestmentService } from './services/investment.service';
 import { JwtTokenModule } from "../token/jwt-token.module";
 import { Investor } from "../users/investors/entities/investor";
+import { InvestmentsController } from './controllers/investments/investments.controller';
 
 @Module({
     imports: [TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor]),
     JwtTokenModule],
-    controllers: [FundingRoundsController],
+    controllers: [FundingRoundsController, InvestmentsController],
     providers: [FundingRoundsService, InvestmentService],
     exports: [FundingRoundsService, InvestmentService]
 })

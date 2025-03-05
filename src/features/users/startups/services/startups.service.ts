@@ -62,11 +62,15 @@ export class StartupsService {
         })
     }
 
-    async getOne(id: number) {
-        const startup = await this.startupRepository
+    async getOne(id: number, includeInvestments = false) {
+        let startupQuery = this.startupRepository
             .createQueryBuilder("startup")
             .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-            .where("startup.id = :id", { id })
+        if (includeInvestments) {
+            startupQuery = startupQuery.leftJoinAndSelect("fundingRound.investments", "investment")
+              .leftJoinAndSelect("investment.investor", "investor")
+        }
+        const startup = await startupQuery.where("startup.id = :id", { id })
             .orderBy("fundingRound.startDate", "ASC")
             .leftJoinAndSelect("startup.tags", "tag")
             .where("startup.id = :id", { id })
@@ -80,7 +84,7 @@ export class StartupsService {
     }
 
     async getCurrent(userData: User) {
-        return this.getOne(userData.id)
+        return this.getOne(userData.id, true)
     }
 
     async create(createStartupDto: CreateStartupDto) {

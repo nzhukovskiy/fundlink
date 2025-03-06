@@ -16,8 +16,8 @@ export class ChatAccessGuard implements CanActivate {
             const request = context.switchToHttp().getRequest()
             user = request.token.payload
             chatId = request.params.id
-            startupId = request.body.startupId
-            investorId = request.body.investorId
+            startupId = request.query["startupId"]
+            investorId = request.query["investorId"]
         } else if (context.getType() === "ws") {
             const client = context.switchToWs().getClient() as Socket
             user = client.data.user

@@ -2,7 +2,11 @@
     <img class="logo" *ngIf="startup?.logoPath" [src]="'http://localhost:3000/uploads/logos/' + startup?.logoPath" alt="">
     <img class="logo" *ngIf="!startup?.logoPath" src="assets/no-image.jpg" alt="">
     <div class="startup-info">
-        <h1 class="title">{{startup?.title}}</h1>
+        <div class="startup-info-title-section">
+            <h1 class="title">{{startup?.title}}</h1>
+            <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.STARTUP" [userToChatWith]="startup"></app-goto-chat>
+        </div>
+
         <app-tags-list [tags]="startup!.tags"></app-tags-list>
         <div>Общая цель: {{startup?.fundingGoal}} руб.
             <app-input-help-tooltip tooltipMessage="Долгосрочная цель"></app-input-help-tooltip>

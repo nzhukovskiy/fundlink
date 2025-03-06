@@ -101,6 +101,10 @@
                 <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
             </div>
         </div>
+        <div class="form-check form-switch auto-approve-group">
+            <input formControlName="autoApproveInvestments" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Автоматическое подтверждение инвестиций<app-input-help-tooltip tooltipMessage="Если выключить эту опцию, то для принятия инвестиции вам будет нужно подтверждать ее вручную"></app-input-help-tooltip></label>
+        </div>
         <div class="mb-3 register-submit-button-group">
             <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">
                 {{formType === FormType.UPDATE ? "Обновить информацию" : "Зарегистрироваться"}}

@@ -1,30 +1,36 @@
 <div class="investor-profile-top-group">
-  <h3>{{investor?.name}} {{investor?.surname}}</h3>
-  <div class="mb-3 button-group">
-    <a [routerLink]="['/investors/edit']" class="btn btn-primary mb-3 action-btn"><mat-icon>edit</mat-icon>Редактировать</a>
-  </div>
+    <h3>{{investor?.name}} {{investor?.surname}}</h3>
+    <div class="mb-3 button-group">
+        <a [routerLink]="['/investors/edit']" class="btn btn-primary mb-3 action-btn">
+            <mat-icon>edit</mat-icon>
+            Редактировать</a>
+    </div>
 </div>
 <p>Email: {{investor?.email}}</p>
 <div>
-  <h4>Совершенные инвестиции</h4>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th scope="col">Дата</th>
-      <th scope="col">Размер</th>
-      <th scope="col">Стартап</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let investment of investments">
-      <td>{{investment.date | date: "dd.MM.yy"}}</td>
-      <td>
-        {{investment.amount}}
-      </td>
-      <td>
-        <a [routerLink]="['/startups', investment.startup_id]">{{investment.startup_title}}</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    <h4>Совершенные инвестиции</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Размер</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Стартап</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let investment of investments">
+            <td>{{investment.date | date:"d.LL.y в H:mm"}}</td>
+            <td>
+                {{investment.amount}}
+            </td>
+            <td>{{ investment.stage }}</td>
+            <td>{{ investment.approvalType }}</td>
+            <td>
+                <a [routerLink]="['/startups', investment.startup_id]">{{investment.startup_title}}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>

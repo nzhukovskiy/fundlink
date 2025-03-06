@@ -158,10 +158,35 @@ export class StartupProfileComponent implements OnInit {
         });
     }
 
-    approveInvestment(investmentId: number) {
+    private approveInvestment(investmentId: number) {
         this.investmentsService.approveInvestment(investmentId).subscribe(investment => {
             this.getCurrentStartup();
         })
+    }
+
+    private rejectInvestment(investmentId: number) {
+        this.investmentsService.rejectInvestment(investmentId).subscribe(investment => {
+            this.getCurrentStartup();
+        })
+    }
+
+    openApproveInvestmentDialog(investmentId: number) {
+        const dialogRef = this.dialog.open(SubmitDialogComponent);
+        let instance = dialogRef.componentInstance;
+        instance.labels = {
+            question: "Подтвердить инвестицию?",
+            accept: "Подтвердить",
+            reject: "Отклонить"
+        };
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result === SubmitDialogReturn.ACCEPT) {
+                this.approveInvestment(investmentId);
+            }
+            else if (result === SubmitDialogReturn.REJECT) {
+                this.rejectInvestment(investmentId);
+            }
+        });
     }
 
     protected readonly InvestmentStage = InvestmentStage;

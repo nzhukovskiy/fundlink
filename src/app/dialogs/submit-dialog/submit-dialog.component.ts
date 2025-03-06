@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {tap} from "rxjs";
 import {SubmitDialogReturn} from "../../constants/submit-dialog-return";
@@ -10,6 +10,12 @@ import {SubmitDialogReturn} from "../../constants/submit-dialog-return";
 })
 export class SubmitDialogComponent implements OnInit {
     constructor(public dialogRef: MatDialogRef<SubmitDialogComponent>) {
+    }
+
+    @Input() labels = {
+        question: "Вы уверены?",
+        accept: "Да",
+        reject: "Нет"
     }
 
     ngOnInit(): void {

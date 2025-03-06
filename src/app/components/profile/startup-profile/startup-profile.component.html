@@ -70,6 +70,7 @@
                                     <th scope="col">Инвестор</th>
                                     <th scope="col">Размер</th>
                                     <th scope="col">Статус</th>
+                                    <th scope="col">Тип</th>
                                     <th scope="col">Дата</th>
                                 </tr>
                                 </thead>
@@ -77,9 +78,15 @@
                                 <tr *ngFor="let investment of fundingRound.investments">
                                     <td>{{ investment.investor.name }} {{ investment.investor.surname }}</td>
                                     <td>{{ investment.amount }}</td>
-                                    <td>{{ investment.stage }}</td>
+                                    <td>
+                                        <button (click)="openApproveInvestmentDialog(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW; else reviewNotNeeded" type="submit" class="btn btn-danger mb-3 action-btn reject-btn">{{ investment.stage }}</button>
+                                        <ng-template #reviewNotNeeded>
+                                            {{investment.stage}}
+                                        </ng-template>
+                                    </td>
+                                    <td>{{ investment.approvalType }}</td>
                                     <td>{{ investment.date }}</td>
-                                    <td (click)="approveInvestment(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW">Подтвердить</td>
+<!--                                    <td (click)="approveInvestment(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW">Подтвердить</td>-->
                                 </tr>
                                 </tbody>
                             </table>

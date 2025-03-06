@@ -1,6 +1,7 @@
 import { FundingRound } from "./funding-round";
 import { Investor } from "./investor";
 import {InvestmentStage} from "../../constants/investment-stage";
+import {InvestmentApprovalType} from "../../constants/investment-approval-type";
 
 export class Investment {
     id: number;
@@ -15,6 +16,8 @@ export class Investment {
 
     stage: InvestmentStage;
 
+    approvalType: InvestmentApprovalType;
+
     startup_id: number;
 
     startup_title: string;
@@ -26,6 +29,7 @@ export class Investment {
         investor: Investor,
         fundingRound: FundingRound,
         investmentStage: InvestmentStage,
+        approvalType: InvestmentApprovalType,
         startup_id: number,
         startup_title: string
     ) {
@@ -35,6 +39,7 @@ export class Investment {
         this.investor = investor;
         this.fundingRound = fundingRound;
         this.stage = investmentStage;
+        this.approvalType = approvalType;
         this.startup_id = startup_id;
         this.startup_title = startup_title;
     }

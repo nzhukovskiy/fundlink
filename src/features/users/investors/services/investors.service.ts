@@ -78,6 +78,8 @@ export class InvestorsService {
               'investment.id as id',
               'investment.amount as amount',
               'investment.date as date',
+              'investment.approvalType as "approvalType"',
+              'investment.stage as stage',
               'startup.id',
               'startup.title'
           ])

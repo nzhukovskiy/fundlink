@@ -1,7 +1,14 @@
 <ng-container *ngIf="chat; else newChat">
   <p>Чат с {{getMemberName()}}</p>
   <div #messagesContainer class="messages-container">
-    <app-message *ngFor="let message of chat?.messages" [message]="message" (markAsReadEvent)="handleMarkAsRead($event)"></app-message>
+      <div #messageItem
+           [attr.data-id]="message.id"
+           *ngFor="let message of chat?.messages">
+          <app-message
+              [message]="message"
+              (markAsReadEvent)="handleMarkAsRead($event)">
+          </app-message>
+      </div>
   </div>
 </ng-container>
 <ng-template #newChat>

@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
 import {ChatService} from "../../../services/chat.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Chat} from "../../../data/models/chat";
@@ -14,8 +23,7 @@ import {CreateMessageDto} from "../../../data/dtos/create-message.dto";
     styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit, AfterViewInit {
-    constructor(private readonly chatService: ChatService,
-                private readonly route: ActivatedRoute,
+    constructor(private readonly route: ActivatedRoute,
                 private readonly socket: AppSocketService,
                 readonly localStorageService: LocalStorageService,
                 private readonly router: Router,
@@ -25,6 +33,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
     chat?: Chat;
     receiverId?: number;
     @ViewChild('messagesContainer') messagesContainer?: ElementRef;
+    @ViewChildren('messageItem') messageItems!: QueryList<ElementRef>;
 
     ngOnInit(): void {
         this.socket.on("markAsRead", (msg: Message) => {
@@ -106,6 +115,24 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
 
     private scrollChatToBottom() {
-        this.messagesContainer!.nativeElement.scrollTop = this.messagesContainer!.nativeElement.scrollHeight;
+        if (!this.chat || !this.chat.messages) {
+            return;
+        }
+
+        const lastReadMessage = this.chat.messages.filter(m => m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role)[
+            this.chat.messages.filter(m => m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role).length - 1];
+
+        if (!lastReadMessage || (lastReadMessage.id !== this.chat.messages[this.chat.messages.length - 1].id && lastReadMessage.senderType !== this.chat.messages[this.chat.messages.length - 1].senderType)) {
+            this.messagesContainer!.nativeElement.scrollTop = this.messagesContainer!.nativeElement.scrollHeight;
+            return;
+        }
+
+        const messageElement = this.messageItems.find(
+            (el: ElementRef) => el.nativeElement.getAttribute('data-id') == lastReadMessage.id
+        );
+
+        if (messageElement) {
+            this.messagesContainer!.nativeElement.scrollTop = messageElement.nativeElement.offsetTop - this.messagesContainer!.nativeElement.clientHeight;
+        }
     }
 }

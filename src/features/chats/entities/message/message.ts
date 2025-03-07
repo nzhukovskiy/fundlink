@@ -19,6 +19,9 @@ export class Message {
     @Column('text')
     text: string;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP AT TIME ZONE \'UTC\'' })
+    @Column({ type: 'timestamp' })
     timestamp: Date;
+
+    @Column({ type: 'timestamp', nullable: true })
+    readAt: Date | null;
 }

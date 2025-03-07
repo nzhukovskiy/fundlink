@@ -32,6 +32,11 @@ export class ChatsService {
         const chat = await this.chatRepository.findOne({
             where: { id: chatId },
             relations: ["messages"],
+            order: {
+                messages: {
+                    timestamp: "ASC",
+                },
+            },
         })
         if (!chat) {
             throw new NotFoundException(
@@ -43,6 +48,7 @@ export class ChatsService {
 
     async joinChat(chatId: number, client: Socket) {
         client.join(`chat-${chatId}`)
+        console.log(client.data.user, "with id", client.id, "joined", `chat-${chatId}`)
     }
 
     async getChatsForUser(user: any) {

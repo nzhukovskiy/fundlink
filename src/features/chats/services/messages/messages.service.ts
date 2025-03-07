@@ -43,7 +43,14 @@ export class MessagesService {
             senderType: senderType,
             senderId: senderId,
             text: createMessageDto.text,
+            timestamp: new Date()
         })
         return this.messageRepository.save(msg)
+    }
+
+    async markAsRead(messageId: number) {
+        let message = await this.messageRepository.findOne({where: { id: messageId }, relations: ["chat"]})
+        message.readAt = new Date();
+        return this.messageRepository.save(message);
     }
 }

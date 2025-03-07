@@ -1,6 +1,5 @@
 import {ResolveFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
-import {LocalStorageService} from "../services/local-storage.service";
 import {ChatService} from "../services/chat.service";
 import {catchError, EMPTY} from "rxjs";
 import {Chat} from "../data/models/chat";

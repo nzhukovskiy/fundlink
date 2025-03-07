@@ -1,7 +1,10 @@
-<div class="message-row" [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.payload!.role}">
-  <div class="message-box">
-    <p class="message-timestamp">{{message?.timestamp | date:"d.LL.y в H:mm":"UTC+6"}}</p>
-    <p>{{message?.text}}</p>
-  </div>
+<div #messageElement class="message-row"
+     [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.payload!.role}">
+    <div class="message-box">
+        <p class="message-timestamp">{{message?.timestamp | date:"d.LL.y в H:mm"}}</p>
+        <p>{{message?.text}}</p>
+        <p *ngIf="message?.readAt">{{message?.readAt}}</p>
+        <p *ngIf="!message?.readAt">null</p>
+    </div>
 </div>
 

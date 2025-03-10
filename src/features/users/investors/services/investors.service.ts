@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Investor } from "../entities/investor";
-import { Repository } from "typeorm";
+import { getConnection, Repository } from "typeorm";
 import { CreateInvestorDto } from "../dtos/create-investor-dto";
 import * as bcrypt from "bcrypt";
 import { PaginateQuery } from "nestjs-paginate";
@@ -61,12 +61,14 @@ export class InvestorsService {
 
     async getStartupsForInvestor(id: number) {
         return this.startupRepository.createQueryBuilder('startup')
+          .select("startup")
+          .addSelect('SUM(investment.amount) AS "totalInvestment"')
           .innerJoin('startup.fundingRounds', 'fundingRound')
           .innerJoin('fundingRound.investments', 'investment')
           .innerJoin('investment.investor', 'investor')
           .where('investor.id = :id', { id })
-          .distinct(true)
-          .getMany();
+          .groupBy("startup.id")
+          .getRawAndEntities();
     }
 
     getFullInvestmentsInfo(id: number) {

@@ -38,7 +38,13 @@
         <div class="stat-value">{{startup?.somMarket}} млн руб.</div>
     </div>
 </div>
-
+<div class="markets-chart-container" *ngIf="startup">
+    <canvas #chart baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            [type]="'bubble'">
+    </canvas>
+</div>
 <h2 class="section-title">О стартапе</h2>
 <div class="description">
     <p style="white-space: pre-line;">{{startup?.description}}</p>

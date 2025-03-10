@@ -1,20 +1,21 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Investor } from 'src/app/data/models/investor';
-import { Startup } from 'src/app/data/models/startup';
-import { StartupService } from 'src/app/services/startup.service';
-import { LocalStorageService } from '../../../services/local-storage.service';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateInvestmentComponent } from '../../dialogs/create-investment/create-investment.component';
-import { Roles } from '../../../constants/roles';
-import { Socket } from 'ngx-socket-io';
-import { AppSocketService } from '../../../services/app-socket.service';
-import { CreateMessageDto } from '../../../data/dtos/create-message.dto';
-import { Message } from '../../../data/models/message';
-import { ChatService } from '../../../services/chat.service';
-import { Chat } from '../../../data/models/chat';
-import { BehaviorSubject } from 'rxjs';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Investor} from 'src/app/data/models/investor';
+import {Startup} from 'src/app/data/models/startup';
+import {StartupService} from 'src/app/services/startup.service';
+import {LocalStorageService} from '../../../services/local-storage.service';
+import {MatDialog} from '@angular/material/dialog';
+import {CreateInvestmentComponent} from '../../dialogs/create-investment/create-investment.component';
+import {Roles} from '../../../constants/roles';
+import {Socket} from 'ngx-socket-io';
+import {AppSocketService} from '../../../services/app-socket.service';
+import {CreateMessageDto} from '../../../data/dtos/create-message.dto';
+import {Message} from '../../../data/models/message';
+import {ChatService} from '../../../services/chat.service';
+import {Chat} from '../../../data/models/chat';
+import {BehaviorSubject} from 'rxjs';
 import Decimal from 'decimal.js';
+import {ChartConfiguration, ChartOptions} from "chart.js";
 
 @Component({
     selector: 'app-startup-page',
@@ -36,10 +37,73 @@ export class StartupPageComponent implements OnInit {
 
     startupLoaded = new BehaviorSubject(false);
 
+    chartData?: ChartConfiguration<'bubble'>['data'];
+
+    chartOptions?: ChartOptions;
+
     ngOnInit(): void {
-        this.route.data.subscribe(({ startup }) => {
+        this.route.data.subscribe(({startup}) => {
             this.startup = startup;
             this.startup!.fundingRounds = this.startup!.fundingRounds.sort((a, b) => a.id - b.id);
+            const SCALING_FACTOR = 1
+            const tamValue = parseInt(this.startup!.tamMarket);
+            const samValue = parseInt(this.startup!.samMarket);
+            const somValue = parseInt(this.startup!.somMarket);
+            const largestRadius = Math.sqrt(Math.max(tamValue, samValue, somValue)) * SCALING_FACTOR;
+            const margin = 5;
+
+            this.chartOptions = {
+                responsive: false,
+                maintainAspectRatio: false,
+                 // aspectRatio: 1, // Ensures circles aren't distorted
+                scales: {
+                    x: {
+                        display: false,
+                        grid: {display: false},
+                        ticks: {display: false},
+                        min: -largestRadius - margin,
+                        max: largestRadius + margin
+                    },
+                    y: {
+                        display: false,
+                        grid: {display: false},
+                        ticks: {display: false},
+                        min: -largestRadius - margin,
+                        max: largestRadius + margin
+                    }
+                },
+                plugins: {
+                    legend: {display: false, position: "top"},
+                    // tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${VALUE}` } }
+                },
+                layout: {
+                    padding: 0 // Remove internal padding
+                },
+
+            };
+            this.chartData = {
+                datasets: [
+                    {
+                        label: 'TAM',
+                        data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.tamMarket)) * SCALING_FACTOR}],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Light red with transparency
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                    },
+                    {
+                        label: 'SAM',
+                        data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.samMarket)) * SCALING_FACTOR}],
+                        backgroundColor: 'rgba(8,125,199,0.2)', // Light blue
+                        borderColor: 'rgb(15,116,187)',
+                    },
+                    {
+                        label: 'SOM',
+                        data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.somMarket)) * SCALING_FACTOR}],
+                        backgroundColor: 'rgb(147,255,66)', // Light green
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                    }
+                ]
+            }
+
             this.startupService.getInvestors(this.startup!.id).subscribe(res => {
                 this.investors = res;
             });

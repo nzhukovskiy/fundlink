@@ -3,6 +3,7 @@ import { AppHttpService } from './app-http.service';
 import { Investor } from '../data/models/investor';
 import {Investment} from "../data/models/investment";
 import { UpdateInvestorDto } from '../data/dtos/update-investor.dto';
+import {Startup} from "../data/models/startup";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class InvestorsService {
 
     getRecommendations() {
       return this.appHttpService.get(`investors/recommendations`);
+    }
+
+    getStartups(id: number) {
+        return this.appHttpService.get<{raw: any[], entities: Startup[]}>(`investors/${id}/startups`);
     }
 }

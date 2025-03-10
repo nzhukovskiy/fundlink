@@ -7,6 +7,17 @@
     </div>
 </div>
 <p>Email: {{investor?.email}}</p>
+<h4>Портфолио</h4>
+<div class="startups-chart-container">
+    <canvas *ngIf="startups.length; else noInvestmentsData"
+            baseChart
+            [data]="lineChartData"
+            [type]="'pie'"
+    ></canvas>
+    <ng-template #noInvestmentsData>
+        Вы пока не совершили ни одной инвестиции
+    </ng-template>
+</div>
 <div>
     <h4>Совершенные инвестиции</h4>
     <table class="table table-striped">

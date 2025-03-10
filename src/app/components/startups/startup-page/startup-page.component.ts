@@ -53,7 +53,7 @@ export class StartupPageComponent implements OnInit {
             const margin = 5;
 
             this.chartOptions = {
-                responsive: false,
+                responsive: true,
                 maintainAspectRatio: false,
                  // aspectRatio: 1, // Ensures circles aren't distorted
                 scales: {
@@ -73,7 +73,7 @@ export class StartupPageComponent implements OnInit {
                     }
                 },
                 plugins: {
-                    legend: {display: false, position: "top"},
+                    legend: {display: true, position: "top"},
                     // tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${VALUE}` } }
                 },
                 layout: {

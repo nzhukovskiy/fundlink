@@ -28,7 +28,7 @@ export class InvestorsService {
     }
 
     async getOne(id: number) {
-        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: {investments: true} });
+        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: { investments: true } });
         if (!investor) {
             throw new NotFoundException(`Investor with an id ${id} does not exist`);
         }
@@ -42,16 +42,16 @@ export class InvestorsService {
         }
         investorDto.password = await bcrypt.hash(investorDto.password, 10);
         let savedInvestor = await this.investorRepository.save(investorDto);
-        let investor = await this.investorRepository.findOneBy({id: savedInvestor.id});
-        delete investor.password
-        investor["role"] = investor.getRole()
+        let investor = await this.investorRepository.findOneBy({ id: savedInvestor.id });
+        delete investor.password;
+        investor["role"] = investor.getRole();
         return {
             accessToken: await this.jwtTokenService.generateToken(investor)
-        }
+        };
     }
 
     async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {
-        let investor = await this.investorRepository.findOne({ where: {id: investorData.id} });
+        let investor = await this.investorRepository.findOne({ where: { id: investorData.id } });
         if (!investor) {
             throw new NotFoundException(`Investor with an id ${investorData.id} does not exist`);
         }
@@ -60,30 +60,38 @@ export class InvestorsService {
     }
 
     async getStartupsForInvestor(id: number) {
-        return this.startupRepository.createQueryBuilder('startup')
+        return this.startupRepository.createQueryBuilder("startup")
           .select("startup")
-          .addSelect('SUM(investment.amount) AS "totalInvestment"')
-          .innerJoin('startup.fundingRounds', 'fundingRound')
-          .innerJoin('fundingRound.investments', 'investment')
-          .innerJoin('investment.investor', 'investor')
-          .where('investor.id = :id', { id })
+          .addSelect("SUM(investment.amount) AS \"totalInvestment\"")
+          .addSelect(
+            `(SUM(investment.amount) * 100.0) / (
+            SELECT SUM(investment_sub.amount) 
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
+          )
+          .innerJoin("startup.fundingRounds", "fundingRound")
+          .innerJoin("fundingRound.investments", "investment")
+          .innerJoin("investment.investor", "investor")
+          .where("investor.id = :id", { id })
           .groupBy("startup.id")
           .getRawAndEntities();
     }
 
     getFullInvestmentsInfo(id: number) {
-        return this.investmentRepository.createQueryBuilder('investment')
-          .innerJoin('investment.fundingRound', 'fundingRound')
-          .innerJoin('fundingRound.startup', 'startup')
-          .where('investment.investorId = :id', { id })
+        return this.investmentRepository.createQueryBuilder("investment")
+          .innerJoin("investment.fundingRound", "fundingRound")
+          .innerJoin("fundingRound.startup", "startup")
+          .where("investment.investorId = :id", { id })
           .select([
-              'investment.id as id',
-              'investment.amount as amount',
-              'investment.date as date',
-              'investment.approvalType as "approvalType"',
-              'investment.stage as stage',
-              'startup.id',
-              'startup.title'
+              "investment.id as id",
+              "investment.amount as amount",
+              "investment.date as date",
+              "investment.approvalType as \"approvalType\"",
+              "investment.stage as stage",
+              "startup.id",
+              "startup.title"
           ])
           .getRawMany();
     }

@@ -5,7 +5,14 @@
             <img *ngIf="!chat.startup.logoPath" src="assets/no-image.jpg" alt="User Avatar">
         </div>
         <div class="chat-info">
-            <div class="chat-name">{{getMemberName(chat)}}</div>
+            <div class="chat-title-group">
+                <div class="chat-name">{{getMemberName(chat)}}</div>
+                <span *ngIf="getUnreadMessagesCount(chat)"
+                      class="badge badge-primary unread-messages-badge"
+                      matTooltip="В этом чате есть непрочитанные сообщения">
+                    {{getUnreadMessagesCount(chat)}}
+                </span>
+            </div>
             <div class="chat-preview">{{getLastMessage(chat).text}}</div>
         </div>
     </a>

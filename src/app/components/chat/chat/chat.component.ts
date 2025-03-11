@@ -33,6 +33,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     chat?: Chat;
     receiverId?: number;
+    firstUnreadMessage?: Message;
+    lastReadMessage?: Message;
     @ViewChild('messagesContainer') messagesContainer?: ElementRef;
     @ViewChildren('messageItem') messageItems!: QueryList<ElementRef>;
 
@@ -40,11 +42,15 @@ export class ChatComponent implements OnInit, AfterViewInit {
         this.socket.on("markAsRead", (msg: Message) => {
             let message = this.chat?.messages.find(x => x.id === msg.id);
             message!.readAt = msg.readAt;
+            this.firstUnreadMessage = this.getFirstUnreadMessage();
+            this.lastReadMessage = this.getLastReadMessage();
         })
         this.socket.on("message", (msg: Message) => {
             if (this.chat) {
                 this.chat?.messages.push(msg);
                 this.changeDetectorRef.detectChanges();
+                this.firstUnreadMessage = this.getFirstUnreadMessage();
+                this.lastReadMessage = this.getLastReadMessage();
                 this.scrollChatToBottom();
             } else {
                 this.router.navigate(["chats/", msg.chat.id]).then();
@@ -55,16 +61,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
             if (chatId) {
                 this.route.data.subscribe(({chat}) => {
                     this.chat = chat;
+                    this.firstUnreadMessage = this.getFirstUnreadMessage();
+                    this.lastReadMessage = this.getLastReadMessage();
                     this.socket.emit('joinChat', {
                         chatId: this.chat!.id,
                     });
                 })
-                // this.chatService.getChat(parseInt(chatId)).subscribe(res => {
-                //   this.chat = res;
-                //   this.socket.emit('joinChat', {
-                //     chatId: this.chat.id,
-                //   });
-                // })
             } else {
                 this.route.queryParamMap.subscribe(queryParams => {
                     if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
@@ -175,7 +177,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
             lastReadMessage = this.chat.messages[index];
         }
 
-        console.log(lastReadMessage);
         const messageElement = this.messageItems.find(
             (el: ElementRef) => el.nativeElement.getAttribute('data-id') == lastReadMessage.id
         );
@@ -200,6 +201,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
 
     isLastMessage(message: Message) {
-        return message.id === this.getLastReadMessage().id;
+        return message.id === this.lastReadMessage!.id;
     }
 }

@@ -73,3 +73,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.chat-title-group {
+    display: flex;
+    gap: 10px;
+}
+.unread-messages-badge {
+    background-color: #dc3545;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+}

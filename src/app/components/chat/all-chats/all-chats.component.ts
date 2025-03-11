@@ -24,7 +24,6 @@ export class AllChatsComponent implements OnInit {
                     message.timestamp = new Date(message.timestamp)
                 })
             })
-            console.log(this.chats)
         })
     }
 
@@ -38,14 +37,8 @@ export class AllChatsComponent implements OnInit {
         return "";
     }
 
-    getMember(chat: Chat) {
-        if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
-            return chat.investor;
-        }
-        else if (this.localStorageService.getUser()?.payload.role === Roles.INVESTOR) {
-            return chat.startup;
-        }
-        return null;
+    getUnreadMessagesCount(chat: Chat) {
+        return chat.messages.filter(m => !m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role).length;
     }
 
     getLastMessage(chat: Chat) {

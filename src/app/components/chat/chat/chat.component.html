@@ -4,7 +4,7 @@
         <div #messageItem
              [attr.data-id]="message.id"
              *ngFor="let message of chat?.messages">
-            <ng-container *ngIf="getFirstUnreadMessage() && getFirstUnreadMessage().id === message.id">
+            <ng-container *ngIf="firstUnreadMessage && firstUnreadMessage.id === message.id">
                 <div class="unread-messages-label">Непрочитанные сообщения</div>
             </ng-container>
             <app-message

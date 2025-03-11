@@ -1,17 +1,21 @@
 <ng-container *ngIf="chat; else newChat">
-  <p>Чат с {{getMemberName()}}</p>
-  <div #messagesContainer class="messages-container">
-      <div #messageItem
-           [attr.data-id]="message.id"
-           *ngFor="let message of chat?.messages">
-          <app-message
-              [message]="message"
-              (markAsReadEvent)="handleMarkAsRead($event)">
-          </app-message>
-      </div>
-  </div>
+    <p>Чат с {{getMemberName()}}</p>
+    <div #messagesContainer class="messages-container">
+        <div #messageItem
+             [attr.data-id]="message.id"
+             *ngFor="let message of chat?.messages">
+            <ng-container *ngIf="getFirstUnreadMessage() && getFirstUnreadMessage().id === message.id">
+                <div class="unread-messages-label">Непрочитанные сообщения</div>
+            </ng-container>
+            <app-message
+                [message]="message"
+                [isLastMessage]="isLastMessage(message)"
+                (markAsReadEvent)="handleMarkAsRead($event)">
+            </app-message>
+        </div>
+    </div>
 </ng-container>
 <ng-template #newChat>
-  Новый чат, тут пока что пусто
+    Новый чат, тут пока что пусто
 </ng-template>
 <app-send-message (message)="sendMessage($event)"></app-send-message>

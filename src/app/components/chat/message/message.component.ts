@@ -25,6 +25,7 @@ export class MessageComponent implements AfterViewInit, OnDestroy {
     }
 
     @Input() message?: Message;
+    @Input() isLastMessage = false;
     @Output() markAsReadEvent = new EventEmitter<number>();
     @ViewChild('messageElement') messageElement!: ElementRef;
     observer!: IntersectionObserver;

@@ -3,8 +3,11 @@
     <div class="message-box">
         <p class="message-timestamp">{{message?.timestamp | date:"d.LL.y в H:mm"}}</p>
         <p>{{message?.text}}</p>
-        <p *ngIf="message?.readAt">{{message?.readAt}}</p>
-        <p *ngIf="!message?.readAt">null</p>
+        <ng-container *ngIf="isLastMessage">
+            <p *ngIf="message?.readAt">	<mat-icon [matTooltip]="message!.readAt ? (message!.readAt | date)! : ''">remove_red_eye</mat-icon></p>
+            <p *ngIf="!message?.readAt">null</p>
+        </ng-container>
+
     </div>
 </div>
 

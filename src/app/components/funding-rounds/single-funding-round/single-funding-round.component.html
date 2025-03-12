@@ -20,10 +20,7 @@
         <div matTooltip="Цель раунда" class="round-goal">{{fundingRound.fundingGoal}}</div>
     </div>
 
-    <div class="progress-bar">
-        <div class="progress-fill" [ngStyle]="{'width': fundingPercent + '%'}"></div>
-        <span class="funding-percent">{{fundingPercent}} %</span>
-    </div>
+    <app-progress-bar [fillPercent]="fundingPercent!.toNumber()" [fillColor]="'#3498db'"></app-progress-bar>
 
     <div class="round-dates">
         <span class="start-date">• Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</span>

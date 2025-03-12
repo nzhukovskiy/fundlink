@@ -22,7 +22,9 @@ export class Startup extends User {
         capitalExpenditures: number[],
         changesInWorkingCapital: number[],
         deprecationAndAmortization: number[],
-        totalInvestment: string
+        totalInvestment: string,
+        sharePercentage: string,
+        totalInvestmentForStartup: string
     ) {
         super(id, email, password);
         this.title = title;
@@ -44,6 +46,8 @@ export class Startup extends User {
         this.changesInWorkingCapital = changesInWorkingCapital;
         this.deprecationAndAmortization = deprecationAndAmortization;
         this.totalInvestment = totalInvestment;
+        this.sharePercentage = sharePercentage;
+        this.totalInvestmentsForStartup = totalInvestmentForStartup;
     }
 
     title: string;
@@ -93,4 +97,8 @@ export class Startup extends User {
     deprecationAndAmortization: number[];
 
     totalInvestment: string;
+
+    sharePercentage: string;
+
+    totalInvestmentsForStartup: string;
 }

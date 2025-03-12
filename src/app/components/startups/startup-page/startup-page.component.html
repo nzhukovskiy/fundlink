@@ -15,9 +15,7 @@
             <app-input-help-tooltip tooltipMessage="Сумма целей всех раундов финансирования"></app-input-help-tooltip>
         </div>
         <div>Всего собрано: {{getCurrentFundingByRounds()}} руб.</div>
-        <div class="progress-bar">
-            <div class="progress" [ngStyle]="{'width': getOverallFundingProgress() + '%'}"></div>
-        </div>
+        <app-progress-bar [fillPercent]="getOverallFundingProgress().toNumber()" [fillColor]="'#27ae60'"></app-progress-bar>
     </div>
 </div>
 <div class="stats-container">
@@ -38,13 +36,13 @@
         <div class="stat-value">{{startup?.somMarket}} млн руб.</div>
     </div>
 </div>
-<div class="markets-chart-container" *ngIf="startup">
-    <canvas #chart baseChart
-            [data]="chartData"
-            [options]="chartOptions"
-            [type]="'bubble'">
-    </canvas>
-</div>
+<!--<div class="markets-chart-container" *ngIf="startup">-->
+<!--    <canvas #chart baseChart-->
+<!--            [data]="chartData"-->
+<!--            [options]="chartOptions"-->
+<!--            [type]="'bubble'">-->
+<!--    </canvas>-->
+<!--</div>-->
 <h2 class="section-title">О стартапе</h2>
 <div class="description">
     <p style="white-space: pre-line;">{{startup?.description}}</p>

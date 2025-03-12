@@ -23,17 +23,19 @@ export class SingleFundingRoundComponent implements OnInit {
     @Output()
     newInvestment = new EventEmitter<number>();
 
-    fundingPercent?: string;
+    fundingPercent?: Decimal;
 
     openInvestmentDialog() {
         this.newInvestment.emit(this.fundingRound?.id);
     }
 
     getFundingPercent() {
-        return new Decimal(this.fundingRound!.currentRaised).div(new Decimal(this.fundingRound!.fundingGoal)).mul(new Decimal(100)).toString();
+        return new Decimal(this.fundingRound!.currentRaised).div(new Decimal(this.fundingRound!.fundingGoal)).mul(new Decimal(100));
     }
 
     ngOnInit(): void {
         this.fundingPercent = this.getFundingPercent();
     }
+
+    protected readonly parseInt = parseInt;
 }

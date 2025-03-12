@@ -5,6 +5,8 @@ import {Investment} from "../../../data/models/investment";
 import {Startup} from "../../../data/models/startup";
 import {ChartConfiguration} from "chart.js";
 import {start} from "@popperjs/core";
+import {InvestmentStage} from "../../../constants/investment-stage";
+import Decimal from "decimal.js";
 
 @Component({
     selector: 'app-investor-profile',
@@ -19,6 +21,7 @@ export class InvestorProfileComponent implements OnInit {
     investments: Investment[] = [];
     startups: Startup[] = [];
     public lineChartData?: ChartConfiguration<'pie'>['data'];
+    public startupsShareData: ChartConfiguration<'doughnut'>['data'][] = [];
 
     ngOnInit(): void {
         this.investorsService.getCurrentInvestor().subscribe(res => {
@@ -30,16 +33,29 @@ export class InvestorProfileComponent implements OnInit {
                 this.startups = startups.entities;
                 this.startups.forEach(startup => {
                     startup.totalInvestment = startups.raw.find(x => x.startup_id === startup.id).totalInvestment;
+                    startup.sharePercentage = startups.raw.find(x => x.startup_id === startup.id).sharePercentage;
+                    startup.totalInvestmentsForStartup = startups.raw.find(x => x.startup_id === startup.id).totalInvestmentsForStartup;
+                    this.startupsShareData.push({
+                        labels: ["Вы", "Остальные"],
+                        datasets: [{
+                            data: [new Decimal(startup.totalInvestment).toNumber(), (new Decimal(startup.totalInvestmentsForStartup).minus(new Decimal(startup.totalInvestment))).toNumber()]
+                        }]
+                    })
                 })
+                console.log(this.startupsShareData)
                 this.lineChartData = {
                     labels: this.startups.map(x => x.title),
                     datasets: [{
                         data: this.startups.map(x => parseInt(x.totalInvestment)),
                     }],
                 };
+
             })
         })
     }
 
 
+    protected readonly InvestmentStage = InvestmentStage;
+    protected readonly parseInt = parseInt;
+    protected readonly start = start;
 }

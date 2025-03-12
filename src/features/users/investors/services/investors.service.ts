@@ -65,11 +65,18 @@ export class InvestorsService {
           .addSelect("SUM(investment.amount) AS \"totalInvestment\"")
           .addSelect(
             `(SUM(investment.amount) * 100.0) / (
-            SELECT SUM(investment_sub.amount) 
+            SELECT SUM(investment_sub.amount)
             FROM investment investment_sub
             INNER JOIN funding_round funding_round_sub
             ON investment_sub."fundingRoundId" = funding_round_sub.id
             WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
+          )
+          .addSelect(
+            `(SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "totalInvestmentsForStartup"`
           )
           .innerJoin("startup.fundingRounds", "fundingRound")
           .innerJoin("fundingRound.investments", "investment")

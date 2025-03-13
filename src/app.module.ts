@@ -20,10 +20,14 @@ import { TagsModule } from './features/tags/tags.module';
 import { ChatsModule } from './features/chats/chats.module';
 import { Chat } from "./features/chats/entities/chat/chat";
 import { Message } from "./features/chats/entities/message/message";
+import { entities, migrations } from "./constants/typeorm";
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: '.env',
+        }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads'
@@ -38,8 +42,10 @@ import { Message } from "./features/chats/entities/message/message";
                 username: configService.get("POSTGRES_USER"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DB").toString(),
-                entities: [Startup, Investor, FundingRound, Investment, Tag, Chat, Message],
-                synchronize: true,
+                entities: entities,
+                // migrations: migrations,
+                // migrationsRun: false,
+                synchronize: false,
             }),
         }),
         UsersModule,

@@ -50,10 +50,7 @@ export class StartupsService {
                 .where("tag.title = :tagTitle", { tagTitle: tag })
         }
         if (title) {
-            startupsQuery.andWhere(
-                "to_tsvector('simple', startup.title) @@ plainto_tsquery('simple', :title)",
-                { title }
-            )
+            startupsQuery.andWhere("startup.title ILIKE :title", { title: `%${title}%` });
         }
 
         return this.paginateService.paginate(query, startupsQuery, {

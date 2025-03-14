@@ -45,9 +45,6 @@ export class Startup extends User {
         this.capitalExpenditures = capitalExpenditures;
         this.changesInWorkingCapital = changesInWorkingCapital;
         this.deprecationAndAmortization = deprecationAndAmortization;
-        this.totalInvestment = totalInvestment;
-        this.sharePercentage = sharePercentage;
-        this.totalInvestmentsForStartup = totalInvestmentForStartup;
     }
 
     title: string;
@@ -95,10 +92,4 @@ export class Startup extends User {
 
     @Expose({name: 'deprecation_and_amortization'})
     deprecationAndAmortization: number[];
-
-    totalInvestment: string;
-
-    sharePercentage: string;
-
-    totalInvestmentsForStartup: string;
 }

@@ -39,13 +39,19 @@ export class ChatComponent implements OnInit, AfterViewInit {
     @ViewChildren('messageItem') messageItems!: QueryList<ElementRef>;
 
     ngOnInit(): void {
-        this.socket.on("markAsRead", (msg: Message) => {
+        this.socket.onReadStateChange().subscribe(msg => {
             let message = this.chat?.messages.find(x => x.id === msg.id);
             message!.readAt = msg.readAt;
             this.firstUnreadMessage = this.getFirstUnreadMessage();
             this.lastReadMessage = this.getLastReadMessage();
         })
-        this.socket.on("message", (msg: Message) => {
+        // this.socket.on("markAsRead", (msg: Message) => {
+        //     let message = this.chat?.messages.find(x => x.id === msg.id);
+        //     message!.readAt = msg.readAt;
+        //     this.firstUnreadMessage = this.getFirstUnreadMessage();
+        //     this.lastReadMessage = this.getLastReadMessage();
+        // })
+        this.socket.onNewMessage().subscribe(msg => {
             if (this.chat) {
                 this.chat?.messages.push(msg);
                 this.changeDetectorRef.detectChanges();
@@ -56,6 +62,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
                 this.router.navigate(["chats/", msg.chat.id]).then();
             }
         })
+        // this.socket.on("message", (msg: Message) => {
+        //     if (this.chat) {
+        //         this.chat?.messages.push(msg);
+        //         this.changeDetectorRef.detectChanges();
+        //         this.firstUnreadMessage = this.getFirstUnreadMessage();
+        //         this.lastReadMessage = this.getLastReadMessage();
+        //         this.scrollChatToBottom();
+        //     } else {
+        //         this.router.navigate(["chats/", msg.chat.id]).then();
+        //     }
+        // })
         this.route.paramMap.subscribe(params => {
             let chatId = params.get("id");
             if (chatId) {
@@ -63,9 +80,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
                     this.chat = chat;
                     this.firstUnreadMessage = this.getFirstUnreadMessage();
                     this.lastReadMessage = this.getLastReadMessage();
-                    this.socket.emit('joinChat', {
-                        chatId: this.chat!.id,
-                    });
+                    // this.socket.emit('joinChat', {
+                    //     chatId: this.chat!.id,
+                    // });
+                    this.socket.joinChat(this.chat!.id);
                 })
             } else {
                 this.route.queryParamMap.subscribe(queryParams => {
@@ -93,16 +111,18 @@ export class ChatComponent implements OnInit, AfterViewInit {
     sendMessage(message: string) {
         if (this.chat) {
             this.scrollChatToBottomForce();
-            this.socket.emit('message', {
-                chatId: this.chat!.id,
-                text: message,
-            } as CreateMessageDto);
+            this.socket.sendMessage({chatId: this.chat!.id, text: message} as CreateMessageDto)
+            // this.socket.emit('message', {
+            //     chatId: this.chat!.id,
+            //     text: message,
+            // } as CreateMessageDto);
         } else {
             console.log("Emitting new message")
-            this.socket.emit('message', {
-                receiverId: this.receiverId,
-                text: message,
-            } as CreateMessageDto);
+            this.socket.sendMessage({receiverId: this.receiverId, text: message} as CreateMessageDto)
+            // this.socket.emit('message', {
+            //     receiverId: this.receiverId,
+            //     text: message,
+            // } as CreateMessageDto);
         }
     }
 
@@ -112,81 +132,50 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
 
     handleMarkAsRead(messageId: number) {
-        this.socket.emit('markAsRead', {
-            messageId: messageId,
-            chatId: this.chat?.id
-        });
+        // this.socket.emit('markAsRead', {
+        //     messageId: messageId,
+        // });
+        this.socket.markAsRead({messageId: messageId, chatId: this.chat!.id});
     }
 
     private scrollChatToBottom() {
         if (!this.chat || !this.chat.messages) {
             return;
         }
-
-        // const lastReadMessage = this.chat.messages.filter(m => m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role)[
-        //     this.chat.messages.filter(m => m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role).length - 1];
-        //
-        // console.log(lastReadMessage)
-        // if (!lastReadMessage || (lastReadMessage.id !== this.chat.messages[this.chat.messages.length - 1].id && lastReadMessage.senderType !== this.chat.messages[this.chat.messages.length - 1].senderType)) {
-        //     this.scrollChatToBottomForce();
-        //     return;
-        // }
-
-        // if (this.chat.messages.every(m => m.readAt)) {
-        //     this.scrollChatToBottomForce();
-        //     return;
-        // }
-        //
-        // const firstUnreadIndex = this.chat.messages.findIndex(m => !m.readAt);
-        //
         let lastReadMessage: Message;
-        //
-        // if (this.chat.messages[firstUnreadIndex].senderType === this.localStorageService.getUser()?.payload.role) {
-        //     console.log("Мы")
-        //     const readFromOther = this.chat.messages.filter(m => m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role);
-        //     console.log(readFromOther)
-        //     if (readFromOther.length > 0) {
-        //         const last = this.chat.messages.lastIndexOf(readFromOther[readFromOther.length - 1]);
-        //         lastReadMessage = this.chat.messages[last];
-        //     } else {
-        //         this.scrollChatToBottomForce();
-        //         return;
-        //     }
-        // } else {
-        //     // If the first unread message is from the other user,
-        //     // scroll to the message immediately before it (if exists)
-        //     const last = firstUnreadIndex > 0 ? firstUnreadIndex - 1 : firstUnreadIndex;
-        //     lastReadMessage = this.chat.messages[last];
-        // }
 
         const firstUnreadIndex = this.chat.messages.findIndex(m => !m.readAt);
-
-        // If all messages are read, scroll to the bottom.
+        console.log(firstUnreadIndex)
         if (firstUnreadIndex === -1) {
             this.scrollChatToBottomForce();
             return;
         }
 
-        // If the first unread message is from the current user,
-        // scroll directly to that message.
         if (this.chat.messages[firstUnreadIndex].senderType === this.localStorageService.getUser()?.payload.role) {
             lastReadMessage = this.chat.messages[firstUnreadIndex];
+            // this.scrollChatToBottomForce();
+            // return;
         } else {
-            // If it's from the other user, scroll to the previous message for context.
             const index = firstUnreadIndex > 0 ? firstUnreadIndex - 1 : firstUnreadIndex;
+            console.log(index)
             lastReadMessage = this.chat.messages[index];
         }
+
+        console.log(lastReadMessage)
 
         const messageElement = this.messageItems.find(
             (el: ElementRef) => el.nativeElement.getAttribute('data-id') == lastReadMessage.id
         );
+        console.log(messageElement)
 
+        console.log(this.messagesContainer!.nativeElement.scrollTop, messageElement!.nativeElement.offsetTop, this.messagesContainer!.nativeElement.clientHeight)
         if (messageElement) {
-            this.messagesContainer!.nativeElement.scrollTop = messageElement.nativeElement.offsetTop - this.messagesContainer!.nativeElement.clientHeight + 40;
+            this.messagesContainer!.nativeElement.scrollTop = messageElement.nativeElement.offsetTop - this.messagesContainer!.nativeElement.clientHeight;
         }
     }
 
     private scrollChatToBottomForce() {
+        console.log("force")
         this.messagesContainer!.nativeElement.scrollTop = this.messagesContainer!.nativeElement.scrollHeight;
     }
 

@@ -3,6 +3,8 @@ import { ChatService } from '../../../services/chat.service';
 import { Chat } from '../../../data/models/chat';
 import { Roles } from '../../../constants/roles';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import {AppSocketService} from "../../../services/app-socket.service";
+import {ChatWithUnreadCountDto} from "../../../data/dtos/responses/chat-with-unread-count.dto";
 
 @Component({
   selector: 'app-all-chats',
@@ -11,14 +13,19 @@ import { LocalStorageService } from '../../../services/local-storage.service';
 })
 export class AllChatsComponent implements OnInit {
     constructor(private readonly chatService: ChatService,
-                 readonly localStorageService: LocalStorageService) {
+                 readonly localStorageService: LocalStorageService,
+                private readonly socket: AppSocketService) {
     }
 
-    chats: Chat[] = [];
+    chats: ChatWithUnreadCountDto[] = [];
 
     ngOnInit(): void {
+        this.socket.onMessageArrived().subscribe(chat => {
+            let index = this.chats.findIndex(x => x.id === chat.id);
+            this.chats[index] = chat;
+        })
         this.chatService.getChatsForUser().subscribe(chats => {
-            this.chats = chats;
+            this.chats = chats as ChatWithUnreadCountDto[];
             this.chats.forEach(chat => {
                 chat.messages.forEach((message) => {
                     message.timestamp = new Date(message.timestamp)

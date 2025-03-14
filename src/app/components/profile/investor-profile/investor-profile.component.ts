@@ -7,6 +7,7 @@ import {ChartConfiguration} from "chart.js";
 import {start} from "@popperjs/core";
 import {InvestmentStage} from "../../../constants/investment-stage";
 import Decimal from "decimal.js";
+import {StartupFullDto} from "../../../data/dtos/responses/startup-full.dto";
 
 @Component({
     selector: 'app-investor-profile',
@@ -19,7 +20,7 @@ export class InvestorProfileComponent implements OnInit {
 
     investor?: Investor;
     investments: Investment[] = [];
-    startups: Startup[] = [];
+    startups: StartupFullDto[] = [];
     public lineChartData?: ChartConfiguration<'pie'>['data'];
     public startupsShareData: ChartConfiguration<'doughnut'>['data'][] = [];
 
@@ -30,11 +31,8 @@ export class InvestorProfileComponent implements OnInit {
                 this.investments = investments;
             })
             this.investorsService.getStartups(this.investor.id).subscribe(startups => {
-                this.startups = startups.entities;
+                this.startups = startups;
                 this.startups.forEach(startup => {
-                    startup.totalInvestment = startups.raw.find(x => x.startup_id === startup.id).totalInvestment;
-                    startup.sharePercentage = startups.raw.find(x => x.startup_id === startup.id).sharePercentage;
-                    startup.totalInvestmentsForStartup = startups.raw.find(x => x.startup_id === startup.id).totalInvestmentsForStartup;
                     this.startupsShareData.push({
                         labels: ["Вы", "Остальные"],
                         datasets: [{
@@ -42,7 +40,6 @@ export class InvestorProfileComponent implements OnInit {
                         }]
                     })
                 })
-                console.log(this.startupsShareData)
                 this.lineChartData = {
                     labels: this.startups.map(x => x.title),
                     datasets: [{

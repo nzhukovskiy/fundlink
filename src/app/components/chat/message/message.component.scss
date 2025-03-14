@@ -25,3 +25,14 @@ p {
     color: gray;
     font-size: 12px;
 }
+.read-at-icon {
+    font-size: 16px;
+    width: unset;
+    height: unset;
+}
+
+.message-top-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -7,10 +7,10 @@
         <div class="chat-info">
             <div class="chat-title-group">
                 <div class="chat-name">{{getMemberName(chat)}}</div>
-                <span *ngIf="getUnreadMessagesCount(chat)"
+                <span *ngIf="chat.unreadCount"
                       class="badge badge-primary unread-messages-badge"
                       matTooltip="В этом чате есть непрочитанные сообщения">
-                    {{getUnreadMessagesCount(chat)}}
+                    {{chat.unreadCount}}
                 </span>
             </div>
             <div class="chat-preview">{{getLastMessage(chat).text}}</div>

@@ -12,9 +12,9 @@ import {
     UseInterceptors
 } from "@nestjs/common";
 import { StartupsService } from "../../services/startups.service";
-import { CreateStartupDto } from "../../dtos/create-startup-dto";
+import { CreateStartupDto } from "../../dtos/requests/create-startup-dto";
 import { Paginate, PaginateQuery } from "nestjs-paginate";
-import { UpdateStartupDto } from "../../dtos/update-startup-dto";
+import { UpdateStartupDto } from "../../dtos/requests/update-startup-dto";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateFundingRoundDto } from "../../../../investments/dtos/create-funding-round-dto";
 import { FundingRoundsService } from "../../../../investments/services/funding-rounds.service";
@@ -24,7 +24,7 @@ import { RolesGuard } from "../../../../auth/guards/roles.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { presentationFileFilter } from "../../storage/presentations/presentation-file-filter";
 import { fileStorage } from "../../storage/file-storage";
-import { AssignTagDto } from "../../dtos/assign-tag-dto";
+import { AssignTagDto } from "../../dtos/requests/assign-tag-dto";
 import { Like } from "typeorm";
 import { logoFileFilter } from "../../storage/logos/logo-file-filter";
 
@@ -50,8 +50,10 @@ export class StartupsController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.startupsService.getOne(id);
+    findOne(@Param('id') id: number,
+            @Query('includeInvestments') includeInvestments: boolean,
+            @Query('includeFundingStats') includeFundingStats: boolean) {
+        return this.startupsService.getOne(id, includeInvestments);
     }
 
     @ApiBody({ type: CreateStartupDto })

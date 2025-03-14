@@ -16,6 +16,7 @@ import { ChatsService } from "../../services/chats/chats.service";
 import { UseGuards } from "@nestjs/common";
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard";
 import { MarkAsReadDto } from "../../dtos/mark-as-read.dto/mark-as-read.dto";
+import { Roles } from "../../../users/constants/roles";
 
 @WebSocketGateway(3001, { cors: true })
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -44,6 +45,20 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.chatsService.joinChat(message.chat.id, client).then();
         }
         this.server.to(`chat-${message.chat.id}`).emit("message", message);
+        if (createMessageDto.receiverId) {
+            this.server.to(`${client.data.user.role === Roles.STARTUP ? "investor": "startup"}-${createMessageDto.receiverId}`).emit("messageArrived", message);
+        }
+        else {
+            let chat = await this.chatsService.getChatAndLastMessage(createMessageDto.chatId)
+            console.log(chat)
+            if (client.data.user.role === Roles.STARTUP) {
+                this.server.to(`investor-${chat.investor.id}`).emit("messageArrived", chat);
+            }
+            else {
+                console.log("emitting", `startup-${createMessageDto.receiverId}`)
+                this.server.to(`startup-${chat.startup.id}`).emit("messageArrived", chat);
+            }
+        }
     }
 
     @UseGuards(ChatAccessGuard)
@@ -80,6 +95,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
             client.data.user = tokenData.payload;
             console.log(`${client.data.user.role} ${client.data.user.id} connected via WebSocket`);
+            client.join(`${client.data.user.role}-${client.data.user.id}`)
         } catch (error) {
             console.error("WebSocket Authentication Failed:", error.message);
             client.disconnect();

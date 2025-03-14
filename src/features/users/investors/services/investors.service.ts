@@ -12,6 +12,10 @@ import { UpdateInvestorDto } from "../dtos/update-investor-dto";
 import { User } from "../../user/user";
 import { Startup } from "../../startups/entities/startup";
 import { Investment } from "../../../investments/entities/investment/investment";
+import { plainToInstance } from "class-transformer";
+import {
+    StartupFullResponseDto
+} from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto";
 
 @Injectable()
 export class InvestorsService {
@@ -60,8 +64,8 @@ export class InvestorsService {
     }
 
     async getStartupsForInvestor(id: number) {
-        return this.startupRepository.createQueryBuilder("startup")
-          .select("startup")
+        let startups = await this.startupRepository.createQueryBuilder("startup")
+          .select(['startup.*'])
           .addSelect("SUM(investment.amount) AS \"totalInvestment\"")
           .addSelect(
             `(SUM(investment.amount) * 100.0) / (
@@ -83,7 +87,9 @@ export class InvestorsService {
           .innerJoin("investment.investor", "investor")
           .where("investor.id = :id", { id })
           .groupBy("startup.id")
-          .getRawAndEntities();
+          .getRawMany();
+
+        return plainToInstance(StartupFullResponseDto, startups);
     }
 
     getFullInvestmentsInfo(id: number) {

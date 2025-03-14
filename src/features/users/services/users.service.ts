@@ -4,11 +4,11 @@ import { Startup } from "../startups/entities/startup";
 import { Repository } from "typeorm";
 import { StartupsService } from "../startups/services/startups.service";
 import { Investor } from "../investors/entities/investor";
-import { CreateStartupDto } from "../startups/dtos/create-startup-dto";
+import { CreateStartupDto } from "../startups/dtos/requests/create-startup-dto";
 import { CreateInvestorDto } from "../investors/dtos/create-investor-dto";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { UpdateStartupDto } from "../startups/dtos/update-startup-dto";
+import { UpdateStartupDto } from "../startups/dtos/requests/update-startup-dto";
 import { UpdateInvestorDto } from "../investors/dtos/update-investor-dto";
 
 @Injectable()

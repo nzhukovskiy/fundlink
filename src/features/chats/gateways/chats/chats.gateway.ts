@@ -45,11 +45,13 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.chatsService.joinChat(message.chat.id, client).then();
         }
         this.server.to(`chat-${message.chat.id}`).emit("message", message);
+        let chat = await this.chatsService.getChatAndLastMessage(message.chat.id)
         if (createMessageDto.receiverId) {
-            this.server.to(`${client.data.user.role === Roles.STARTUP ? "investor": "startup"}-${createMessageDto.receiverId}`).emit("messageArrived", message);
+            console.log("sening", `${client.data.user.role === Roles.STARTUP ? "investor": "startup"}-${createMessageDto.receiverId}`)
+            this.server.to(`${client.data.user.role === Roles.STARTUP ? "investor": "startup"}-${createMessageDto.receiverId}`).emit("messageArrived", chat);
         }
         else {
-            let chat = await this.chatsService.getChatAndLastMessage(createMessageDto.chatId)
+            console.log(chat)
             if (client.data.user.role === Roles.STARTUP) {
                 this.server.to(`investor-${chat.investor.id}`).emit("messageArrived", chat);
             }

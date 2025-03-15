@@ -68,9 +68,11 @@ export class ChatsService {
             whereParams = { investorId: user.id }
             whereString = "investor.id = :investorId"
         }
-        const unreadCountSubQuery = await this.messageRepository.createQueryBuilder("message")
+        const unreadCountSubQuery = this.messageRepository.createQueryBuilder("message")
           .where("message.chatId = chat.id")
           .andWhere("message.readAt isnull")
+          .andWhere("message.senderId != :userId", {userId: user.id})
+          .andWhere("message.senderType != :userType", {userType: user.role})
           .select("COUNT (message.id)")
         const raw = await this.chatRepository
             .createQueryBuilder("chat")
@@ -83,6 +85,7 @@ export class ChatsService {
             )
             .addSelect(`(${unreadCountSubQuery.getQuery()})`, 'unreadCount')
             .where(whereString, whereParams)
+          .setParameters(unreadCountSubQuery.getParameters())
             .orderBy("message.timestamp", "DESC")
             .getRawAndEntities()
 
@@ -118,9 +121,8 @@ export class ChatsService {
 
 
     async getChatAndLastMessage(chatId: number) {
-        const unreadCountSubQuery = await this.chatRepository.createQueryBuilder("chat")
-          .leftJoinAndSelect("chat.messages", "message")
-          .where("chat.id = :id", {id: chatId})
+        const unreadCountSubQuery = await this.messageRepository.createQueryBuilder("message")
+          .where("message.chatId = chat.id")
           .andWhere("message.readAt isnull")
           .select("COUNT (message.id)")
         const chatRaw = await this.chatRepository

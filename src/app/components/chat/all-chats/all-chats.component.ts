@@ -22,7 +22,13 @@ export class AllChatsComponent implements OnInit {
     ngOnInit(): void {
         this.socket.onMessageArrived().subscribe(chat => {
             let index = this.chats.findIndex(x => x.id === chat.id);
-            this.chats[index] = chat;
+            if (index == -1) {
+                this.chats.push(chat);
+            }
+            else {
+                this.chats[index] = chat;
+            }
+            this.sortChatsByLastMessage();
         })
         this.chatService.getChatsForUser().subscribe(chats => {
             this.chats = chats as ChatWithUnreadCountDto[];
@@ -31,6 +37,7 @@ export class AllChatsComponent implements OnInit {
                     message.timestamp = new Date(message.timestamp)
                 })
             })
+            this.sortChatsByLastMessage();
         })
     }
 
@@ -50,6 +57,10 @@ export class AllChatsComponent implements OnInit {
 
     getLastMessage(chat: Chat) {
         return chat.messages[0];
+    }
+
+    private sortChatsByLastMessage() {
+        this.chats = this.chats.sort((a, b) => new Date(b.messages[0].timestamp).getTime() - new Date(a.messages[0].timestamp).getTime())
     }
 
     protected readonly Roles = Roles;

@@ -45,12 +45,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
             this.firstUnreadMessage = this.getFirstUnreadMessage();
             this.lastReadMessage = this.getLastReadMessage();
         })
-        // this.socket.on("markAsRead", (msg: Message) => {
-        //     let message = this.chat?.messages.find(x => x.id === msg.id);
-        //     message!.readAt = msg.readAt;
-        //     this.firstUnreadMessage = this.getFirstUnreadMessage();
-        //     this.lastReadMessage = this.getLastReadMessage();
-        // })
         this.socket.onNewMessage().subscribe(msg => {
             if (this.chat) {
                 this.chat?.messages.push(msg);
@@ -62,17 +56,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
                 this.router.navigate(["chats/", msg.chat.id]).then();
             }
         })
-        // this.socket.on("message", (msg: Message) => {
-        //     if (this.chat) {
-        //         this.chat?.messages.push(msg);
-        //         this.changeDetectorRef.detectChanges();
-        //         this.firstUnreadMessage = this.getFirstUnreadMessage();
-        //         this.lastReadMessage = this.getLastReadMessage();
-        //         this.scrollChatToBottom();
-        //     } else {
-        //         this.router.navigate(["chats/", msg.chat.id]).then();
-        //     }
-        // })
         this.route.paramMap.subscribe(params => {
             let chatId = params.get("id");
             if (chatId) {
@@ -80,9 +63,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
                     this.chat = chat;
                     this.firstUnreadMessage = this.getFirstUnreadMessage();
                     this.lastReadMessage = this.getLastReadMessage();
-                    // this.socket.emit('joinChat', {
-                    //     chatId: this.chat!.id,
-                    // });
                     this.socket.joinChat(this.chat!.id);
                 })
             } else {
@@ -112,17 +92,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
         if (this.chat) {
             this.scrollChatToBottomForce();
             this.socket.sendMessage({chatId: this.chat!.id, text: message} as CreateMessageDto)
-            // this.socket.emit('message', {
-            //     chatId: this.chat!.id,
-            //     text: message,
-            // } as CreateMessageDto);
         } else {
-            console.log("Emitting new message")
             this.socket.sendMessage({receiverId: this.receiverId, text: message} as CreateMessageDto)
-            // this.socket.emit('message', {
-            //     receiverId: this.receiverId,
-            //     text: message,
-            // } as CreateMessageDto);
         }
     }
 
@@ -132,9 +103,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
 
     handleMarkAsRead(messageId: number) {
-        // this.socket.emit('markAsRead', {
-        //     messageId: messageId,
-        // });
         this.socket.markAsRead({messageId: messageId, chatId: this.chat!.id});
     }
 
@@ -157,7 +125,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
             // return;
         } else {
             const index = firstUnreadIndex > 0 ? firstUnreadIndex - 1 : firstUnreadIndex;
-            console.log(index)
             lastReadMessage = this.chat.messages[index];
         }
 
@@ -190,6 +157,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
 
     isLastMessage(message: Message) {
-        return message.id === this.lastReadMessage!.id;
+        return !!this.lastReadMessage && message.id === this.lastReadMessage!.id;
     }
 }

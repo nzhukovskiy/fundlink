@@ -50,12 +50,10 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         }
         else {
             let chat = await this.chatsService.getChatAndLastMessage(createMessageDto.chatId)
-            console.log(chat)
             if (client.data.user.role === Roles.STARTUP) {
                 this.server.to(`investor-${chat.investor.id}`).emit("messageArrived", chat);
             }
             else {
-                console.log("emitting", `startup-${createMessageDto.receiverId}`)
                 this.server.to(`startup-${chat.startup.id}`).emit("messageArrived", chat);
             }
         }

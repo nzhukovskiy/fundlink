@@ -19,6 +19,7 @@ import { User } from "../../user/user"
 import { Tag } from "../../../tags/entities/tag/tag"
 import Decimal from "decimal.js"
 import { sampleTime } from "rxjs"
+import { displayManualRestartTip } from "@nestjs/cli/lib/compiler/helpers/manual-restart"
 
 @Injectable()
 export class StartupsService {
@@ -50,7 +51,9 @@ export class StartupsService {
                 .where("tag.title = :tagTitle", { tagTitle: tag })
         }
         if (title) {
-            startupsQuery.andWhere("startup.title ILIKE :title", { title: `%${title}%` });
+            startupsQuery.andWhere("startup.title ILIKE :title", {
+                title: `%${title}%`,
+            })
         }
 
         return this.paginateService.paginate(query, startupsQuery, {
@@ -59,25 +62,45 @@ export class StartupsService {
         })
     }
 
-    async getOne(id: number, includeInvestments = false) {
+    async getOne(id: number, includeInvestments = false, investorId?: number) {
         let startupQuery = this.startupRepository
             .createQueryBuilder("startup")
             .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
         if (includeInvestments) {
-            startupQuery = startupQuery.leftJoinAndSelect("fundingRound.investments", "investment")
-              .leftJoinAndSelect("investment.investor", "investor")
+            startupQuery = startupQuery
+                .leftJoinAndSelect("fundingRound.investments", "investment")
+                .leftJoinAndSelect("investment.investor", "investor")
         }
-        const startup = await startupQuery.where("startup.id = :id", { id })
+        if (investorId) {
+            startupQuery = startupQuery
+                .addSelect(
+                    `
+            EXISTS (
+                SELECT 1 
+                FROM investor_interesting_startups_startup iiss  
+                WHERE iiss."startupId"  = startup.id and iiss."investorId" = :investorId
+            )`,
+                    "isInteresting"
+                )
+                .setParameter("investorId", investorId)
+        }
+        const startup = await startupQuery
+            .where("startup.id = :id", { id })
             .orderBy("fundingRound.startDate", "ASC")
             .leftJoinAndSelect("startup.tags", "tag")
             .where("startup.id = :id", { id })
-            .getOne()
+            .getRawAndEntities()
+
         if (!startup) {
             throw new NotFoundException(
                 `Startup with an id ${id} does not exist`
             )
         }
-        return { ...startup, dcf: this.calculateDcf(startup) }
+        return {
+            ...startup.entities[0],
+            isInteresting: startup.raw[0].isInteresting,
+            dcf: this.calculateDcf(startup.entities[0]),
+        }
     }
 
     async getCurrent(userData: User) {
@@ -232,6 +255,29 @@ export class StartupsService {
         }
         startup.logoPath = fileName
         return this.startupRepository.save(startup)
+    }
+
+    async markAsInteresting(startupId: number, investorId: number) {
+        const startup = await this.startupRepository.findOneBy({
+            id: startupId,
+        })
+        const investor = await this.investorRepository.findOne({
+            where: { id: investorId },
+            relations: ["interestingStartups"],
+        })
+        investor.interestingStartups.push(startup)
+        return this.investorRepository.save(investor)
+    }
+
+    async removeFromInteresting(startupId: number, investorId: number) {
+        const investor = await this.investorRepository.findOne({
+            where: { id: investorId },
+            relations: ["interestingStartups"],
+        })
+        investor.interestingStartups = investor.interestingStartups.filter(
+            (x) => x.id !== startupId
+        )
+        return this.investorRepository.save(investor)
     }
 
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {

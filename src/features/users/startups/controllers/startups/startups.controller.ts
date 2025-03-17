@@ -25,8 +25,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { presentationFileFilter } from "../../storage/presentations/presentation-file-filter";
 import { fileStorage } from "../../storage/file-storage";
 import { AssignTagDto } from "../../dtos/requests/assign-tag-dto";
-import { Like } from "typeorm";
 import { logoFileFilter } from "../../storage/logos/logo-file-filter";
+import { OptionalAuthGuard } from "../../../../auth/guards/optional-auth/optional-auth.guard"
 
 
 @Controller('startups')
@@ -49,11 +49,12 @@ export class StartupsController {
         return this.startupsService.getCurrent(req.token.payload);
     }
 
+    @UseGuards(OptionalAuthGuard)
     @Get(':id')
     findOne(@Param('id') id: number,
             @Query('includeInvestments') includeInvestments: boolean,
-            @Query('includeFundingStats') includeFundingStats: boolean) {
-        return this.startupsService.getOne(id, includeInvestments);
+            @Req() req) {
+        return this.startupsService.getOne(id, includeInvestments, req.token ? req.token.payload.id : undefined);
     }
 
     @ApiBody({ type: CreateStartupDto })
@@ -151,5 +152,19 @@ export class StartupsController {
         }
         const user = req.token.payload;
         return this.startupsService.uploadLogo(user.id, file.filename);
+    }
+
+    @Roles('investor')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post(":id/mark-as-interesting")
+    markAsInteresting(@Param('id') id: number, @Req() req) {
+        return this.startupsService.markAsInteresting(id, req.token.payload.id);
+    }
+
+    @Roles('investor')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post(":id/remove-from-interesting")
+    removeFromInteresting(@Param('id') id: number, @Req() req) {
+        return this.startupsService.removeFromInteresting(id, req.token.payload.id);
     }
 }

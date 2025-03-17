@@ -1,5 +1,5 @@
 import { User } from "../../user/user";
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany } from "typeorm"
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 import { Roles } from "../../constants/roles";
 import { Tag } from "../../../tags/entities/tag/tag";
@@ -8,6 +8,7 @@ import { InvestmentApprovalType } from "../../../investments/constants/investmen
 @Entity()
 export class Startup extends User {
     @Column()
+    @Index('idx_startup_title_gin', { synchronize: false })
     title: string;
 
     @Column()

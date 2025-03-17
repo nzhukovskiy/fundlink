@@ -31,8 +31,8 @@ export class InvestorsService {
         return this.paginateService.paginate(query, this.investorRepository);
     }
 
-    async getOne(id: number) {
-        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: { investments: true } });
+    async getOne(id: number, relations: string[] = []) {
+        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: ["investments", ...relations ] });
         if (!investor) {
             throw new NotFoundException(`Investor with an id ${id} does not exist`);
         }
@@ -110,6 +110,6 @@ export class InvestorsService {
     }
 
     getCurrent(payload: User) {
-        return this.getOne(payload.id);
+        return this.getOne(payload.id, ["interestingStartups"]);
     }
 }

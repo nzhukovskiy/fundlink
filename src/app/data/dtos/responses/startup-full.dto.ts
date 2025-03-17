@@ -9,8 +9,9 @@ export class StartupFullDto extends Startup {
 
     totalInvestmentsForStartup: string;
 
-    constructor(title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, fundingRounds: FundingRound[], id: number, email: string, password: string, tam: string, sam: string, som: string, teamExperience: string, industry: string, tags: Tag[], dcf: string, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[], totalInvestment: string, sharePercentage: string, totalInvestmentForStartup: string, totalInvestmentsForStartup: string) {
-        super(title, description, fundingGoal, presentationPath, logoPath, autoApproveInvestments, fundingRounds, id, email, password, tam, sam, som, teamExperience, industry, tags, dcf, revenuePerYear, capitalExpenditures, changesInWorkingCapital, deprecationAndAmortization, totalInvestment, sharePercentage, totalInvestmentForStartup);
+
+    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: string, isInteresting: boolean, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[], totalInvestment: string, sharePercentage: string, totalInvestmentsForStartup: string) {
+        super(id, email, password, title, description, fundingGoal, presentationPath, logoPath, autoApproveInvestments, teamExperience, industry, tamMarket, samMarket, somMarket, fundingRounds, tags, dcf, isInteresting, revenuePerYear, capitalExpenditures, changesInWorkingCapital, deprecationAndAmortization);
         this.totalInvestment = totalInvestment;
         this.sharePercentage = sharePercentage;
         this.totalInvestmentsForStartup = totalInvestmentsForStartup;

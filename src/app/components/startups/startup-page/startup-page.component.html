@@ -4,7 +4,15 @@
     <div class="startup-info">
         <div class="startup-info-title-section">
             <h1 class="title">{{startup?.title}}</h1>
-            <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.STARTUP" [userToChatWith]="startup"></app-goto-chat>
+            <div class="title-right-group" *ngIf="localStorageService.getUser() && localStorageService.getUser()?.payload!.role !== Roles.STARTUP">
+                <app-goto-chat [userToChatWith]="startup"></app-goto-chat>
+                <div class="mb-3 button-group">
+                    <a (click)="toggleStartupInterestingState()" class="btn btn-primary mb-3 action-btn" [matTooltip]=" startup?.isInteresting ? 'Удалить из избранного': 'Добавить в избранные'">
+                        <mat-icon *ngIf="startup?.isInteresting">favorite</mat-icon>
+                        <mat-icon *ngIf="!startup?.isInteresting">favorite_border</mat-icon>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <app-tags-list [tags]="startup!.tags"></app-tags-list>

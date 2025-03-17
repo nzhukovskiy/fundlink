@@ -150,5 +150,18 @@ export class StartupPageComponent implements OnInit {
         return this.getCurrentFundingByRounds().div(this.getTotalFundingGoalByRounds()).mul(100);
     }
 
+    toggleStartupInterestingState() {
+        if (this.startup?.isInteresting) {
+            this.startupService.removeStartupFromInteresting(this.startup!.id).subscribe(res => {
+                this.loadStartupAndInvestors();
+            })
+        }
+        else {
+            this.startupService.markStartupAsInteresting(this.startup!.id).subscribe(res => {
+                this.loadStartupAndInvestors();
+            })
+        }
+    }
+
     protected readonly Roles = Roles;
 }

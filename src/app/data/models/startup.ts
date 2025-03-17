@@ -5,27 +5,9 @@ import {Expose, Type, plainToInstance} from 'class-transformer';
 
 
 export class Startup extends User {
-    constructor(
-        title: string,
-        description: string,
-        fundingGoal: string,
-        presentationPath: string,
-        logoPath: string,
-        autoApproveInvestments: boolean,
-        fundingRounds: FundingRound[],
-        id: number, email: string, password: string,
-        tam: string, sam: string, som: string,
-        teamExperience: string, industry: string,
-        tags: Tag[],
-        dcf: string,
-        revenuePerYear: number[],
-        capitalExpenditures: number[],
-        changesInWorkingCapital: number[],
-        deprecationAndAmortization: number[],
-        totalInvestment: string,
-        sharePercentage: string,
-        totalInvestmentForStartup: string
-    ) {
+
+
+    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: string, isInteresting: boolean, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[]) {
         super(id, email, password);
         this.title = title;
         this.description = description;
@@ -33,14 +15,15 @@ export class Startup extends User {
         this.presentationPath = presentationPath;
         this.logoPath = logoPath;
         this.autoApproveInvestments = autoApproveInvestments;
-        this.fundingRounds = fundingRounds;
-        this.tamMarket = tam;
-        this.samMarket = sam;
-        this.somMarket = som;
         this.teamExperience = teamExperience;
         this.industry = industry;
+        this.tamMarket = tamMarket;
+        this.samMarket = samMarket;
+        this.somMarket = somMarket;
+        this.fundingRounds = fundingRounds;
         this.tags = tags;
         this.dcf = dcf;
+        this.isInteresting = isInteresting;
         this.revenuePerYear = revenuePerYear;
         this.capitalExpenditures = capitalExpenditures;
         this.changesInWorkingCapital = changesInWorkingCapital;
@@ -80,6 +63,8 @@ export class Startup extends User {
     tags: Tag[];
 
     dcf: string
+
+    isInteresting: boolean
 
     @Expose({name: 'revenue_per_year'})
     revenuePerYear: number[];

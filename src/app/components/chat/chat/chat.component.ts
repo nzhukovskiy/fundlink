@@ -37,6 +37,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
     lastReadMessage?: Message;
     @ViewChild('messagesContainer') messagesContainer?: ElementRef;
     @ViewChildren('messageItem') messageItems!: QueryList<ElementRef>;
+    @ViewChild('unreadMessagesLabel' ) unreadMessagesLabel?: ElementRef;
 
     ngOnInit(): void {
         this.socket.onReadStateChange().subscribe(msg => {
@@ -113,7 +114,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
         let lastReadMessage: Message;
 
         const firstUnreadIndex = this.chat.messages.findIndex(m => !m.readAt);
-        console.log(firstUnreadIndex)
         if (firstUnreadIndex === -1) {
             this.scrollChatToBottomForce();
             return;
@@ -121,23 +121,22 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
         if (this.chat.messages[firstUnreadIndex].senderType === this.localStorageService.getUser()?.payload.role) {
             lastReadMessage = this.chat.messages[firstUnreadIndex];
-            // this.scrollChatToBottomForce();
-            // return;
+            this.scrollChatToBottomForce();
+            return;
         } else {
             const index = firstUnreadIndex > 0 ? firstUnreadIndex - 1 : firstUnreadIndex;
             lastReadMessage = this.chat.messages[index];
         }
 
-        console.log(lastReadMessage)
+
 
         const messageElement = this.messageItems.find(
             (el: ElementRef) => el.nativeElement.getAttribute('data-id') == lastReadMessage.id
         );
-        console.log(messageElement)
 
-        console.log(this.messagesContainer!.nativeElement.scrollTop, messageElement!.nativeElement.offsetTop, this.messagesContainer!.nativeElement.clientHeight)
+        const additionalScroll = this.unreadMessagesLabel ? this.unreadMessagesLabel.nativeElement.clientHeight : 0;
         if (messageElement) {
-            this.messagesContainer!.nativeElement.scrollTop = messageElement.nativeElement.offsetTop - this.messagesContainer!.nativeElement.clientHeight;
+            this.messagesContainer!.nativeElement.scrollTop = messageElement.nativeElement.offsetTop - this.messagesContainer!.nativeElement.clientHeight + messageElement.nativeElement.clientHeight + additionalScroll;
         }
     }
 

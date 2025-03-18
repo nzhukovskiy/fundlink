@@ -15,7 +15,7 @@ export const fundingRoundResolver: ResolveFn<FundingRound> = (route, state) => {
 
     return fundingRoundsService.getOne(parseInt(id!)).pipe(
         tap(fundingRound => {
-            if (localStorageService.getUser()?.payload.id !== fundingRound.startup.id) {
+            if (localStorageService.getUser()?.id !== fundingRound.startup.id) {
                 router.navigate(['**'], {skipLocationChange: true}).then();
             }
         }),

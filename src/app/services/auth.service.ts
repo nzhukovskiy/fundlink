@@ -7,6 +7,7 @@ import {LocalStorageService} from "./local-storage.service";
 import {CreateInvestorDto} from "../data/dtos/create-investor.dto";
 import {jwtDecode} from "jwt-decode";
 import { instanceToPlain } from 'class-transformer';
+import { UserJwtInfo } from '../data/models/user-jwt-info';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,10 @@ export class AuthService {
 
   login(userLoginDto: LoginUserDto) {
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`auth/login`, userLoginDto).pipe(
-      tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
-      )
+      tap(x => {
+          this.localStorageService.setUser(
+              jwtDecode<{payload: UserJwtInfo}>(x.accessToken.access_token).payload, x.accessToken.access_token)
+      })
     )
   }
 
@@ -28,7 +30,7 @@ export class AuthService {
     const payload = instanceToPlain(createStartupDto);
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`startups`, payload).pipe(
       tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+          jwtDecode<{payload: UserJwtInfo}>(x.accessToken.access_token).payload, x.accessToken.access_token)
       )
     )
   }
@@ -36,7 +38,7 @@ export class AuthService {
   registerInvestor(createInvestorDto: CreateInvestorDto) {
     return this.appHttpService.post<{accessToken: {access_token: string}}>(`investors`, createInvestorDto).pipe(
       tap(x => this.localStorageService.setUser(
-        jwtDecode(x.accessToken.access_token), x.accessToken.access_token)
+          jwtDecode<{payload: UserJwtInfo}>(x.accessToken.access_token).payload, x.accessToken.access_token)
       )
     )
   }

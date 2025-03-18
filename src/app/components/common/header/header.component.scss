@@ -8,3 +8,63 @@
 .header-navigation {
   margin-bottom: 30px;
 }
+
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.profile-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    min-width: 200px;
+    z-index: 1000;
+}
+
+.profile-dropdown:hover .profile-menu {
+    display: block;
+}
+
+.profile-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5rem 0;
+    color: #2d3436;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.profile-menu-item:hover {
+    background-color: #f8f9fa;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #0984e3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+.header-nav-bar {
+    gap: 10px;
+}

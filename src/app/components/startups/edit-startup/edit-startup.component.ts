@@ -134,7 +134,7 @@ export class EditStartupComponent implements OnInit {
         // })
         if (this.formType === FormType.UPDATE) {
             let user = this.localStorageService.getUser();
-            this.startupService.getOne(user!.payload!.id).subscribe(startup => {
+            this.startupService.getOne(user!.id).subscribe(startup => {
                 console.log(startup);
                 if (!startup.logoPath) {
                     this.startupEditFormGroup.setValue({

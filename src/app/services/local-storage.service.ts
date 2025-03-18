@@ -18,7 +18,7 @@ export class LocalStorageService {
     if (userInfo) {
       return JSON.parse(userInfo) as UserJwtInfo;
     }
-    return null;
+    return undefined;
   }
 
   getToken() {

@@ -36,10 +36,10 @@ export class GotoChatComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.userToChatWith);
     let user = this.localStorageService.getUser();
-    if (user?.payload.role === Roles.STARTUP) {
-      this.loadChatRedirectRules({startupId: user.payload.id, investorId: this.userToChatWith!.id});
-    } else if (user?.payload.role === Roles.INVESTOR) {
-      this.loadChatRedirectRules({startupId: this.userToChatWith!.id, investorId: user.payload.id});
+    if (user?.role === Roles.STARTUP) {
+      this.loadChatRedirectRules({startupId: user.id, investorId: this.userToChatWith!.id});
+    } else if (user?.role === Roles.INVESTOR) {
+      this.loadChatRedirectRules({startupId: this.userToChatWith!.id, investorId: user.id});
     }
   }
 

@@ -42,17 +42,17 @@ export class AllChatsComponent implements OnInit {
     }
 
     getMemberName(chat: Chat) {
-        if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
+        if (this.localStorageService.getUser()?.role === Roles.STARTUP) {
             return chat.investor.name;
         }
-        else if (this.localStorageService.getUser()?.payload.role === Roles.INVESTOR) {
+        else if (this.localStorageService.getUser()?.role === Roles.INVESTOR) {
             return chat.startup.title;
         }
         return "";
     }
 
     getUnreadMessagesCount(chat: Chat) {
-        return chat.messages.filter(m => !m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role).length;
+        return chat.messages.filter(m => !m.readAt && m.senderType !== this.localStorageService.getUser()?.role).length;
     }
 
     getLastMessage(chat: Chat) {

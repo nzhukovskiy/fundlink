@@ -1,5 +1,5 @@
 <div #messageElement class="message-row"
-     [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.payload!.role}">
+     [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.role}">
     <div class="message-box">
         <div class="message-top-group">
             <p class="message-timestamp">{{message?.timestamp | date:"d.LL.y в H:mm"}}</p>

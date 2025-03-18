@@ -27,7 +27,7 @@
         <span class="end-date">• Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</span>
     </div>
 
-    <div *ngIf="localStorageService.getUser()?.payload!.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group invest-btn">
+    <div *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR && fundingRound.isCurrent" class="mb-3 button-group invest-btn">
         <a (click)="openInvestmentDialog()" ><mat-icon>payment</mat-icon>Инвестировать</a>
     </div>
 </div>

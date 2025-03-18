@@ -38,7 +38,7 @@ export class MessageComponent implements AfterViewInit, OnDestroy {
                 entries.forEach(entry => {
                     if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
                         this.timeoutId = setTimeout(() => {
-                            if (this.message?.senderType !== this.localStorageService.getUser()?.payload!.role && !this.message?.readAt) {
+                            if (this.message?.senderType !== this.localStorageService.getUser()?.role && !this.message?.readAt) {
                                 this.markAsReadEvent.emit(this.message!.id);
                             }
                         }, 500);

@@ -26,7 +26,7 @@ export class EditInvestorComponent implements OnInit {
     ngOnInit (): void {
         if (this.formType === FormType.UPDATE) {
             let user = this.localStorageService.getUser();
-            this.investorsService.getOne(user!.payload!.id).subscribe(res => {
+            this.investorsService.getOne(user!.id).subscribe(res => {
                 this.investorFormGroup.setValue({
                     name: res.name,
                     surname: res.surname,

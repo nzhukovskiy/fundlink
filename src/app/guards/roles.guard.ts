@@ -9,7 +9,7 @@ export function rolesGuard(role: Roles): CanActivateFn {
       const router = inject(Router);
 
       let user = localStorageService.getUser();
-      if (user?.payload.role === role) {
+      if (user?.role === role) {
         return true;
       }
       return router.navigate(['**'], {skipLocationChange: true});

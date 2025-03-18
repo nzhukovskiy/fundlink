@@ -68,9 +68,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
                 })
             } else {
                 this.route.queryParamMap.subscribe(queryParams => {
-                    if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
+                    if (this.localStorageService.getUser()?.role === Roles.STARTUP) {
                         this.receiverId = parseInt(queryParams.get('investorId')!);
-                    } else if (this.localStorageService.getUser()?.payload.role === Roles.INVESTOR) {
+                    } else if (this.localStorageService.getUser()?.role === Roles.INVESTOR) {
                         this.receiverId = parseInt(queryParams.get('startupId')!);
                     }
                 });
@@ -80,9 +80,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     getMemberName() {
         if (this.chat) {
-            if (this.localStorageService.getUser()?.payload.role === Roles.STARTUP) {
+            if (this.localStorageService.getUser()?.role === Roles.STARTUP) {
                 return `${this.chat.investor.name} ${this.chat.investor.surname}`;
-            } else if (this.localStorageService.getUser()?.payload.role === Roles.INVESTOR) {
+            } else if (this.localStorageService.getUser()?.role === Roles.INVESTOR) {
                 return this.chat.startup.title;
             }
         }
@@ -119,7 +119,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
             return;
         }
 
-        if (this.chat.messages[firstUnreadIndex].senderType === this.localStorageService.getUser()?.payload.role) {
+        if (this.chat.messages[firstUnreadIndex].senderType === this.localStorageService.getUser()?.role) {
             lastReadMessage = this.chat.messages[firstUnreadIndex];
             this.scrollChatToBottomForce();
             return;
@@ -146,12 +146,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
 
     getFirstUnreadMessage() {
-        const readMessages = this.chat!.messages.filter(m => !m.readAt && m.senderType !== this.localStorageService.getUser()?.payload.role)
+        const readMessages = this.chat!.messages.filter(m => !m.readAt && m.senderType !== this.localStorageService.getUser()?.role)
         return readMessages[0];
     }
 
     getLastReadMessage() {
-        const readMessages = this.chat!.messages.filter(m => m.readAt && m.senderType === this.localStorageService.getUser()?.payload.role)
+        const readMessages = this.chat!.messages.filter(m => m.readAt && m.senderType === this.localStorageService.getUser()?.role)
         return readMessages[readMessages.length - 1];
     }
 

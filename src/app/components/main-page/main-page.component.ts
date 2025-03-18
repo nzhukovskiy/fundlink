@@ -17,8 +17,8 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
     let user = this.localStorageService.getUser();
     console.log(user)
-    if (user?.payload.role) {
-      this.role = user.payload.role;
+    if (user?.role) {
+      this.role = user.role;
     }
   }
 

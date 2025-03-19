@@ -36,9 +36,17 @@ export class StartupsController {
     constructor(private readonly startupsService: StartupsService,
                 private readonly fundingRoundsService: FundingRoundsService) {
     }
+    
+    @UseGuards(OptionalAuthGuard)
     @Get()
-    findAll(@Paginate() query: PaginateQuery, @Query('title') title: string, @Query('tag') tag: string) {
-        return this.startupsService.getAll(query, title, tag);
+    findAll(
+        @Paginate() query: PaginateQuery,
+        @Query("title") title: string,
+        @Query("tag") tag: string,
+        @Query("isInteresting") isInteresting: boolean,
+        @Req() req
+    ) {
+        return this.startupsService.getAll(query, title, tag, isInteresting, isInteresting && req.token ? req.token.payload.id : undefined);
     }
 
     @ApiBearerAuth()

@@ -18,8 +18,6 @@ import { UsersService } from "../../services/users.service"
 import { User } from "../../user/user"
 import { Tag } from "../../../tags/entities/tag/tag"
 import Decimal from "decimal.js"
-import { sampleTime } from "rxjs"
-import { displayManualRestartTip } from "@nestjs/cli/lib/compiler/helpers/manual-restart"
 
 @Injectable()
 export class StartupsService {
@@ -41,7 +39,7 @@ export class StartupsService {
     beta = "1.3"
     stockMarketAverageReturn = "0.083"
 
-    async getAll(query: PaginateQuery, title = "", tag = "", params = {}) {
+    async getAll(query: PaginateQuery, title = "", tag = "", isInteresting = false, investorId = -1, params = {}) {
         const startupsQuery =
             this.startupRepository.createQueryBuilder("startup")
 
@@ -54,6 +52,18 @@ export class StartupsService {
             startupsQuery.andWhere("startup.title ILIKE :title", {
                 title: `%${title}%`,
             })
+        }
+        if (isInteresting && investorId) {
+            startupsQuery
+                .andWhere(
+                    `
+            EXISTS (
+                SELECT 1 
+                FROM investor_interesting_startups_startup iiss  
+                WHERE iiss."startupId"  = startup.id and iiss."investorId" = :investorId
+            )`
+                )
+                .setParameter("investorId", investorId)
         }
 
         return this.paginateService.paginate(query, startupsQuery, {

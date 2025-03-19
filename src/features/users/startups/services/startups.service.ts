@@ -53,7 +53,7 @@ export class StartupsService {
                 title: `%${title}%`,
             })
         }
-        if (isInteresting && investorId) {
+        if (isInteresting) {
             startupsQuery
                 .andWhere(
                     `

@@ -1,9 +1,13 @@
 <div class="chat-list">
     <a [routerLink]="['/chats', chat.id]"  *ngFor="let chat of chats" class="chat-item single-chat">
-        <div *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR" class="chat-avatar">
-            <img *ngIf="chat.startup.logoPath" [src]="'http://localhost:3000/uploads/logos/' + chat.startup.logoPath" alt="User Avatar">
-            <img *ngIf="!chat.startup.logoPath" src="assets/no-image.jpg" alt="User Avatar">
-        </div>
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR"
+            [avatarStyle]="'image'"
+            [imagePath]="chat.startup.logoPath">
+        </app-user-avatar>
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.STARTUP"
+                         [avatarStyle]="'initials'"
+                         [fullName]="{name: chat.investor.name, surname: chat.investor.surname}">
+        </app-user-avatar>
         <div class="chat-info">
             <div class="chat-title-group">
                 <div class="chat-name">{{getMemberName(chat)}}</div>

@@ -51,6 +51,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TagsListComponent } from './components/startups/tags-list/tags-list.component';
 import { InputHelpTooltipComponent } from './components/common/input-help-tooltip/input-help-tooltip.component';
 import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
+import { UserAvatarComponent } from './components/chat/user-avatar/user-avatar.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -89,7 +90,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     FundingRoundsListComponent,
     TagsListComponent,
     InputHelpTooltipComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    UserAvatarComponent
   ],
     imports: [
         BrowserModule,

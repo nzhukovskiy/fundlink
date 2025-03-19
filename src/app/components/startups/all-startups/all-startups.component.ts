@@ -28,6 +28,7 @@ export class AllStartupsComponent implements OnInit {
     pageIndex = 0;
     startups: Startup[] = [];
     tag?: string;
+    isInteresting = false;
     allTags: Tag[] = [];
     selectOptions: { identifier: string, text: string }[] = [];
 
@@ -47,7 +48,8 @@ export class AllStartupsComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.startupTitleSearch.setValue(params['title'], { emitEvent: false });
             this.tag = params['tag'];
-            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag']).subscribe(res => {
+            this.isInteresting = params['isInteresting'];
+            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag'], params['isInteresting']).subscribe(res => {
                 this.startups = res.data;
                 this.totalStartupsNumber = res.meta.totalItems;
             });
@@ -66,7 +68,7 @@ export class AllStartupsComponent implements OnInit {
     handlePageChange(event: PageEvent) {
         this.pageSize = event.pageSize;
         this.pageIndex = event.pageIndex;
-        this.startupService.getAll(event.pageIndex + 1, event.pageSize, this.startupTitleSearch.getRawValue()!, this.tag).subscribe(res => {
+        this.startupService.getAll(event.pageIndex + 1, event.pageSize, this.startupTitleSearch.getRawValue()!, this.tag, this.isInteresting).subscribe(res => {
             this.startups = res.data;
             this.totalStartupsNumber = res.meta.totalItems;
         });

@@ -158,4 +158,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     isLastMessage(message: Message) {
         return !!this.lastReadMessage && message.id === this.lastReadMessage!.id;
     }
+
+    protected readonly Roles = Roles;
 }

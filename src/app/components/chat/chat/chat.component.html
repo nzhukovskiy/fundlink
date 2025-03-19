@@ -1,5 +1,18 @@
 <ng-container *ngIf="chat; else newChat">
-    <p>Чат с {{getMemberName()}}</p>
+    <div class="user-chat-logo">
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR"
+                         [avatarStyle]="'image'"
+                         [imagePath]="chat.startup.logoPath">
+        </app-user-avatar>
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.STARTUP"
+                         [avatarStyle]="'initials'"
+                         [fullName]="{name: chat.investor.name, surname: chat.investor.surname}">
+        </app-user-avatar>
+        <div class="member-name">
+            {{getMemberName()}}
+        </div>
+    </div>
+
     <div #messagesContainer class="messages-container">
         <div #messageItem
              [attr.data-id]="message.id"

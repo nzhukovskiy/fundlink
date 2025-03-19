@@ -1,9 +1,9 @@
 <nav class="header-navigation navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid navigation-container">
-        <div>
+        <a [routerLink]="['']">
 <!--            <a class="navbar-brand" href="#">FundLink</a>-->
             <img src="assets/fundlink-high-resolution-logo.png" height="90">
-        </div>
+        </a>
       <div class="collapse navbar-collapse nav-menu-section" id="navbarSupportedContent">
         <ul class="header-nav-bar navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -15,9 +15,14 @@
             <li class="profile-dropdown">
                 <div class="profile-icon"><mat-icon>account_circle</mat-icon></div>
                 <div class="profile-menu">
-                    <a [routerLink]="['profile']" class="profile-menu-item"><mat-icon>account_circle</mat-icon>Профиль</a>
-                    <a *ngIf="currentUser?.role === Roles.INVESTOR" href="#interesting" class="profile-menu-item"><mat-icon>favorite</mat-icon>Избранные стартапы</a>
-                    <a [routerLink]="['chats']" class="profile-menu-item"><mat-icon>mail_outline</mat-icon>Сообщения</a>
+                    <ng-container *ngIf="this.localStorageService.getUser(); else userNotLoggedIn">
+                        <a [routerLink]="['profile']" class="profile-menu-item"><mat-icon>account_circle</mat-icon>Профиль</a>
+                        <a *ngIf="this.localStorageService.getUser()?.role === Roles.INVESTOR" [routerLink]="['/startups']" [queryParams]="{isInteresting: true}" class="profile-menu-item"><mat-icon>favorite</mat-icon>Избранные стартапы</a>
+                        <a [routerLink]="['chats']" class="profile-menu-item"><mat-icon>mail_outline</mat-icon>Сообщения</a>
+                    </ng-container>
+                    <ng-template #userNotLoggedIn>
+                        <a [routerLink]="['login']" class="profile-menu-item"><mat-icon>exit_to_app</mat-icon>Войти</a>
+                    </ng-template>
                 </div>
             </li>
         </ul>

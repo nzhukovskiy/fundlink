@@ -10,13 +10,15 @@ import { Startup } from "../../users/startups/entities/startup";
 import { InvestmentStage } from "../constants/investment-stage";
 import { InvestmentApprovalType } from "../constants/investment-approval-type";
 import { FundingRound } from "../entities/funding-round/funding-round";
+import { EventEmitter2 } from "@nestjs/event-emitter"
 
 @Injectable()
 export class InvestmentService {
     constructor(@InjectRepository(Investment) private readonly investmentRepository: Repository<Investment>,
                 @InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
                 @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
-                private readonly fundingRoundsService: FundingRoundsService) {
+                private readonly fundingRoundsService: FundingRoundsService,
+                private eventEmitter: EventEmitter2) {
     }
     async create(fundingRoundId: number, createInvestmentDto: CreateInvestmentDto, investorData: User) {
         let fundingRound = await this.fundingRoundsService.getOne(fundingRoundId);
@@ -40,6 +42,10 @@ export class InvestmentService {
         if (fundingRound.startup.autoApproveInvestments) {
             await this.fundingRoundsService.addFunds(fundingRound, investment.amount);
         }
+        this.eventEmitter.emit('notification', {
+            startupId: fundingRound.startup.id,
+            text: `Investor ${investor.name} invested money in you`
+        })
         return investment;
     }
 

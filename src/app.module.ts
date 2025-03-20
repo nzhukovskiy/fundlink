@@ -21,6 +21,10 @@ import { ChatsModule } from './features/chats/chats.module';
 import { Chat } from "./features/chats/entities/chat/chat";
 import { Message } from "./features/chats/entities/message/message";
 import { entities, migrations } from "./constants/typeorm";
+import { NotificationsModule } from './features/notifications/notifications.module';
+import { BaseGateway } from './common/gateways/base/base.gateway';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+
 
 @Module({
     imports: [
@@ -48,12 +52,14 @@ import { entities, migrations } from "./constants/typeorm";
                 synchronize: false,
             }),
         }),
+        EventEmitterModule.forRoot(),
         UsersModule,
         InvestmentModule,
         AuthModule,
         JwtTokenModule,
         TagsModule,
         ChatsModule,
+        NotificationsModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

@@ -37,7 +37,7 @@ import { EditInvestorComponent } from './components/investors/edit-investor/edit
 import { RecommendedStartupsComponent } from './components/startups/recommended-startups/recommended-startups.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
-import {AppSocketService} from "./services/app-socket.service";
+import {AppSocketService} from "./services/socket/app-socket.service";
 import { ChatComponent } from './components/chat/chat/chat.component';
 import { MessageComponent } from './components/chat/message/message.component';
 import { GotoChatComponent } from './components/common/goto-chat/goto-chat.component';
@@ -52,6 +52,8 @@ import { TagsListComponent } from './components/startups/tags-list/tags-list.com
 import { InputHelpTooltipComponent } from './components/common/input-help-tooltip/input-help-tooltip.component';
 import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
 import { UserAvatarComponent } from './components/chat/user-avatar/user-avatar.component';
+import { ChatSocketService } from './services/socket/chat-socket.service';
+import { NotificationsSocketService } from './services/socket/notifications-socket.service';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -116,7 +118,7 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
       useClass: AuthInterceptor,
       multi: true,
     },
-    AppSocketService],
+    ChatSocketService, NotificationsSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

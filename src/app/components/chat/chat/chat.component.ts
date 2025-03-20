@@ -12,11 +12,12 @@ import {ChatService} from "../../../services/chat.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Chat} from "../../../data/models/chat";
 import {Message} from "../../../data/models/message";
-import {AppSocketService} from "../../../services/app-socket.service";
+import {AppSocketService} from "../../../services/socket/app-socket.service";
 import {LocalStorageService} from "../../../services/local-storage.service";
 import {Roles} from "../../../constants/roles";
 import {CreateMessageDto} from "../../../data/dtos/create-message.dto";
 import {last} from "rxjs";
+import { ChatSocketService } from '../../../services/socket/chat-socket.service';
 
 @Component({
     selector: 'app-chat',
@@ -25,7 +26,7 @@ import {last} from "rxjs";
 })
 export class ChatComponent implements OnInit, AfterViewInit {
     constructor(private readonly route: ActivatedRoute,
-                private readonly socket: AppSocketService,
+                private readonly socket: ChatSocketService,
                 readonly localStorageService: LocalStorageService,
                 private readonly router: Router,
                 private readonly changeDetectorRef: ChangeDetectorRef) {

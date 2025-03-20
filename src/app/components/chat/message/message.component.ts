@@ -12,7 +12,7 @@ import {
 import {Message} from "../../../data/models/message";
 import {Roles} from "../../../constants/roles";
 import {LocalStorageService} from "../../../services/local-storage.service";
-import {AppSocketService} from "../../../services/app-socket.service";
+import {AppSocketService} from "../../../services/socket/app-socket.service";
 
 @Component({
     selector: 'app-message',
@@ -20,8 +20,7 @@ import {AppSocketService} from "../../../services/app-socket.service";
     styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements AfterViewInit, OnDestroy {
-    constructor(readonly localStorageService: LocalStorageService,
-                private readonly socket: AppSocketService) {
+    constructor(readonly localStorageService: LocalStorageService) {
     }
 
     @Input() message?: Message;

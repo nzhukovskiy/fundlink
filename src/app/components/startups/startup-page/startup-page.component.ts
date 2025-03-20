@@ -7,10 +7,6 @@ import {LocalStorageService} from '../../../services/local-storage.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CreateInvestmentComponent} from '../../dialogs/create-investment/create-investment.component';
 import {Roles} from '../../../constants/roles';
-import {Socket} from 'ngx-socket-io';
-import {AppSocketService} from '../../../services/app-socket.service';
-import {CreateMessageDto} from '../../../data/dtos/create-message.dto';
-import {Message} from '../../../data/models/message';
 import {ChatService} from '../../../services/chat.service';
 import {Chat} from '../../../data/models/chat';
 import {BehaviorSubject} from 'rxjs';
@@ -26,9 +22,7 @@ export class StartupPageComponent implements OnInit {
     constructor(private readonly route: ActivatedRoute,
                 private readonly startupService: StartupService,
                 readonly localStorageService: LocalStorageService,
-                private readonly dialog: MatDialog,
-                private socket: AppSocketService,
-                private readonly chatService: ChatService) {
+                private readonly dialog: MatDialog) {
     }
 
     startup?: Startup;

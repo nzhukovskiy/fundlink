@@ -3,8 +3,9 @@ import { ChatService } from '../../../services/chat.service';
 import { Chat } from '../../../data/models/chat';
 import { Roles } from '../../../constants/roles';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import {AppSocketService} from "../../../services/app-socket.service";
+import {AppSocketService} from "../../../services/socket/app-socket.service";
 import {ChatWithUnreadCountDto} from "../../../data/dtos/responses/chat-with-unread-count.dto";
+import { ChatSocketService } from '../../../services/socket/chat-socket.service';
 
 @Component({
   selector: 'app-all-chats',
@@ -14,7 +15,7 @@ import {ChatWithUnreadCountDto} from "../../../data/dtos/responses/chat-with-unr
 export class AllChatsComponent implements OnInit {
     constructor(private readonly chatService: ChatService,
                  readonly localStorageService: LocalStorageService,
-                private readonly socket: AppSocketService) {
+                private readonly socket: ChatSocketService) {
     }
 
     chats: ChatWithUnreadCountDto[] = [];

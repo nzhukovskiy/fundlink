@@ -1,16 +1,18 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
-import { CreateInvestmentDto } from "../dtos/create-investment-dto";
-import { User } from "../../users/user/user";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Investment } from "../entities/investment/investment";
-import { Repository } from "typeorm";
-import { FundingRoundsService } from "./funding-rounds.service";
-import { Investor } from "../../users/investors/entities/investor";
-import { Startup } from "../../users/startups/entities/startup";
-import { InvestmentStage } from "../constants/investment-stage";
-import { InvestmentApprovalType } from "../constants/investment-approval-type";
-import { FundingRound } from "../entities/funding-round/funding-round";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common"
+import { CreateInvestmentDto } from "../dtos/create-investment-dto"
+import { User } from "../../users/user/user"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Investment } from "../entities/investment/investment"
+import { Repository } from "typeorm"
+import { FundingRoundsService } from "./funding-rounds.service"
+import { Investor } from "../../users/investors/entities/investor"
+import { Startup } from "../../users/startups/entities/startup"
+import { InvestmentStage } from "../constants/investment-stage"
+import { InvestmentApprovalType } from "../constants/investment-approval-type"
 import { EventEmitter2 } from "@nestjs/event-emitter"
+import { Roles } from "../../users/constants/roles"
+import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto"
+import { NotificationTypes } from "../../notifications/constants/notification-types"
 
 @Injectable()
 export class InvestmentService {
@@ -28,13 +30,12 @@ export class InvestmentService {
         let investor = await this.investorRepository.findOneBy({id: investorData.id});
         const stage = fundingRound.startup.autoApproveInvestments ? InvestmentStage.COMPLETED : InvestmentStage.PENDING_REVIEW;
         const approvalType = fundingRound.startup.autoApproveInvestments ? InvestmentApprovalType.AUTO_APPROVE : InvestmentApprovalType.STARTUP_APPROVE;
-        let investment = await this.investmentRepository.create({
+        let investment = this.investmentRepository.create({
             amount: createInvestmentDto.amount,
-            date: new Date(),
             investor: investor,
             fundingRound: fundingRound,
             stage: stage,
-            approvalType: approvalType
+            approvalType: approvalType,
         })
         await this.investmentRepository.save(investment);
         fundingRound.investments.push(investment);
@@ -43,9 +44,11 @@ export class InvestmentService {
             await this.fundingRoundsService.addFunds(fundingRound, investment.amount);
         }
         this.eventEmitter.emit('notification', {
-            startupId: fundingRound.startup.id,
-            text: `Investor ${investor.name} invested money in you`
-        })
+            userId: fundingRound.startup.id,
+            userType: Roles.STARTUP,
+            type: NotificationTypes.INVESTMENT,
+            message: `Investor ${investor.name} invested money in you`
+        } as CreateNotificationDto);
         return investment;
     }
 

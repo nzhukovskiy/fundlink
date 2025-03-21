@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Startup } from "../../../users/startups/entities/startup";
 import { Investor } from "../../../users/investors/entities/investor";
 import { FundingRound } from "../funding-round/funding-round";
@@ -13,7 +13,7 @@ export class Investment {
     @Column({type: "decimal"})
     amount: string;
 
-    @Column()
+    @CreateDateColumn()
     date: Date;
 
     @Column({

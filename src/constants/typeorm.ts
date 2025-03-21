@@ -6,6 +6,7 @@ import { Investment } from "../features/investments/entities/investment/investme
 import { Tag } from "../features/tags/entities/tag/tag";
 import { Chat } from "../features/chats/entities/chat/chat";
 import { Message } from "../features/chats/entities/message/message";
+import { Notification } from "../features/notifications/entities/notification/notification"
 
-export const entities = [Startup, Investor, FundingRound, Investment, Tag, Chat, Message];
+export const entities = [Startup, Investor, FundingRound, Investment, Tag, Chat, Message, Notification];
 export const migrations = ['src/migrations/*.ts'];

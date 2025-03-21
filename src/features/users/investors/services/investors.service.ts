@@ -1,115 +1,137 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Investor } from "../entities/investor";
-import { getConnection, Repository } from "typeorm";
-import { CreateInvestorDto } from "../dtos/create-investor-dto";
-import * as bcrypt from "bcrypt";
-import { PaginateQuery } from "nestjs-paginate";
-import { PaginateService } from "../../common/services/paginate/paginate.service";
-import { JwtTokenService } from "../../../token/services/jwt-token.service";
-import { UsersService } from "../../services/users.service";
-import { UpdateInvestorDto } from "../dtos/update-investor-dto";
-import { User } from "../../user/user";
-import { Startup } from "../../startups/entities/startup";
-import { Investment } from "../../../investments/entities/investment/investment";
-import { plainToInstance } from "class-transformer";
 import {
-    StartupFullResponseDto
-} from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto";
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Investor } from "../entities/investor"
+import { getConnection, Repository } from "typeorm"
+import { CreateInvestorDto } from "../dtos/create-investor-dto"
+import * as bcrypt from "bcrypt"
+import { PaginateQuery } from "nestjs-paginate"
+import { PaginateService } from "../../common/services/paginate/paginate.service"
+import { JwtTokenService } from "../../../token/services/jwt-token.service"
+import { UsersService } from "../../services/users.service"
+import { UpdateInvestorDto } from "../dtos/update-investor-dto"
+import { User } from "../../user/user"
+import { Startup } from "../../startups/entities/startup"
+import { Investment } from "../../../investments/entities/investment/investment"
+import { plainToInstance } from "class-transformer"
+import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
 
 @Injectable()
 export class InvestorsService {
-    constructor(@InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
-                @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
-                @InjectRepository(Investment) private readonly investmentRepository: Repository<Investment>,
-                private readonly jwtTokenService: JwtTokenService,
-                private readonly paginateService: PaginateService,
-                private readonly usersService: UsersService) {
-    }
+    constructor(
+        @InjectRepository(Investor)
+        private readonly investorRepository: Repository<Investor>,
+        @InjectRepository(Startup)
+        private readonly startupRepository: Repository<Startup>,
+        @InjectRepository(Investment)
+        private readonly investmentRepository: Repository<Investment>,
+        private readonly jwtTokenService: JwtTokenService,
+        private readonly paginateService: PaginateService,
+        private readonly usersService: UsersService
+    ) {}
 
     getAll(query: PaginateQuery) {
-        return this.paginateService.paginate(query, this.investorRepository);
+        return this.paginateService.paginate(query, this.investorRepository)
     }
 
     async getOne(id: number, relations: string[] = []) {
-        let investor = await this.investorRepository.findOne({ where: { id: id }, relations: ["investments", ...relations ] });
+        const investor = await this.investorRepository.findOne({
+            where: { id: id },
+            relations: ["investments", ...relations],
+        })
         if (!investor) {
-            throw new NotFoundException(`Investor with an id ${id} does not exist`);
+            throw new NotFoundException(
+                `Investor with an id ${id} does not exist`
+            )
         }
-        return investor;
+        return investor
     }
 
     async create(createInvestorDto: CreateInvestorDto) {
-        let investorDto = createInvestorDto;
+        const investorDto = createInvestorDto
         if (await this.usersService.findByEmail(investorDto.email)) {
-            throw new BadRequestException(`User with email ${investorDto.email} already exists`);
+            throw new BadRequestException(
+                `User with email ${investorDto.email} already exists`
+            )
         }
-        investorDto.password = await bcrypt.hash(investorDto.password, 10);
-        let savedInvestor = await this.investorRepository.save(investorDto);
-        let investor = await this.investorRepository.findOneBy({ id: savedInvestor.id });
-        delete investor.password;
-        investor["role"] = investor.getRole();
+        investorDto.password = await bcrypt.hash(investorDto.password, 10)
+        const savedInvestor = await this.investorRepository.save(investorDto)
+        const investor = await this.investorRepository.findOneBy({
+            id: savedInvestor.id,
+        })
+        delete investor.password
+        investor["role"] = investor.getRole()
         return {
-            accessToken: await this.jwtTokenService.generateToken(investor)
-        };
+            accessToken: await this.jwtTokenService.generateToken(investor),
+        }
     }
 
     async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {
-        let investor = await this.investorRepository.findOne({ where: { id: investorData.id } });
+        const investor = await this.investorRepository.findOne({
+            where: { id: investorData.id },
+        })
         if (!investor) {
-            throw new NotFoundException(`Investor with an id ${investorData.id} does not exist`);
+            throw new NotFoundException(
+                `Investor with an id ${investorData.id} does not exist`
+            )
         }
-        Object.assign(investor, updateInvestorDto);
-        return this.investorRepository.save(investor);
+        Object.assign(investor, updateInvestorDto)
+        return this.investorRepository.save(investor)
     }
 
     async getStartupsForInvestor(id: number) {
-        let startups = await this.startupRepository.createQueryBuilder("startup")
-          .select(['startup.*'])
-          .addSelect("SUM(investment.amount) AS \"totalInvestment\"")
-          .addSelect(
-            `(SUM(investment.amount) * 100.0) / (
+        const startups = await this.startupRepository
+            .createQueryBuilder("startup")
+            .select(["startup.*"])
+            .addSelect('SUM(investment.amount) AS "totalInvestment"')
+            .addSelect(
+                `(SUM(investment.amount) * 100.0) / (
             SELECT SUM(investment_sub.amount)
             FROM investment investment_sub
             INNER JOIN funding_round funding_round_sub
             ON investment_sub."fundingRoundId" = funding_round_sub.id
             WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
-          )
-          .addSelect(
-            `(SELECT SUM(investment_sub.amount)
+            )
+            .addSelect(
+                `(SELECT SUM(investment_sub.amount)
             FROM investment investment_sub
             INNER JOIN funding_round funding_round_sub
             ON investment_sub."fundingRoundId" = funding_round_sub.id
             WHERE funding_round_sub."startupId" = startup.id) AS "totalInvestmentsForStartup"`
-          )
-          .innerJoin("startup.fundingRounds", "fundingRound")
-          .innerJoin("fundingRound.investments", "investment")
-          .innerJoin("investment.investor", "investor")
-          .where("investor.id = :id", { id })
-          .groupBy("startup.id")
-          .getRawMany();
+            )
+            .innerJoin("startup.fundingRounds", "fundingRound")
+            .innerJoin("fundingRound.investments", "investment")
+            .innerJoin("investment.investor", "investor")
+            .where("investor.id = :id", { id })
+            .andWhere("investment.stage = 'completed'")
+            .groupBy("startup.id")
+            .getRawMany()
 
-        return plainToInstance(StartupFullResponseDto, startups);
+        return plainToInstance(StartupFullResponseDto, startups)
     }
 
     getFullInvestmentsInfo(id: number) {
-        return this.investmentRepository.createQueryBuilder("investment")
-          .innerJoin("investment.fundingRound", "fundingRound")
-          .innerJoin("fundingRound.startup", "startup")
-          .where("investment.investorId = :id", { id })
-          .select([
-              "investment.id as id",
-              "investment.amount as amount",
-              "investment.date as date",
-              "investment.approvalType as \"approvalType\"",
-              "investment.stage as stage",
-              "startup.id",
-              "startup.title"
-          ])
-          .getRawMany();
+        return this.investmentRepository
+            .createQueryBuilder("investment")
+            .innerJoin("investment.fundingRound", "fundingRound")
+            .innerJoin("fundingRound.startup", "startup")
+            .where("investment.investorId = :id", { id })
+            .select([
+                "investment.id as id",
+                "investment.amount as amount",
+                "investment.date as date",
+                'investment.approvalType as "approvalType"',
+                "investment.stage as stage",
+                "startup.id",
+                "startup.title",
+            ])
+            .getRawMany()
     }
 
     getCurrent(payload: User) {
-        return this.getOne(payload.id, ["interestingStartups"]);
+        return this.getOne(payload.id, ["interestingStartups"])
     }
 }

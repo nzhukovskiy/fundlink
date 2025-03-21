@@ -9,10 +9,13 @@ import { Server, Socket } from "socket.io"
 import { BaseGateway } from "../../../../common/gateways/base/base.gateway"
 import { OnEvent } from "@nestjs/event-emitter"
 import { JwtTokenService } from "../../../token/services/jwt-token.service"
+import { CreateNotificationDto } from "../../entities/dtos/create-notification.dto"
+import { NotificationsService } from "../../services/notifications/notifications.service"
 
 @WebSocketGateway(3001, { cors: true, namespace: "/notifications" })
 export class NotificationsGateway extends BaseGateway {
-    constructor(jwtTokenService: JwtTokenService) {
+    constructor(jwtTokenService: JwtTokenService,
+                private readonly notificationService: NotificationsService,) {
         super(jwtTokenService)
     }
     @WebSocketServer()
@@ -24,10 +27,8 @@ export class NotificationsGateway extends BaseGateway {
     }
 
     @OnEvent('notification')
-    handleNotification(payload: {
-        startupId: number;
-        text: string;
-    }) {
-        this.server.to(`startup-${payload.startupId}`).emit("notification", payload.text);
+    async handleNotification(payload: CreateNotificationDto) {
+        const notification = await this.notificationService.saveNotification(payload)
+        this.server.to(`${payload.userType}-${payload.userId}`).emit("notification", notification);
     }
 }

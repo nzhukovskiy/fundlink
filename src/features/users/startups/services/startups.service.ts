@@ -173,6 +173,7 @@ export class StartupsService {
             .innerJoin("investment.fundingRound", "fundingRound")
             .innerJoin("fundingRound.startup", "startup")
             .where(whereClause, { id, fundingRoundId })
+            .andWhere("investment.stage = 'completed'")
             .select([
                 "investor.id as id",
                 "investor.name as name",

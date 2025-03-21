@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Chat } from "../chat/chat";
 import { Roles } from "../../../users/constants/roles";
 
@@ -19,7 +19,7 @@ export class Message {
     @Column('text')
     text: string;
 
-    @Column({ type: 'timestamp' })
+    @CreateDateColumn()
     timestamp: Date;
 
     @Column({ type: 'timestamp', nullable: true })

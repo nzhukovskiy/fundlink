@@ -42,8 +42,7 @@ export class MessagesService {
             chat: { id: chat.id },
             senderType: senderType,
             senderId: senderId,
-            text: createMessageDto.text,
-            timestamp: new Date()
+            text: createMessageDto.text
         })
         return this.messageRepository.save(msg)
     }

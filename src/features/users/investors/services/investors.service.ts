@@ -128,6 +128,7 @@ export class InvestorsService {
                 "startup.id",
                 "startup.title",
             ])
+            .orderBy("investment.date", "ASC")
             .getRawMany()
     }
 

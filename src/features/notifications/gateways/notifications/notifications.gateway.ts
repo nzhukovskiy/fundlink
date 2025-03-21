@@ -14,21 +14,34 @@ import { NotificationsService } from "../../services/notifications/notifications
 
 @WebSocketGateway(3001, { cors: true, namespace: "/notifications" })
 export class NotificationsGateway extends BaseGateway {
-    constructor(jwtTokenService: JwtTokenService,
-                private readonly notificationService: NotificationsService,) {
+    constructor(
+        jwtTokenService: JwtTokenService,
+        private readonly notificationService: NotificationsService
+    ) {
         super(jwtTokenService)
     }
     @WebSocketServer()
-    server: Server;
+    server: Server
 
     @SubscribeMessage("message")
     handleMessage(client: any, payload: any): string {
         return "Hello world!"
     }
 
-    @OnEvent('notification')
+    @OnEvent("notification")
     async handleNotification(payload: CreateNotificationDto) {
-        const notification = await this.notificationService.saveNotification(payload)
-        this.server.to(`${payload.userType}-${payload.userId}`).emit("notification", notification);
+        const notification =
+            await this.notificationService.saveNotification(payload)
+        const count = await this.notificationService.getUnreadNotificationCount(
+            payload.userId,
+            payload.userType
+        )
+        this.server
+            .to(`${payload.userType}-${payload.userId}`)
+            .emit("notification", notification)
+
+        this.server
+            .to(`${payload.userType}-${payload.userId}`)
+            .emit("notification-unread-count", count)
     }
 }

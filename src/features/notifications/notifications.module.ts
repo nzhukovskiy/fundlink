@@ -4,9 +4,11 @@ import { NotificationsService } from "./services/notifications/notifications.ser
 import { JwtTokenModule } from "../token/jwt-token.module"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Notification } from "./entities/notification/notification"
+import { NotificationsController } from './controllers/notifications/notifications.controller';
 
 @Module({
     imports: [JwtTokenModule, TypeOrmModule.forFeature([Notification])],
     providers: [NotificationsGateway, NotificationsService],
+    controllers: [NotificationsController],
 })
 export class NotificationsModule {}

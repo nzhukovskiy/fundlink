@@ -16,6 +16,9 @@ import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 import { MarkAsReadDto } from "../../dtos/mark-as-read.dto/mark-as-read.dto"
 import { Roles } from "../../../users/constants/roles"
 import { BaseGateway } from "../../../../common/gateways/base/base.gateway"
+import { NotificationTypes } from "../../../notifications/constants/notification-types"
+import { CreateNotificationDto } from "../../../notifications/entities/dtos/create-notification.dto"
+import { EventEmitter2 } from "@nestjs/event-emitter"
 
 @WebSocketGateway(3001, { cors: true, namespace: "/chats" })
 export class ChatsGateway extends BaseGateway {
@@ -25,7 +28,8 @@ export class ChatsGateway extends BaseGateway {
     constructor(
         readonly jwtTokenService: JwtTokenService,
         private readonly messagesService: MessagesService,
-        private readonly chatsService: ChatsService
+        private readonly chatsService: ChatsService,
+        private readonly eventEmitter: EventEmitter2
     ) {
         super(jwtTokenService)
     }
@@ -53,25 +57,44 @@ export class ChatsGateway extends BaseGateway {
             message.chat.id
         )
         if (createMessageDto.receiverId) {
-            console.log(
-                "sening",
-                `${client.data.user.role === Roles.STARTUP ? "investor" : "startup"}-${createMessageDto.receiverId}`
-            )
             this.server
                 .to(
                     `${client.data.user.role === Roles.STARTUP ? "investor" : "startup"}-${createMessageDto.receiverId}`
                 )
                 .emit("messageArrived", chat)
+
+            this.eventEmitter.emit("notification", {
+                userId: createMessageDto.receiverId,
+                userType:
+                    client.data.user.role === Roles.STARTUP
+                        ? Roles.INVESTOR
+                        : Roles.STARTUP,
+                type: NotificationTypes.MESSAGE,
+                message: `Startup ${chat.startup.title} sent you a message`,
+            } as CreateNotificationDto)
         } else {
             console.log(chat)
             if (client.data.user.role === Roles.STARTUP) {
                 this.server
                     .to(`investor-${chat.investor.id}`)
                     .emit("messageArrived", chat)
+                this.eventEmitter.emit("notification", {
+                    userId: chat.investor.id,
+                    userType: Roles.INVESTOR,
+                    type: NotificationTypes.MESSAGE,
+                    message: `Startup ${chat.startup.title} sent you a message`,
+                } as CreateNotificationDto)
             } else {
                 this.server
                     .to(`startup-${chat.startup.id}`)
                     .emit("messageArrived", chat)
+
+                this.eventEmitter.emit("notification", {
+                    userId: chat.startup.id,
+                    userType: Roles.STARTUP,
+                    type: NotificationTypes.MESSAGE,
+                    message: `Investor ${chat.investor.name} ${chat.investor.surname} sent you a message`,
+                } as CreateNotificationDto)
             }
         }
     }

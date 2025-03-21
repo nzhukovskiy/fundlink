@@ -54,6 +54,7 @@ import { ProgressBarComponent } from './components/common/progress-bar/progress-
 import { UserAvatarComponent } from './components/chat/user-avatar/user-avatar.component';
 import { ChatSocketService } from './services/socket/chat-socket.service';
 import { NotificationsSocketService } from './services/socket/notifications-socket.service';
+import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -93,7 +94,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     TagsListComponent,
     InputHelpTooltipComponent,
     ProgressBarComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    NotificationsComponent
   ],
     imports: [
         BrowserModule,

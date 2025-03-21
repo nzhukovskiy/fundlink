@@ -13,10 +13,26 @@
             <a class="nav-link" [routerLink]="['startups']">Стартапы</a>
           </li>
             <li class="profile-dropdown">
-                <div class="profile-icon"><mat-icon>account_circle</mat-icon></div>
+                <div class="profile-icon">
+                    <mat-icon>account_circle</mat-icon>
+                    <span *ngIf="unreadNotificationsCounter"
+                          class="badge badge-primary unread-messages-badge"
+                          matTooltip="У вас есть новые уведомления">
+                    {{unreadNotificationsCounter}}
+                    </span>
+                </div>
                 <div class="profile-menu">
                     <ng-container *ngIf="this.localStorageService.getUser(); else userNotLoggedIn">
                         <a [routerLink]="['profile']" class="profile-menu-item"><mat-icon>account_circle</mat-icon>Профиль</a>
+                        <a [routerLink]="['notifications']" class="profile-menu-item">
+                            <mat-icon>notifications</mat-icon>
+                            Уведомления
+                            <span *ngIf="unreadNotificationsCounter"
+                                  class="badge badge-primary unread-messages-badge"
+                                  matTooltip="У вас есть новые уведомления">
+                                {{unreadNotificationsCounter}}
+                            </span>
+                        </a>
                         <a *ngIf="this.localStorageService.getUser()?.role === Roles.INVESTOR" [routerLink]="['/startups']" [queryParams]="{isInteresting: true}" class="profile-menu-item"><mat-icon>favorite</mat-icon>Избранные стартапы</a>
                         <a [routerLink]="['chats']" class="profile-menu-item"><mat-icon>mail_outline</mat-icon>Сообщения</a>
                     </ng-container>

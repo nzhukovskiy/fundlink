@@ -24,6 +24,7 @@ import {startupResolver} from "./resolvers/startup.resolver";
 import {investorResolver} from "./resolvers/investor.resolver";
 import { AllChatsComponent } from './components/chat/all-chats/all-chats.component';
 import { fundingRoundResolver } from './resolvers/funding-round.resolver';
+import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
 
 const routes: Routes = [
     {path: '', component: MainPageComponent},
@@ -41,6 +42,7 @@ const routes: Routes = [
     {path: 'chats', component: AllChatsComponent, canActivate: [authGuard]},
     {path: 'chats/new', component: ChatComponent, canActivate: [authGuard]},
     {path: 'chats/:id', component: ChatComponent, canActivate: [authGuard], resolve: {chat: chatResolver}},
+    {path: 'notifications', component: NotificationsComponent, canActivate: [authGuard]},
     {path: '**', component: PageNotFoundComponent}
 ];
 

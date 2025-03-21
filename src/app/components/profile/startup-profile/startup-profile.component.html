@@ -85,7 +85,7 @@
                                         </ng-template>
                                     </td>
                                     <td>{{ investment.approvalType }}</td>
-                                    <td>{{ investment.date }}</td>
+                                    <td>{{ investment.date | date:"d.LL.y в H:mm"}}</td>
 <!--                                    <td (click)="approveInvestment(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW">Подтвердить</td>-->
                                 </tr>
                                 </tbody>

@@ -24,10 +24,19 @@ export class NotificationsComponent implements OnInit {
             this.notifications.push(notification);
             this.sortNotifications();
         })
+        this.notificationsSocketService.onMarkAsRead().subscribe(notification => {
+            const idx = this.notifications.findIndex(x => x.id === notification.id);
+            this.notifications[idx] = notification;
+            this.sortNotifications();
+        })
     }
 
     sortNotifications() {
         this.notifications = this.notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
+    markNotificationAsRead(notificationId: number) {
+        this.notificationsSocketService.markAsRead(notificationId);
     }
 
     protected readonly NotificationType = NotificationType;

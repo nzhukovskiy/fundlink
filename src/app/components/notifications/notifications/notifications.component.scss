@@ -1,0 +1,19 @@
+.unread-notification-badge {
+    background-color: red;
+    margin-left: 10px;
+}
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.notification-header::after {
+    margin-left: 0;
+}
+.notification-main-info {
+    display: flex;
+}
+.notification-created-at {
+    margin-right: 10px;
+    margin-left: auto;
+}

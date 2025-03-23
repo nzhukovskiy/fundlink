@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common"
+import {
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { Notification } from "../../entities/notification/notification"
@@ -29,5 +33,26 @@ export class NotificationsService {
         return this.notificationRepository.count({
             where: { userId, userType, read: false },
         })
+    }
+
+    async markAsRead(notificationId: number, userId: number, userRole: Roles) {
+        const notification = await this.notificationRepository.findOneBy({
+            id: notificationId,
+        })
+        if (!notification) {
+            throw new NotFoundException(
+                `Notification with id ${notificationId} does not exist`
+            )
+        }
+        if (
+            notification.userId !== userId ||
+            notification.userType !== userRole
+        ) {
+            throw new UnauthorizedException(
+                "You are not allowed to perform this action"
+            )
+        }
+        notification.read = true
+        return this.notificationRepository.save(notification)
     }
 }

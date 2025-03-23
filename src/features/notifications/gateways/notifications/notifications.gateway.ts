@@ -1,4 +1,6 @@
 import {
+    ConnectedSocket,
+    MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
     SubscribeMessage,
@@ -11,6 +13,8 @@ import { OnEvent } from "@nestjs/event-emitter"
 import { JwtTokenService } from "../../../token/services/jwt-token.service"
 import { CreateNotificationDto } from "../../entities/dtos/create-notification.dto"
 import { NotificationsService } from "../../services/notifications/notifications.service"
+import { MarkAsReadDto } from "../../../chats/dtos/mark-as-read.dto/mark-as-read.dto"
+import { MarkNotificationAsReadDto } from "../../entities/dtos/mark-notification-as-read.dto"
 
 @WebSocketGateway(3001, { cors: true, namespace: "/notifications" })
 export class NotificationsGateway extends BaseGateway {
@@ -22,11 +26,6 @@ export class NotificationsGateway extends BaseGateway {
     }
     @WebSocketServer()
     server: Server
-
-    @SubscribeMessage("message")
-    handleMessage(client: any, payload: any): string {
-        return "Hello world!"
-    }
 
     @OnEvent("notification")
     async handleNotification(payload: CreateNotificationDto) {
@@ -43,5 +42,23 @@ export class NotificationsGateway extends BaseGateway {
         this.server
             .to(`${payload.userType}-${payload.userId}`)
             .emit("notification-unread-count", count)
+    }
+
+    @SubscribeMessage("mark-as-read")
+    async handleMarkAsRead(
+        @MessageBody() markNotificationAsReadDto: MarkNotificationAsReadDto,
+        @ConnectedSocket() client: Socket
+    ) {
+        const notification = await this.notificationService.markAsRead(
+            markNotificationAsReadDto.notificationId,
+            client.data.user.id,
+            client.data.user.role
+        )
+        client.emit("mark-as-read", notification)
+        const count = await this.notificationService.getUnreadNotificationCount(
+            client.data.user.id,
+            client.data.user.role
+        )
+        client.emit("notification-unread-count", count)
     }
 }

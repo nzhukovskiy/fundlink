@@ -1,0 +1,7 @@
+{{getMessageSender()}} отправил вам следующее сообщение {{notification?.message?.timestamp | date:"d.LL.y в H:mm" }}:
+
+<div class="message-text-box">
+    {{notification?.message?.text}}
+</div>
+<a [routerLink]="['/chats/', notification?.message?.chat?.id]" class="btn btn-primary mb-3 action-btn">
+    Перейти к чату</a>

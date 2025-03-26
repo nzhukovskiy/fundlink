@@ -4,8 +4,6 @@ import { Notification } from '../../data/models/notification';
 import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { NotificationsSocketService } from '../socket/notifications-socket.service';
 import { UserService } from '../users/user.service';
-import { User } from '../../data/models/user';
-import { UserJwtInfo } from '../../data/models/user-jwt-info';
 
 @Injectable({
     providedIn: 'root',

@@ -55,6 +55,8 @@ import { UserAvatarComponent } from './components/chat/user-avatar/user-avatar.c
 import { ChatSocketService } from './services/socket/chat-socket.service';
 import { NotificationsSocketService } from './services/socket/notifications-socket.service';
 import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
+import { MessageNotificationComponent } from './components/notifications/message-notification/message-notification.component';
+import { InvestmentNotificationComponent } from './components/notifications/investment-notification/investment-notification.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -95,7 +97,9 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     InputHelpTooltipComponent,
     ProgressBarComponent,
     UserAvatarComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    MessageNotificationComponent,
+    InvestmentNotificationComponent
   ],
     imports: [
         BrowserModule,

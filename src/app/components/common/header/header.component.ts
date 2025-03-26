@@ -1,9 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from '../../../services/local-storage.service';
+import { Component } from '@angular/core';
 import { Roles } from '../../../constants/roles';
-import { UserJwtInfo } from '../../../data/models/user-jwt-info';
-import { investorResolver } from '../../../resolvers/investor.resolver';
-import { NotificationsSocketService } from '../../../services/socket/notifications-socket.service';
 import { NotificationsService } from '../../../services/notifications/notifications.service';
 import { UserService } from '../../../services/users/user.service';
 
@@ -12,12 +8,9 @@ import { UserService } from '../../../services/users/user.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
     constructor(protected readonly notificationsService: NotificationsService,
                 protected readonly userService: UserService) {}
 
     protected readonly Roles = Roles;
-
-    ngOnInit(): void {
-    }
 }

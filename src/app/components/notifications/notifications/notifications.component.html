@@ -1,9 +1,9 @@
 <h4>Ваши уведомления</h4>
-<div class="accordion" id="accordionExample">
-    <div class="accordion-item" *ngFor="let notification of notifications; index as i">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed notification-header" type="button" data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">
+<div ngbAccordion>
+    <div ngbAccordionItem *ngFor="let notification of notifications" [id]="notification.id"
+         (show)="onNotificationPanelOpen(notification.id)" (hide)="onNotificationPanelHide(notification.id)">
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>
                 <div class="notification-main-info">
                     <div *ngIf="notification.type === NotificationType.INVESTMENT">
                         В ваш стартап совершена новая инвестиция!
@@ -18,16 +18,41 @@
                 </div>
             </button>
         </h2>
-        <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                {{notification.message}}
-                <button *ngIf="!notification.read" (click)="markNotificationAsRead(notification.id)">
-                    mark as read
-                </button>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <app-investment-notification *ngIf="notification.type === NotificationType.INVESTMENT" [notification]="notification"></app-investment-notification>
+                <app-message-notification *ngIf="notification.type === NotificationType.MESSAGE" [notification]="notification"></app-message-notification>
             </div>
         </div>
     </div>
 </div>
+<!--<div class="accordion" id="accordionExample">-->
+<!--    <div class="accordion-item" *ngFor="let notification of notifications; index as i">-->
+<!--        <h2 class="accordion-header">-->
+<!--            <button (click)="onNotificationHeaderClick(notification.id)" class="accordion-button collapsed notification-header" type="button" data-bs-toggle="collapse"-->
+<!--                    [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">-->
+<!--                <div class="notification-main-info">-->
+<!--                    <div *ngIf="notification.type === NotificationType.INVESTMENT">-->
+<!--                        В ваш стартап совершена новая инвестиция!-->
+<!--                    </div>-->
+<!--                    <div *ngIf="notification.type === NotificationType.MESSAGE">-->
+<!--                        Новое сообщение для вас!-->
+<!--                    </div>-->
+<!--                    <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>-->
+<!--                </div>-->
+<!--                <div class="notification-created-at">-->
+<!--                    {{notification.createdAt | date:"d.LL.y в H:mm" }}-->
+<!--                </div>-->
+<!--            </button>-->
+<!--        </h2>-->
+<!--        <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">-->
+<!--            <div class="accordion-body">-->
+<!--                <app-investment-notification *ngIf="notification.type === NotificationType.INVESTMENT" [notification]="notification"></app-investment-notification>-->
+<!--                <app-message-notification *ngIf="notification.type === NotificationType.MESSAGE" [notification]="notification"></app-message-notification>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <div *ngIf="notifications.length === 0">
     Здесь пока ничего нет
 </div>

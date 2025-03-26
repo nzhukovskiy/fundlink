@@ -70,7 +70,8 @@ export class ChatsGateway extends BaseGateway {
                         ? Roles.INVESTOR
                         : Roles.STARTUP,
                 type: NotificationTypes.MESSAGE,
-                message: `Startup ${chat.startup.title} sent you a message`,
+                text: `Стартап ${chat.startup.title} отправил вам сообщение`,
+                message: message
             } as CreateNotificationDto)
         } else {
             console.log(chat)
@@ -82,7 +83,8 @@ export class ChatsGateway extends BaseGateway {
                     userId: chat.investor.id,
                     userType: Roles.INVESTOR,
                     type: NotificationTypes.MESSAGE,
-                    message: `Startup ${chat.startup.title} sent you a message`,
+                    text: `Стартап ${chat.startup.title} отправил вам сообщение`,
+                    message: message
                 } as CreateNotificationDto)
             } else {
                 this.server
@@ -93,7 +95,8 @@ export class ChatsGateway extends BaseGateway {
                     userId: chat.startup.id,
                     userType: Roles.STARTUP,
                     type: NotificationTypes.MESSAGE,
-                    message: `Investor ${chat.investor.name} ${chat.investor.surname} sent you a message`,
+                    text: `Инвестор ${chat.investor.name} ${chat.investor.surname} отправил вам сообщение`,
+                    message: message
                 } as CreateNotificationDto)
             }
         }

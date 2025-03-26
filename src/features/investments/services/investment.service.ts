@@ -47,7 +47,8 @@ export class InvestmentService {
             userId: fundingRound.startup.id,
             userType: Roles.STARTUP,
             type: NotificationTypes.INVESTMENT,
-            message: `Investor ${investor.name} invested money in you`
+            text: `Investor ${investor.name} invested money in you`,
+            investment: investment
         } as CreateNotificationDto);
         return investment;
     }

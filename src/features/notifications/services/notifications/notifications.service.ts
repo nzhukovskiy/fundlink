@@ -16,8 +16,12 @@ export class NotificationsService {
         private readonly notificationRepository: Repository<Notification>
     ) {}
 
-    saveNotification(createNotificationDto: CreateNotificationDto) {
-        return this.notificationRepository.save(createNotificationDto)
+    async saveNotification(createNotificationDto: CreateNotificationDto) {
+        const notification = await this.notificationRepository.save(createNotificationDto)
+        return this.notificationRepository.findOne({
+            where: { id: notification.id },
+            relations: ["investment", "message", "investment.investor", "message.chat"]
+        })
     }
 
     getNotificationsForUser(userId: number, userType: Roles) {
@@ -26,6 +30,7 @@ export class NotificationsService {
             order: {
                 createdAt: "DESC",
             },
+            relations: ["investment", "message", "investment.investor", "message.chat"]
         })
     }
 
@@ -53,6 +58,10 @@ export class NotificationsService {
             )
         }
         notification.read = true
-        return this.notificationRepository.save(notification)
+        const updatedNotification = await this.notificationRepository.save(notification)
+        return this.notificationRepository.findOne({
+            where: { id: updatedNotification.id },
+            relations: ["investment", "message", "investment.investor", "message.chat"]
+        })
     }
 }

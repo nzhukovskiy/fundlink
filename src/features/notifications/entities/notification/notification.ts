@@ -1,11 +1,14 @@
 import {
     Column,
     CreateDateColumn,
-    Entity,
+    Entity, JoinColumn, ManyToOne,
     PrimaryGeneratedColumn,
 } from "typeorm"
 import { NotificationTypes } from "../../constants/notification-types"
 import { Roles } from "../../../users/constants/roles"
+import { Message } from "../../../chats/entities/message/message"
+import { Investor } from "../../../users/investors/entities/investor"
+import { Investment } from "../../../investments/entities/investment/investment"
 
 @Entity()
 export class Notification {
@@ -22,11 +25,19 @@ export class Notification {
     type: NotificationTypes
 
     @Column()
-    message: string
+    text: string
 
     @Column({ default: false })
     read: boolean
 
     @CreateDateColumn()
     createdAt: Date
+
+    @ManyToOne(() => Message, { nullable: true })
+    @JoinColumn()
+    message?: Message
+
+    @ManyToOne(() => Investment, { nullable: true })
+    @JoinColumn()
+    investment?: Investment
 }

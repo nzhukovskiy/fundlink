@@ -13,6 +13,8 @@ import { Tag } from 'src/app/data/models/tag';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import {InvestmentsService} from "../../../services/investments.service";
 import {InvestmentStage} from "../../../constants/investment-stage";
+import { start } from '@popperjs/core';
+import { Roles } from '../../../constants/roles';
 
 @Component({
     selector: 'app-startup-profile',
@@ -190,4 +192,6 @@ export class StartupProfileComponent implements OnInit {
     }
 
     protected readonly InvestmentStage = InvestmentStage;
+    protected readonly start = start;
+    protected readonly Roles = Roles;
 }

@@ -57,6 +57,7 @@ import { NotificationsSocketService } from './services/socket/notifications-sock
 import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
 import { MessageNotificationComponent } from './components/notifications/message-notification/message-notification.component';
 import { InvestmentNotificationComponent } from './components/notifications/investment-notification/investment-notification.component';
+import { InvestmentsTableComponent } from './components/profile/investments-table/investments-table.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: {auth: {token: "fgfg"}} };
 
@@ -99,7 +100,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
     UserAvatarComponent,
     NotificationsComponent,
     MessageNotificationComponent,
-    InvestmentNotificationComponent
+    InvestmentNotificationComponent,
+    InvestmentsTableComponent
   ],
     imports: [
         BrowserModule,

@@ -64,32 +64,36 @@
                 <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div>
-                            <table *ngIf="fundingRound.investments.length; else noInvestmentsYet" class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Инвестор</th>
-                                    <th scope="col">Размер</th>
-                                    <th scope="col">Статус</th>
-                                    <th scope="col">Тип</th>
-                                    <th scope="col">Дата</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let investment of fundingRound.investments">
-                                    <td>{{ investment.investor.name }} {{ investment.investor.surname }}</td>
-                                    <td>{{ investment.amount }}</td>
-                                    <td>
-                                        <button (click)="openApproveInvestmentDialog(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW; else reviewNotNeeded" type="submit" class="btn btn-danger mb-3 action-btn reject-btn">{{ investment.stage }}</button>
-                                        <ng-template #reviewNotNeeded>
-                                            {{investment.stage}}
-                                        </ng-template>
-                                    </td>
-                                    <td>{{ investment.approvalType }}</td>
-                                    <td>{{ investment.date | date:"d.LL.y в H:mm"}}</td>
-<!--                                    <td (click)="approveInvestment(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW">Подтвердить</td>-->
-                                </tr>
-                                </tbody>
-                            </table>
+                            <app-investments-table
+                                [investments]="fundingRound.investments"
+                                [investmentsFor]="Roles.STARTUP"
+                                (approveInvestmentDialogClick)="openApproveInvestmentDialog($event)"></app-investments-table>
+<!--                            <table *ngIf="fundingRound.investments.length; else noInvestmentsYet" class="table table-striped">-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th scope="col">Инвестор</th>-->
+<!--                                    <th scope="col">Размер</th>-->
+<!--                                    <th scope="col">Статус</th>-->
+<!--                                    <th scope="col">Тип</th>-->
+<!--                                    <th scope="col">Дата</th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <tr *ngFor="let investment of fundingRound.investments">-->
+<!--                                    <td>{{ investment.investor.name }} {{ investment.investor.surname }}</td>-->
+<!--                                    <td>{{ investment.amount }}</td>-->
+<!--                                    <td>-->
+<!--                                        <button (click)="openApproveInvestmentDialog(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW; else reviewNotNeeded" type="submit" class="btn btn-danger mb-3 action-btn reject-btn">{{ investment.stage }}</button>-->
+<!--                                        <ng-template #reviewNotNeeded>-->
+<!--                                            {{investment.stage}}-->
+<!--                                        </ng-template>-->
+<!--                                    </td>-->
+<!--                                    <td>{{ investment.approvalType }}</td>-->
+<!--                                    <td>{{ investment.date | date:"d.LL.y в H:mm"}}</td>-->
+<!--&lt;!&ndash;                                    <td (click)="approveInvestment(investment.id)" *ngIf="investment.stage === InvestmentStage.PENDING_REVIEW">Подтвердить</td>&ndash;&gt;-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
                             <ng-template #noInvestmentsYet>
                                 Здесь пока пусто
                             </ng-template>

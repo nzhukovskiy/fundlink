@@ -66,28 +66,48 @@
 </div>
 <div>
     <h4>Совершенные инвестиции</h4>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Дата</th>
-            <th scope="col">Размер</th>
-            <th scope="col">Статус</th>
-            <th scope="col">Тип</th>
-            <th scope="col">Стартап</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let investment of investments">
-                <td>{{ investment.date | date:"d.LL.y в H:mm" }}</td>
-                <td>
-                    {{ investment.amount }}
-                </td>
-                <td>{{ investment.stage }}</td>
-                <td>{{ investment.approvalType }}</td>
-                <td>
-                    <a [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <app-investments-table [investments]="investments" [investmentsFor]="Roles.INVESTOR"></app-investments-table>
+<!--    <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th scope="col">Дата</th>-->
+<!--            <th scope="col">Размер</th>-->
+<!--            <th scope="col">Статус</th>-->
+<!--            <th scope="col">Тип</th>-->
+<!--            <th scope="col">Стартап</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            <tr *ngFor="let investment of investments">-->
+<!--                <td>{{ investment.date | date:"d.LL.y в H:mm" }}</td>-->
+<!--                <td>-->
+<!--                    {{ investment.amount }}-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <div class="status-badge" [ngClass]="{-->
+<!--                        'completed': investment.stage === InvestmentStage.COMPLETED,-->
+<!--                        'pending-review': investment.stage === InvestmentStage.PENDING_REVIEW,-->
+<!--                        'rejected': investment.stage === InvestmentStage.REJECTED,-->
+<!--                        }"-->
+<!--                    >-->
+<!--                        <span class="status-icon"></span>-->
+<!--                        {{investment.stage}}-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <div class="approval-type" [ngClass]="{-->
+<!--                        'auto-approve': investment.approvalType === InvestmentApprovalType.AUTO_APPROVE,-->
+<!--                        'startup-approve': investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE,-->
+<!--                        }">-->
+<!--                        <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE">done</mat-icon>-->
+<!--                        <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE">settings</mat-icon>-->
+<!--                        {{investment.approvalType}}-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <a [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
 </div>

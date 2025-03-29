@@ -6,3 +6,43 @@
     max-width: fit-content;
     margin-bottom: 10px;
 }
+.message-notification .sender-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.sender-name {
+    font-weight: 600;
+    color: #2d3436;
+}
+
+.notification-date {
+    color: #636e72;
+    font-size: 0.9em;
+}
+
+.message-preview {
+    color: #57606f;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.chat-button {
+    background: #0984e3;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+    max-width: fit-content;
+    text-decoration: none;
+}

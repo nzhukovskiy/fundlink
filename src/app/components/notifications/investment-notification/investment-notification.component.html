@@ -1,2 +1,23 @@
-Инвестиция
-{{notification?.text}}
+<!--Инвестор {{notification?.investment?.investor?.name}} {{notification?.investment?.investor?.surname}}-->
+<!--Размер {{notification?.investment?.amount}}-->
+<!--Раунд финансирования {{notification?.investment?.fundingRound?.stage}}-->
+<div class="notification-body investment-notification">
+    <div class="notification-header">
+        <div class="investor-info">
+            <span class="investor-name">{{notification?.investment?.investor?.name}} {{notification?.investment?.investor?.surname}}</span>
+            <span class="notification-date">{{notification?.investment?.date | date:"d.LL.y в H:mm" }}</span>
+        </div>
+        <div class="investment-amount">
+            {{notification?.investment?.amount}} ₽
+        </div>
+    </div>
+
+    <div class="funding-round-info">
+        <span class="round-name">{{notification?.investment?.fundingRound?.stage}}</span>
+    </div>
+
+    <div class="investment-actions" *ngIf="notification?.investment?.stage === InvestmentStage.PENDING_REVIEW">
+        <button class="accept-button" (click)="approveInvestment()">Подтвердить</button>
+        <button class="reject-button" (click)="rejectInvestment()">Отклонить</button>
+    </div>
+</div>

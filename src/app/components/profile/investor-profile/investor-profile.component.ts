@@ -8,6 +8,8 @@ import {start} from "@popperjs/core";
 import {InvestmentStage} from "../../../constants/investment-stage";
 import Decimal from "decimal.js";
 import {StartupFullDto} from "../../../data/dtos/responses/startup-full.dto";
+import { InvestmentApprovalType } from '../../../constants/investment-approval-type';
+import { Roles } from '../../../constants/roles';
 
 @Component({
     selector: 'app-investor-profile',
@@ -55,4 +57,6 @@ export class InvestorProfileComponent implements OnInit {
     protected readonly InvestmentStage = InvestmentStage;
     protected readonly parseInt = parseInt;
     protected readonly start = start;
+    protected readonly InvestmentApprovalType = InvestmentApprovalType;
+    protected readonly Roles = Roles;
 }

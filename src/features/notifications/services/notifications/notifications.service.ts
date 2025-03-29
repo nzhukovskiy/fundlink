@@ -30,7 +30,7 @@ export class NotificationsService {
             order: {
                 createdAt: "DESC",
             },
-            relations: ["investment", "message", "investment.investor", "message.chat"]
+            relations: ["investment", "message", "investment.investor", "message.chat", "investment.fundingRound"]
         })
     }
 

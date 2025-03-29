@@ -1,6 +1,6 @@
 <h4>Ваши уведомления</h4>
 <div ngbAccordion>
-    <div ngbAccordionItem *ngFor="let notification of notifications" [id]="notification.id"
+    <div ngbAccordionItem *ngFor="let notification of notifications; trackBy: trackByNotificationId" [id]="notification.id"
          (show)="onNotificationPanelOpen(notification.id)" (hide)="onNotificationPanelHide(notification.id)">
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton class="notification-header">
@@ -25,7 +25,6 @@
             <div ngbAccordionBody *ngIf="notification.type === NotificationType.MESSAGE">
                 <app-message-notification [notification]="notification"></app-message-notification>
             </div>
-
         </div>
     </div>
 </div>

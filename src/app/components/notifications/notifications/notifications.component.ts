@@ -49,7 +49,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
 
     sortNotifications() {
-        this.notifications = this.notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
     onNotificationPanelOpen(notificationId: number) {
@@ -69,5 +69,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription?.unsubscribe();
+    }
+
+    trackByNotificationId(index: number, notification: Notification): number {
+        return notification.id;
     }
 }

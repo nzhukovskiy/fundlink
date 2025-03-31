@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { paginate, PaginateQuery } from "nestjs-paginate";
-import { Repository, SelectQueryBuilder } from "typeorm";
+import { paginate, PaginateQuery } from "nestjs-paginate"
+import { Repository, SelectQueryBuilder } from "typeorm"
 
 @Injectable()
 export class PaginateService {

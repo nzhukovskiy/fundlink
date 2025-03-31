@@ -24,6 +24,7 @@ import { entities, migrations } from "./constants/typeorm";
 import { NotificationsModule } from './features/notifications/notifications.module';
 import { BaseGateway } from './common/gateways/base/base.gateway';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { PaginateModule } from './common/paginate/paginate.module';
 
 
 @Module({
@@ -60,6 +61,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         TagsModule,
         ChatsModule,
         NotificationsModule,
+        PaginateModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

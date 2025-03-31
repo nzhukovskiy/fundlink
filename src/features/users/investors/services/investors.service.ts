@@ -9,7 +9,6 @@ import { getConnection, Repository } from "typeorm"
 import { CreateInvestorDto } from "../dtos/create-investor-dto"
 import * as bcrypt from "bcrypt"
 import { PaginateQuery } from "nestjs-paginate"
-import { PaginateService } from "../../common/services/paginate/paginate.service"
 import { JwtTokenService } from "../../../token/services/jwt-token.service"
 import { UsersService } from "../../services/users.service"
 import { UpdateInvestorDto } from "../dtos/update-investor-dto"
@@ -18,6 +17,7 @@ import { Startup } from "../../startups/entities/startup"
 import { Investment } from "../../../investments/entities/investment/investment"
 import { plainToInstance } from "class-transformer"
 import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
+import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
 
 @Injectable()
 export class InvestorsService {

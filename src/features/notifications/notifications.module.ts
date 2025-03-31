@@ -5,9 +5,10 @@ import { JwtTokenModule } from "../token/jwt-token.module"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Notification } from "./entities/notification/notification"
 import { NotificationsController } from './controllers/notifications/notifications.controller';
+import { PaginateModule } from "../../common/paginate/paginate.module"
 
 @Module({
-    imports: [JwtTokenModule, TypeOrmModule.forFeature([Notification])],
+    imports: [JwtTokenModule, TypeOrmModule.forFeature([Notification]), PaginateModule],
     providers: [NotificationsGateway, NotificationsService],
     controllers: [NotificationsController],
 })

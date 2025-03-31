@@ -1,6 +1,7 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common"
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common"
 import { NotificationsService } from "../../services/notifications/notifications.service"
 import { AuthGuard } from "../../../auth/guards/auth.guard"
+import { Paginate, PaginateQuery } from "nestjs-paginate"
 
 @Controller("notifications")
 export class NotificationsController {
@@ -8,10 +9,12 @@ export class NotificationsController {
 
     @UseGuards(AuthGuard)
     @Get("")
-    getNotifications(@Req() req) {
+    getNotifications(@Paginate() query: PaginateQuery, @Req() req, @Query("onlyUnread") onlyUnread: boolean) {
         return this.notificationsService.getNotificationsForUser(
+            query,
             req.token.payload.id,
-            req.token.payload.role
+            req.token.payload.role,
+            onlyUnread
         )
     }
 

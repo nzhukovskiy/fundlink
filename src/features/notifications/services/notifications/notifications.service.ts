@@ -4,33 +4,54 @@ import {
     UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { FindOptionsWhere, Repository } from "typeorm"
 import { Notification } from "../../entities/notification/notification"
 import { CreateNotificationDto } from "../../entities/dtos/create-notification.dto"
 import { Roles } from "../../../users/constants/roles"
+import { PaginateQuery } from "nestjs-paginate"
+import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
+import { not } from "rxjs/internal/util/not"
 
 @Injectable()
 export class NotificationsService {
     constructor(
         @InjectRepository(Notification)
-        private readonly notificationRepository: Repository<Notification>
+        private readonly notificationRepository: Repository<Notification>,
+        private readonly paginateService: PaginateService
     ) {}
 
     async saveNotification(createNotificationDto: CreateNotificationDto) {
-        const notification = await this.notificationRepository.save(createNotificationDto)
+        const notification = await this.notificationRepository.save(
+            createNotificationDto
+        )
         return this.notificationRepository.findOne({
             where: { id: notification.id },
-            relations: ["investment", "message", "investment.investor", "message.chat"]
+            relations: [
+                "investment",
+                "message",
+                "investment.investor",
+                "message.chat",
+            ],
         })
     }
 
-    getNotificationsForUser(userId: number, userType: Roles) {
-        return this.notificationRepository.find({
-            where: { userId, userType },
-            order: {
-                createdAt: "DESC",
-            },
-            relations: ["investment", "message", "investment.investor", "message.chat", "investment.fundingRound"]
+    getNotificationsForUser(
+        query: PaginateQuery,
+        userId: number,
+        userType: Roles,
+        onlyUnread = false
+    ) {
+        const whereClause: FindOptionsWhere<Notification> = {
+            userId,
+            userType
+        };
+        if (onlyUnread) {
+            whereClause.read = false;
+        }
+        return this.paginateService.paginate(query, this.notificationRepository, {
+            where: whereClause,
+            defaultSortBy: [["createdAt", "DESC"]],
+            relations: ["investment", "message", "investment.investor", "message.chat", "investment.fundingRound", "message.chat.investor", "message.chat.startup"]
         })
     }
 
@@ -58,10 +79,16 @@ export class NotificationsService {
             )
         }
         notification.read = true
-        const updatedNotification = await this.notificationRepository.save(notification)
+        const updatedNotification =
+            await this.notificationRepository.save(notification)
         return this.notificationRepository.findOne({
             where: { id: updatedNotification.id },
-            relations: ["investment", "message", "investment.investor", "message.chat"]
+            relations: [
+                "investment",
+                "message",
+                "investment.investor",
+                "message.chat",
+            ],
         })
     }
 }

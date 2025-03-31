@@ -8,7 +8,6 @@ import { Startup } from "../entities/startup"
 import { Repository } from "typeorm"
 import { CreateStartupDto } from "../dtos/requests/create-startup-dto"
 import * as bcrypt from "bcrypt"
-import { PaginateService } from "../../common/services/paginate/paginate.service"
 import { PaginateQuery } from "nestjs-paginate"
 import { UpdateStartupDto } from "../dtos/requests/update-startup-dto"
 import { FundingRoundsService } from "../../../investments/services/funding-rounds.service"
@@ -18,6 +17,7 @@ import { UsersService } from "../../services/users.service"
 import { User } from "../../user/user"
 import { Tag } from "../../../tags/entities/tag/tag"
 import Decimal from "decimal.js"
+import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
 
 @Injectable()
 export class StartupsService {

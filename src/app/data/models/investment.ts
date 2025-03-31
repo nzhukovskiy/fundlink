@@ -2,11 +2,12 @@ import { FundingRound } from "./funding-round";
 import { Investor } from "./investor";
 import {InvestmentStage} from "../../constants/investment-stage";
 import {InvestmentApprovalType} from "../../constants/investment-approval-type";
+import Decimal from 'decimal.js';
 
 export class Investment {
     id: number;
 
-    amount: string;
+    amount: Decimal;
 
     date: Date;
 
@@ -24,7 +25,7 @@ export class Investment {
 
     constructor(
         id: number,
-        amount: string,
+        amount: Decimal,
         date: Date,
         investor: Investor,
         fundingRound: FundingRound,

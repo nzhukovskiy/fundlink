@@ -1,4 +1,10 @@
 <h4>Ваши уведомления</h4>
+<div class="form-check only-read-checkbox">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [formControl]="onlyUnread">
+    <label class="form-check-label" for="flexCheckDefault">
+        Только непрочитанные
+    </label>
+</div>
 <div ngbAccordion>
     <div ngbAccordionItem *ngFor="let notification of notifications; trackBy: trackByNotificationId" [id]="notification.id"
          (show)="onNotificationPanelOpen(notification.id)" (hide)="onNotificationPanelHide(notification.id)">
@@ -31,3 +37,10 @@
 <div *ngIf="notifications.length === 0">
     Здесь пока ничего нет
 </div>
+<mat-paginator class="startups-paginator" [length]="totalNotificationsNumber"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 8, 10, 25, 100]"
+               (page)="handlePageChange($event)"
+               aria-label="Select page">
+</mat-paginator>

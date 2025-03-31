@@ -1,10 +1,10 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th scope="col">Дата</th>
-        <th scope="col">Размер</th>
-        <th scope="col">Статус</th>
-        <th scope="col">Тип</th>
+        <th scope="col" sortable="date" (sort)="onSort($event)">Дата</th>
+        <th scope="col" sortable="amount" (sort)="onSort($event)">Размер</th>
+        <th scope="col" sortable="stage" (sort)="onSort($event)">Статус</th>
+        <th scope="col" sortable="approvalType" (sort)="onSort($event)">Тип</th>
         <th scope="col">{{investmentsFor === Roles.STARTUP ? "Инвестор" : "Стартап"}}</th>
     </tr>
     </thead>
@@ -12,7 +12,7 @@
     <tr *ngFor="let investment of investments">
         <td>{{ investment.date | date:"d.LL.y в H:mm" }}</td>
         <td>
-            {{ investment.amount }}
+            {{ investment.amount}}
         </td>
         <td>
             <div class="status-badge" [ngClass]="{

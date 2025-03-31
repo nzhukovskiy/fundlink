@@ -4,6 +4,8 @@ import { Notification } from '../../data/models/notification';
 import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { NotificationsSocketService } from '../socket/notifications-socket.service';
 import { UserService } from '../users/user.service';
+import { HttpParams } from '@angular/common/http';
+import { PaginationResult } from '../../data/dtos/pagination-result';
 
 @Injectable({
     providedIn: 'root',
@@ -39,8 +41,18 @@ export class NotificationsService {
 
     }
 
-    getNotifications() {
-        return this.appHttpService.get<Notification[]>(`notifications`);
+    getNotifications(page?: number, itemsPerPage?: number, onlyUnread?: boolean) {
+        let query = new HttpParams();
+        if (typeof onlyUnread !== 'undefined') {
+            query = query.append('onlyUnread', onlyUnread);
+        }
+        if (typeof page !== 'undefined') {
+            query = query.append('page', page);
+        }
+        if (typeof itemsPerPage !== 'undefined') {
+            query = query.append('limit', itemsPerPage);
+        }
+        return this.appHttpService.get<PaginationResult<Notification>>(`notifications`, query);
     }
 
     private getUnreadNotificationsCount() {

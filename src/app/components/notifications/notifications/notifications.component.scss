@@ -17,3 +17,9 @@
     margin-right: 10px;
     margin-left: auto;
 }
+.only-read-checkbox {
+    margin: 20px 0;
+    label, input {
+        cursor: pointer;
+    }
+}

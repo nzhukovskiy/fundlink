@@ -4,6 +4,8 @@ import { Notification } from '../../../data/models/notification';
 import { NotificationsSocketService } from '../../../services/socket/notifications-socket.service';
 import { NotificationType } from '../../../constants/notification-type';
 import { debounceTime, filter, map, Subject, Subscription, switchMap, takeUntil, timer } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-notifications',
@@ -21,6 +23,12 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private cancellationSubject = new Subject<void>();
     notifications: Notification[] = [];
 
+    totalNotificationsNumber: number = 0;
+    pageSize = 8;
+    pageIndex = 0;
+
+    onlyUnread = new FormControl(false);
+
     ngOnInit(): void {
         this.subscription = this.clickSubject.pipe(
             switchMap(notificationId =>
@@ -34,8 +42,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.markNotificationAsRead(notificationId);
             }
         });
+        this.onlyUnread.valueChanges.subscribe(value => {
+            this.notificationsService.getNotifications(this.pageIndex, this.pageSize, value!).subscribe(res => {
+                this.notifications = res.data;
+                this.totalNotificationsNumber = res.meta.totalItems;
+            });
+        })
         this.notificationsService.getNotifications().subscribe((notifications) => {
-            this.notifications = notifications;
+            this.notifications = notifications.data;
+            this.totalNotificationsNumber = notifications.meta.totalItems;
         })
         this.notificationsSocketService.onNotification().subscribe(notification => {
             this.notifications.push(notification);
@@ -74,4 +89,14 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     trackByNotificationId(index: number, notification: Notification): number {
         return notification.id;
     }
+
+    handlePageChange(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageIndex = event.pageIndex;
+        this.notificationsService.getNotifications(event.pageIndex + 1, event.pageSize, false).subscribe(res => {
+            this.notifications = res.data;
+            this.totalNotificationsNumber = res.meta.totalItems;
+        });
+    }
+
 }

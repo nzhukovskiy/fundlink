@@ -12,6 +12,8 @@ import {Chat} from '../../../data/models/chat';
 import {BehaviorSubject} from 'rxjs';
 import Decimal from 'decimal.js';
 import {ChartConfiguration, ChartOptions} from "chart.js";
+import { SubmitDialogComponent } from '../../../dialogs/submit-dialog/submit-dialog.component';
+import { FinancialStatsComponent } from '../financial-stats/financial-stats.component';
 
 @Component({
     selector: 'app-startup-page',
@@ -155,6 +157,12 @@ export class StartupPageComponent implements OnInit {
                 this.loadStartupAndInvestors();
             })
         }
+    }
+
+    openDetailedFinancialStats() {
+        const dialogRef = this.dialog.open(FinancialStatsComponent, {
+            data: this.startup,
+        });
     }
 
     protected readonly Roles = Roles;

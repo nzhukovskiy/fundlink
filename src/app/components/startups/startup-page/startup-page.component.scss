@@ -60,12 +60,16 @@
     color: #7f8c8d;
     margin-bottom: 10px;
     font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
 }
 
 .stat-value {
     font-size: 1.5em;
     font-weight: bold;
     color: #2c3e50;
+    display: flex;
+    align-items: center;
 }
 
 .section-title {
@@ -149,4 +153,36 @@
 .title-right-group {
     display: flex;
     gap: 10px;
+}
+
+
+.financial-details-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.financial-details-btn:hover {
+    background: #2980b9;
+}
+
+.valuation-section {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .financial-details-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+.open-financial-stats-icon {
+    cursor: pointer;
 }

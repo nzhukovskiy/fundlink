@@ -29,7 +29,9 @@
 <div class="stats-container">
     <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'" class="stat-card">
         <div class="stat-label">Оценка по методу DCF</div>
-        <div class="stat-value">{{startup?.dcf | number:'1.2-2'}} млн руб.</div>
+        <div class="stat-value">{{startup?.dcf | number:'1.2-2'}} млн руб.
+            <mat-icon (click)="openDetailedFinancialStats()" matTooltip="Прогнозируемые финансовые показатели" class="open-financial-stats-icon">open_in_new</mat-icon>
+        </div>
     </div>
     <div class="stat-card">
         <div class="stat-label">TAM</div>

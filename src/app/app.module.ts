@@ -72,6 +72,7 @@ import {
 import { InvestmentsTableComponent } from './components/profile/investments-table/investments-table.component';
 import { NgbdSortableHeaderDirective } from './directives/ngbd-sortable-header.directive';
 import { DecimalInterceptor } from './interceptors/decimal.interceptor';
+import { FinancialStatsComponent } from './components/startups/financial-stats/financial-stats.component';
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: { auth: { token: 'fgfg' } } };
 
@@ -116,6 +117,7 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
         MessageNotificationComponent,
         InvestmentNotificationComponent,
         InvestmentsTableComponent,
+        FinancialStatsComponent,
     ],
     imports: [
         BrowserModule,

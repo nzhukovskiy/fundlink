@@ -102,9 +102,11 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+                "node_modules/katex/dist/katex.min.css"
             ],
-            "scripts": []
+            "scripts": [
+                "node_modules/katex/dist/katex.min.js",
           }
         }
       }

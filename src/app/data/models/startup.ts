@@ -2,12 +2,13 @@ import {FundingRound} from "./funding-round";
 import {Tag} from "./tag";
 import {User} from "./user";
 import {Expose, Type, plainToInstance} from 'class-transformer';
+import { DcfDetailedDto } from '../dtos/responses/dcf-calculation-details';
 
 
 export class Startup extends User {
 
 
-    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: string, isInteresting: boolean, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[]) {
+    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: DcfDetailedDto, isInteresting: boolean, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[]) {
         super(id, email, password);
         this.title = title;
         this.description = description;
@@ -62,7 +63,7 @@ export class Startup extends User {
 
     tags: Tag[];
 
-    dcf: string
+    dcf: DcfDetailedDto
 
     isInteresting: boolean
 

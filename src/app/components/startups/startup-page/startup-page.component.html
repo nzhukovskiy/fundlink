@@ -27,9 +27,9 @@
     </div>
 </div>
 <div class="stats-container">
-    <div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'" class="stat-card">
+    <div *ngIf="startup?.dcf && startup?.dcf?.totalDcfValue != 0" class="stat-card">
         <div class="stat-label">Оценка по методу DCF</div>
-        <div class="stat-value">{{startup?.dcf | number:'1.2-2'}} млн руб.
+        <div class="stat-value">{{startup?.dcf?.totalDcfValue | number:'1.2-2'}} млн руб.
             <mat-icon *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role === Roles.INVESTOR" (click)="openDetailedFinancialStats()" matTooltip="Прогнозируемые финансовые показатели" class="open-financial-stats-icon">open_in_new</mat-icon>
         </div>
     </div>

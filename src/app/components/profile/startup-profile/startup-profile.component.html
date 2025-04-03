@@ -20,8 +20,8 @@
         <input (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
     </div>
 </div>
-<div *ngIf="startup?.dcf && startup?.dcf != '0.0' && startup?.dcf != '0'">Оценка по методу
-    DCF: {{ startup?.dcf | number:'1.2-2' }} млн руб.
+<div *ngIf="startup?.dcf?.totalDcfValue && startup?.dcf?.totalDcfValue != 0">Оценка по методу
+    DCF: {{ startup?.dcf?.totalDcfValue | number:'1.2-2' }} млн руб.
 </div>
 <div class="startup-profile-top-group">
     <h4>Раунды инвестирования:</h4>

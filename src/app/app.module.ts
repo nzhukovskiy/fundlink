@@ -74,6 +74,10 @@ import { NgbdSortableHeaderDirective } from './directives/ngbd-sortable-header.d
 import { DecimalInterceptor } from './interceptors/decimal.interceptor';
 import { FinancialStatsComponent } from './components/startups/financial-stats/financial-stats.component';
 import { FooterComponent } from './components/common/footer/footer.component';
+import { DcfVisualizationComponent } from './components/startups/dcf-visualization/dcf-visualization.component';
+import {  } from 'ngx-math';
+import { KatexDirective } from './directives/katex.directive';
+
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: { auth: { token: 'fgfg' } } };
 
@@ -120,6 +124,8 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
         InvestmentsTableComponent,
         FinancialStatsComponent,
         FooterComponent,
+        DcfVisualizationComponent,
+        KatexDirective,
     ],
     imports: [
         BrowserModule,

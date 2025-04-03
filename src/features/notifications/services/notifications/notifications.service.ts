@@ -10,7 +10,6 @@ import { CreateNotificationDto } from "../../entities/dtos/create-notification.d
 import { Roles } from "../../../users/constants/roles"
 import { PaginateQuery } from "nestjs-paginate"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
-import { not } from "rxjs/internal/util/not"
 
 @Injectable()
 export class NotificationsService {

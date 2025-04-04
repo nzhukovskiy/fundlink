@@ -73,28 +73,53 @@
         <p>Ниже вам необходимо ввести прогнозирумые метрики на срок в 5 лет. Эти данные используются для вычисления
             стоимости стартапа, что облегчит задачу инвесторам. Если у вас нет прогнозируемых оценок, оставьте поля
             пустыми</p>
-        <p>Прибыль до вычета процентов и налогов</p>
+        <ng-template #ebitExplanation>
+            <h3><strong>Прибыль до вычета процентов и налогов (EBIT)</strong></h3>
+            <p><em>«Сколько компания зарабатывает до уплаты налогов и процентов по кредитам»</em><br><strong>Простыми словами:</strong><br>Это ваша прибыль от основной деятельности (например, продажи продукта или услуги) без учета налогов и кредитных обязательств.<br><strong>Пример:</strong><br>Если вы заработали 500 тыс. рублей, а потратили 300 тыс. на зарплаты и аренду, ваш EBIT — 200 тыс. рублей.</p>
+        </ng-template>
+        <ng-template #capexExplanation>
+            <h3><strong>Вложения в основные средства компании (CapEx)</strong></h3>
+            <p><em>«Сколько вы инвестируете в оборудование, технику или инфраструктуру»</em><br><strong>Простыми словами:</strong><br>Это расходы на покупку или улучшение активов, которые будут служить компании долго (например, компьютеры, офис, производственные линии).<br><strong>Пример:</strong><br>Если вы купили сервер за 1 млн рублей или отремонтировали офис — это CapEx.</p>
+        </ng-template>
+        <ng-template #cwkExplanation>
+            <h3><strong>Изменения в оборотном капитале</strong></h3>
+            <p><em>«Насколько изменились ваши текущие активы и обязательства»</em><br><strong>Простыми словами:</strong><br>Разница между деньгами, которые вам должны (например, дебиторская задолженность), и тем, что должны вы (например, неоплаченные счета поставщикам).<br><strong>Пример:</strong><br>Если вы увеличили запасы сырья на 100 тыс. рублей, оборотный капитал уменьшится на эту сумму.</p>
+        </ng-template>
+        <ng-template #daExplanation>
+            <h3><strong>Амортизационные расходы</strong></h3>
+            <p><em>«Насколько уменьшается стоимость вашего оборудования/активов со временем»</em><br><strong>Простыми словами:</strong><br>Ежегодное списание части стоимости активов (например, ноутбуков, машин), так как они изнашиваются или устаревают.<br><strong>Пример:</strong><br>Ноутбук за 100 тыс. рублей будет терять 20 тыс. рублей в год, если срок его службы — 5 лет.</p>
+        </ng-template>
+
+        <p>Прибыль до вычета процентов и налогов
+            <app-input-help-tooltip (click)="openInfoDialog(ebitExplanation)" tooltipMessage=""></app-input-help-tooltip>
+        </p>
         <div class="five-years-metrics-container" formArrayName="revenuePerYear">
             <div *ngFor="let control of revenuePerYear.controls; let i = index" class="mb-3">
                 <label [for]="'arrayField' + i" class="form-label">{{i + 1}} год</label>
                 <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
             </div>
         </div>
-        <p>Вложения в основные средства компании</p>
+        <p>Вложения в основные средства компании
+            <app-input-help-tooltip (click)="openInfoDialog(capexExplanation)" tooltipMessage=""></app-input-help-tooltip>
+        </p>
         <div class="five-years-metrics-container" formArrayName="capitalExpenditures">
             <div *ngFor="let control of capitalExpenditures.controls; let i = index" class="mb-3">
                 <label [for]="'arrayField' + i" class="form-label">{{i + 1}} год</label>
                 <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
             </div>
         </div>
-        <p>Изменения в оборотном капитале</p>
+        <p>Изменения в оборотном капитале
+            <app-input-help-tooltip (click)="openInfoDialog(cwkExplanation)" tooltipMessage=""></app-input-help-tooltip>
+        </p>
         <div class="five-years-metrics-container" formArrayName="changesInWorkingCapital">
             <div *ngFor="let control of changesInWorkingCapital.controls; let i = index" class="mb-3">
                 <label [for]="'arrayField' + i" class="form-label">{{i + 1}} год</label>
                 <input type="number" [formControlName]="i" class="form-control" [id]="'arrayField' + i">
             </div>
         </div>
-        <p>Амортизационные расходы</p>
+        <p>Амортизационные расходы
+            <app-input-help-tooltip (click)="openInfoDialog(daExplanation)" tooltipMessage=""></app-input-help-tooltip>
+        </p>
         <div class="five-years-metrics-container" formArrayName="deprecationAndAmortization">
             <div *ngFor="let control of deprecationAndAmortization.controls; let i = index" class="mb-3">
                 <label [for]="'arrayField' + i" class="form-label">{{i + 1}} год</label>
@@ -103,7 +128,11 @@
         </div>
         <div class="form-check form-switch auto-approve-group">
             <input formControlName="autoApproveInvestments" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Автоматическое подтверждение инвестиций<app-input-help-tooltip tooltipMessage="Если выключить эту опцию, то для принятия инвестиции вам будет нужно подтверждать ее вручную"></app-input-help-tooltip></label>
+            <label class="form-check-label" for="flexSwitchCheckDefault">Автоматическое подтверждение инвестиций
+                <app-input-help-tooltip tooltipMessage="Если выключить эту опцию, то для принятия инвестиции вам будет нужно подтверждать ее вручную">
+
+                </app-input-help-tooltip>
+            </label>
         </div>
         <div class="mb-3 register-submit-button-group">
             <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">

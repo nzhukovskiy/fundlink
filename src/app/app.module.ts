@@ -77,10 +77,13 @@ import { FooterComponent } from './components/common/footer/footer.component';
 import { DcfVisualizationComponent } from './components/startups/dcf-visualization/dcf-visualization.component';
 import {  } from 'ngx-math';
 import { KatexDirective } from './directives/katex.directive';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import { TextDialogComponent } from './components/dialogs/text-dialog/text-dialog.component';
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: { auth: { token: 'fgfg' } } };
-
+registerLocaleData(localeRu, 'ru-RU');
 @NgModule({
     declarations: [
         AppComponent,
@@ -126,6 +129,7 @@ const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: 
         FooterComponent,
         DcfVisualizationComponent,
         KatexDirective,
+        TextDialogComponent,
     ],
     imports: [
         BrowserModule,

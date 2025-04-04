@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StartupService } from '../../../services/startup.service';
@@ -8,6 +8,9 @@ import { environment } from '../../../../environments/environment';
 import { FormType } from '../../../constants/form-type';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import { CreateInvestmentComponent } from '../../dialogs/create-investment/create-investment.component';
+import { MatDialog } from '@angular/material/dialog';
+import { TextDialogComponent } from '../../dialogs/text-dialog/text-dialog.component';
 
 @Component({
     selector: 'app-edit-startup',
@@ -22,7 +25,8 @@ export class EditStartupComponent implements OnInit {
                 private readonly constantsService: ConstantsService,
                 private readonly remoteFileService: RemoteFileService,
                 private readonly authService: AuthService,
-                private readonly localStorageService: LocalStorageService) {
+                private readonly localStorageService: LocalStorageService,
+                private readonly dialog: MatDialog) {
     }
 
     @Input() formType = FormType.UPDATE;
@@ -227,6 +231,12 @@ export class EditStartupComponent implements OnInit {
         this.fileInput!.nativeElement.files = fileList.files;
         this.fileInput!.nativeElement.dispatchEvent(new Event('change'));
         this.startupEditFormGroup.patchValue({ logo: null });
+    }
+
+    openInfoDialog(template: TemplateRef<any>) {
+        const dialogRef = this.dialog.open(TextDialogComponent, {
+            data: {template},
+        });
     }
 
     protected readonly FormType = FormType;

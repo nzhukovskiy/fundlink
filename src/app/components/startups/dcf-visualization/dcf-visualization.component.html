@@ -1,178 +1,6 @@
-<!--<div *ngIf="dcfDetails">-->
-<!--    <h2>DCF Calculation Breakdown</h2>-->
-
-<!--    &lt;!&ndash; Display Warnings if any &ndash;&gt;-->
-<!--    <div *ngIf="dcfDetails.warnings && dcfDetails.warnings.length > 0" class="warnings">-->
-<!--        <h3>Warnings:</h3>-->
-<!--        <ul>-->
-<!--            <li *ngFor="let warning of dcfDetails.warnings">{{ warning }}</li>-->
-<!--        </ul>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Section: WACC Calculation &ndash;&gt;-->
-<!--    <section class="calculation-section" *ngIf="dcfDetails.waccCalculation">-->
-<!--        <h3>Weighted Average Cost of Capital (WACC)</h3>-->
-
-<!--        <div class="formula-block">-->
-<!--            <p><strong>Formula:</strong></p>-->
-<!--            <ng-katex [equation]="'WACC = \\frac{E}{V} \\times K_e + \\frac{D}{V} \\times K_d \\times (1 - T)'"></ng-katex>-->
-<!--        </div>-->
-
-<!--        <div class="calculation-steps">-->
-<!--            <h4>Components:</h4>-->
-<!--            <dl>-->
-<!--                &lt;!&ndash; Cost of Equity (Ke) &ndash;&gt;-->
-<!--                <dt>Cost of Equity (K<sub>e</sub> - CAPM)</dt>-->
-<!--                <dd>-->
-<!--                    Formula: <span [latex]="'K_e = R_f + \\beta \\times (R_m - R_f)'"></span><br/>-->
-<!--                    Calculation: <span [latex]="'K_e = ' + formatNumber(dcfDetails.inputs?.waccInputs?.bonds10YearsYield, 4) + ' + ' + formatNumber(dcfDetails.inputs?.waccInputs?.beta, 3) + ' \\times (' + formatNumber(dcfDetails.inputs?.waccInputs?.stockMarketAverageReturn, 4) + ' - ' + formatNumber(dcfDetails.inputs?.waccInputs?.bonds10YearsYield, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfEquity, 4)"></span>-->
-<!--                </dd>-->
-
-<!--                &lt;!&ndash; Cost of Debt (Kd) &ndash;&gt;-->
-<!--                <dt>Cost of Debt (K<sub>d</sub>)</dt>-->
-<!--                <dd>-->
-<!--                    Pre-Tax (K<sub>d,pre</sub>): {{ dcfDetails.waccCalculation.costOfDebtPreTax | number:'1.2-4' }} <br/>-->
-<!--                    Formula (After-Tax): <span [latex]="'K_{d,after} = K_{d,pre} \\times (1 - T)'"></span><br/>-->
-<!--                    Calculation (After-Tax): <span [latex]="'K_{d,after} = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtPreTax, 4) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs?.incomeTaxRate, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtAfterTax, 4)"></span>-->
-<!--                </dd>-->
-
-<!--                &lt;!&ndash; Weights &ndash;&gt;-->
-<!--                <dt>Capital Structure Weights</dt>-->
-<!--                <dd>-->
-<!--                    Equity Value (E): {{ dcfDetails.waccCalculation.equityValue | number:'1.2-2' }} <br/>-->
-<!--                    Debt Value (D): {{ dcfDetails.waccCalculation.debtValue | number:'1.2-2' }} <br/>-->
-<!--                    Total Capital (V = E + D): {{ dcfDetails.waccCalculation.totalCapitalValue | number:'1.2-2' }} <br/>-->
-<!--                    Equity Weight (E/V): <span [latex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.equityValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.equityWeight, 4)"></span><br/>-->
-<!--                    Debt Weight (D/V): <span [latex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.debtValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.debtWeight, 4)"></span>-->
-<!--                </dd>-->
-<!--            </dl>-->
-
-<!--            <h4>Final WACC Calculation:</h4>-->
-<!--            <div [latex]="'WACC = (' + formatNumber(dcfDetails.waccCalculation.equityWeight, 4) + ' \\times ' + formatNumber(dcfDetails.waccCalculation.costOfEquity, 4) + ') + (' + formatNumber(dcfDetails.waccCalculation.debtWeight, 4) + ' \\times ' + formatNumber(dcfDetails.waccCalculation.costOfDebtAfterTax, 4) + ') = \\mathbf{' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + '}'"></div>-->
-<!--            <p><em>(Using WACC = {{ (dcfDetails.waccCalculation.calculatedWacc * 100) | number:'1.2-2' }}%)</em></p>-->
-<!--        </div>-->
-<!--    </section>-->
-
-<!--    &lt;!&ndash; Section: Free Cash Flow (FCF) Calculation &ndash;&gt;-->
-<!--    <section class="calculation-section" *ngIf="dcfDetails.fcfCalculations && dcfDetails.fcfCalculations.length > 0">-->
-<!--        <h3>Free Cash Flow (FCF) - Forecast Period</h3>-->
-
-<!--        <div class="formula-block">-->
-<!--            <p><strong>Formula (from EBIT):</strong></p>-->
-<!--            <div [latex]="'FCF = EBIT \\times (1 - T) + D\\&A - CapEx - \\Delta NWC'"></div>-->
-<!--            <p>(Where T = Tax Rate, D&A = Depreciation & Amortization, CapEx = Capital Expenditures, ΔNWC = Change in Net Working Capital)</p>-->
-<!--            <p><strong>Present Value (PV) Formula:</strong></p>-->
-<!--            <div [latex]="'PV(FCF) = \\frac{FCF_n}{(1 + WACC)^n}'"></div>-->
-<!--        </div>-->
-
-<!--        <div class="calculation-steps">-->
-<!--            <h4>Year-by-Year Breakdown:</h4>-->
-<!--            <table>-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th>Year (n)</th>-->
-<!--                    <th>EBIT</th>-->
-<!--                    <th>NOPAT <span [latex]="'EBIT(1-T)'"></span></th>-->
-<!--                    <th>+ D&A</th>-->
-<!--                    <th>- CapEx</th>-->
-<!--                    <th>- ΔNWC</th>-->
-<!--                    <th>= FCF</th>-->
-<!--                    <th>Discount Factor <span [latex]="'\\frac{1}{(1+WACC)^n}'"></span></th>-->
-<!--                    <th>= PV(FCF)</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr *ngFor="let item of dcfDetails.fcfCalculations">-->
-<!--                    <td>{{ item.year }}</td>-->
-<!--                    <td>{{ item.ebit | number:'1.0-0' }}</td>-->
-<!--                    <td>&lt;!&ndash; NOPAT Calc &ndash;&gt;-->
-<!--                        <span [latex]="'(' + formatNumber(item.ebit,0) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs?.incomeTaxRate, 3) + ')) = ' + formatNumber(item.nopat, 0)"></span>-->
-<!--                    </td>-->
-<!--                    <td>{{ dcfDetails.inputs?.deprecationAndAmortization[item.year-1] | number:'1.0-0' }}</td>-->
-<!--                    <td>{{ dcfDetails.inputs?.capitalExpenditures[item.year-1] | number:'1.0-0' }}</td>-->
-<!--                    <td>{{ dcfDetails.inputs?.changesInWorkingCapital[item.year-1] | number:'1.0-0' }}</td>-->
-<!--                    <td> &lt;!&ndash; FCF Value &ndash;&gt;-->
-<!--                        <span [latex]="'=' + formatNumber(item.fcf, 0)"></span>-->
-<!--                    </td>-->
-<!--                    <td> &lt;!&ndash; Discount Factor &ndash;&gt;-->
-<!--                        <span [latex]="'\\frac{1}{(1 + ' + formatNumber(dcfDetails.waccCalculation?.calculatedWacc, 4) + ')^{' + item.year + '}} = ' + formatNumber(item.discountFactor, 5)"></span>-->
-<!--                    </td>-->
-<!--                    <td> &lt;!&ndash; PV FCF &ndash;&gt;-->
-<!--                        <span [latex]="'(' + formatNumber(item.fcf, 0) + ' \\times ' + formatNumber(item.discountFactor, 5) + ') = \\mathbf{' + formatNumber(item.pvFcf, 0) + '}'"></span>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <td colspan="8" style="text-align: right;"><strong>Total PV of Forecast FCFs:</strong></td>-->
-<!--                    <td><strong>{{ dcfDetails.pvForecastFcfsTotal | number:'1.0-0' }}</strong></td>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--    </section>-->
-
-<!--    &lt;!&ndash; Section: Terminal Value (TV) Calculation &ndash;&gt;-->
-<!--    <section class="calculation-section" *ngIf="dcfDetails.terminalValueCalculation && dcfDetails.waccCalculation">-->
-<!--        <h3>Terminal Value (TV) Calculation</h3>-->
-<!--        <p>(Using Gordon Growth Model with perpetual growth rate g = {{ (dcfDetails.inputs?.perpetualGrowthRate ?? 0) * 100 }}%)</p>-->
-
-<!--        <div class="calculation-steps">-->
-<!--            <dl>-->
-<!--                <dt>FCF in Year N+1 (FCF<sub>N+1</sub>)</dt>-->
-<!--                <dd>-->
-<!--                    Formula: <span [latex]="'FCF_{N+1} = FCF_N \\times (1 + g)'"></span><br/>-->
-<!--                    Calculation: <span [latex]="'FCF_{N+1} = ' + formatNumber(dcfDetails.terminalValueCalculation.finalYearFcf, 0) + ' \\times (1 + ' + formatNumber(dcfDetails.inputs?.perpetualGrowthRate, 3) + ') = ' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0)"></span>-->
-<!--                </dd>-->
-
-<!--                <dt>Terminal Value (TV)</dt>-->
-<!--                <dd>-->
-<!--                    Formula: <span [latex]="'TV = \\frac{FCF_{N+1}}{WACC - g}'"></span><br/>-->
-<!--                    Calculation: <span [latex]="'TV = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0) + '}{' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ' - ' + formatNumber(dcfDetails.inputs?.perpetualGrowthRate, 3) + '} = ' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0)"></span>-->
-<!--                    &lt;!&ndash; Add warning display if WACC <= g was handled &ndash;&gt;-->
-<!--                    <span *ngIf="dcfDetails.warnings?.includes('WACC minus Growth Rate is non-positive')" style="color: red;"> (Warning: WACC <= g, TV calculation may be unreliable or was skipped)</span>-->
-<!--                </dd>-->
-
-<!--                <dt>Present Value of Terminal Value (PV(TV))</dt>-->
-<!--                <dd>-->
-<!--                    Formula: <span [latex]="'PV(TV) = \\frac{TV}{(1 + WACC)^N}'"></span> (N = {{ dcfDetails.fcfCalculations?.length }}) <br/>-->
-<!--                    Calculation: <span [latex]="'PV(TV) = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0) + '}{(1 + ' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ')^{' + dcfDetails.fcfCalculations?.length + '}} = \\mathbf{' + formatNumber(dcfDetails.terminalValueCalculation.pvTerminalValue, 0) + '}'"></span>-->
-<!--                </dd>-->
-<!--            </dl>-->
-<!--        </div>-->
-<!--    </section>-->
-
-<!--    &lt;!&ndash; Section: Final DCF Value &ndash;&gt;-->
-<!--    <section class="calculation-section final-value" *ngIf="dcfDetails.totalDcfValue !== null && dcfDetails.totalDcfValue !== undefined">-->
-<!--        <h3>Total DCF Valuation</h3>-->
-<!--        <div class="formula-block">-->
-<!--            <p><strong>Formula:</strong></p>-->
-<!--            <div [latex]="'DCF \\, Value = PV(Forecast \\, FCFs) + PV(Terminal \\, Value)'"></div>-->
-<!--        </div>-->
-<!--        <div class="calculation-steps">-->
-<!--            <h4>Calculation:</h4>-->
-<!--            <div [latex]="'DCF \\, Value = ' + formatNumber(dcfDetails.pvForecastFcfsTotal, 0) + ' + ' + formatNumber(dcfDetails.terminalValueCalculation?.pvTerminalValue, 0) + ' = \\mathbf{' + formatNumber(dcfDetails.totalDcfValue, 0) + '}'"></div>-->
-<!--            <p><strong>Estimated Total Value: {{ dcfDetails.totalDcfValue | currency:'USD':'symbol':'1.0-0' }}</strong></p>-->
-<!--        </div>-->
-<!--    </section>-->
-
-<!--    &lt;!&ndash; Fallback if calculation failed &ndash;&gt;-->
-<!--    <p *ngIf="dcfDetails.totalDcfValue === null || dcfDetails.totalDcfValue === undefined">-->
-<!--        Calculation could not be completed. Please check inputs and warnings.-->
-<!--    </p>-->
-
-<!--</div>-->
-
-<!--&lt;!&ndash; Show loading or default message if dcfDetails is null &ndash;&gt;-->
-<!--<div *ngIf="!dcfDetails">-->
-<!--    <p>Loading DCF calculation details...</p>-->
-<!--</div>-->
-
-
 <div *ngIf="dcfDetails" class="dcf-details">
-    <h2>DCF Calculation Breakdown</h2>
+    <h2>Подробная оценка стартапа по методу DCF</h2>
 
-    <!-- Display Warnings if any -->
     <div *ngIf="dcfDetails.warnings && dcfDetails.warnings.length > 0" class="warnings">
         <h3>Warnings:</h3>
         <ul>
@@ -180,79 +8,70 @@
         </ul>
     </div>
 
-    <!-- Section: WACC Calculation -->
     <section class="calculation-section" *ngIf="dcfDetails.waccCalculation">
-        <h3>Weighted Average Cost of Capital (WACC)</h3>
+        <h3>Средневзвешенная стоимость капитала (WACC)</h3>
 
         <div class="formula-block">
-            <p><strong>Formula:</strong></p>
-            <!-- USE CUSTOM DIRECTIVE -->
+            <p><strong>Формула:</strong></p>
             <div [appKatex]="'WACC = \\frac{E}{V} \\times K_e + \\frac{D}{V} \\times K_d \\times (1 - T)'"></div>
         </div>
 
         <div class="calculation-steps">
-            <h4>Components:</h4>
+            <h4>Компоненты:</h4>
             <dl>
-                <!-- Cost of Equity (Ke) -->
-                <dt>Cost of Equity (K<sub>e</sub> - CAPM)</dt>
+                <dt>Стоимость собственного капитала (K<sub>e</sub> - Модель CAPM)</dt>
                 <dd>
-                    Formula: <span [appKatex]="'K_e = R_f + \\beta \\times (R_m - R_f)'"></span><br/>
-                    Calculation: <span [appKatex]="'K_e = ' + formatNumber(dcfDetails.inputs?.waccInputs?.bonds10YearsYield, 4) + ' + ' + formatNumber(dcfDetails.inputs?.waccInputs?.beta, 3) + ' \\times (' + formatNumber(dcfDetails.inputs?.waccInputs?.stockMarketAverageReturn, 4) + ' - ' + formatNumber(dcfDetails.inputs?.waccInputs?.bonds10YearsYield, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfEquity, 4)"></span>
+                    Формула: <span [appKatex]="'K_e = R_f + \\beta \\times (R_m - R_f)'"></span><br/>
+                    Расчет: <span [appKatex]="'K_e = ' + formatNumber(dcfDetails.inputs.waccInputs.bonds10YearsYield, 4) + ' + ' + formatNumber(dcfDetails.inputs.waccInputs.beta, 3) + ' \\times (' + formatNumber(dcfDetails.inputs.waccInputs.stockMarketAverageReturn, 4) + ' - ' + formatNumber(dcfDetails.inputs.waccInputs.bonds10YearsYield, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfEquity, 4)"></span>
                 </dd>
 
-                <!-- Cost of Debt (Kd) -->
-                <dt>Cost of Debt (K<sub>d</sub>)</dt>
+                <dt>Стоимость заемного капитала (K<sub>d</sub>)</dt>
                 <dd>
-                    Pre-Tax (K<sub>d,pre</sub>): {{ dcfDetails.waccCalculation.costOfDebtPreTax | number:'1.2-4' }} <br/>
-                    Formula (After-Tax): <span [appKatex]="'K_{d,after} = K_{d,pre} \\times (1 - T)'"></span><br/>
-                    Calculation (After-Tax): <span [appKatex]="'K_{d,after} = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtPreTax, 4) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs?.incomeTaxRate, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtAfterTax, 4)"></span>
+                    До налогообложения (K<sub>d,донал</sub>): {{ dcfDetails.waccCalculation.costOfDebtPreTax | number:'1.2-4' }} <br/>
+                    Формула (После налогов): <span [appKatex]="'K_{d,после} = K_{d,донал} \\times (1 - T)'"></span><br/>
+                    Расчет (После налогов): <span [appKatex]="'K_{d,после} = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtPreTax, 4) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs.incomeTaxRate, 4) + ') = ' + formatNumber(dcfDetails.waccCalculation.costOfDebtAfterTax, 4)"></span>
                 </dd>
 
-                <!-- Weights -->
-                <dt>Capital Structure Weights</dt>
+                <dt>Веса структуры капитала</dt>
                 <dd>
-                    Equity Value (E): {{ dcfDetails.waccCalculation.equityValue | number:'1.2-2' }} <br/>
-                    Debt Value (D): {{ dcfDetails.waccCalculation.debtValue | number:'1.2-2' }} <br/>
-                    Total Capital (V = E + D): {{ dcfDetails.waccCalculation.totalCapitalValue | number:'1.2-2' }} <br/>
-                    Equity Weight (E/V): <span [appKatex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.equityValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.equityWeight, 4)"></span><br/>
-                    Debt Weight (D/V): <span [appKatex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.debtValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.debtWeight, 4)"></span>
+                    Стоимость собственного капитала (E): {{ dcfDetails.waccCalculation.equityValue | number:'1.2-2' }} <br/>
+                    Стоимость заемного капитала (D): {{ dcfDetails.waccCalculation.debtValue | number:'1.2-2' }} <br/>
+                    Общий капитал (V = E + D): {{ dcfDetails.waccCalculation.totalCapitalValue | number:'1.2-2' }} <br/>
+                    Вес собственного капитала (E/V): <span [appKatex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.equityValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.equityWeight, 4)"></span><br/>
+                    Вес заемного капитала (D/V): <span [appKatex]="'\\frac{' + formatNumber(dcfDetails.waccCalculation.debtValue) + '}{' + formatNumber(dcfDetails.waccCalculation.totalCapitalValue) + '} = ' + formatNumber(dcfDetails.waccCalculation.debtWeight, 4)"></span>
                 </dd>
             </dl>
 
-            <h4>Final WACC Calculation:</h4>
-            <!-- USE CUSTOM DIRECTIVE -->
+            <h4>Итоговый расчет WACC:</h4>
             <div [appKatex]="'WACC = (' + formatNumber(dcfDetails.waccCalculation.equityWeight, 4) + ' \\times ' + formatNumber(dcfDetails.waccCalculation.costOfEquity, 4) + ') + (' + formatNumber(dcfDetails.waccCalculation.debtWeight, 4) + ' \\times ' + formatNumber(dcfDetails.waccCalculation.costOfDebtAfterTax, 4) + ') = \\mathbf{' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + '}'"></div>
             <p><em>(Using WACC = {{ (dcfDetails.waccCalculation.calculatedWacc * 100) | number:'1.2-2' }}%)</em></p>
         </div>
     </section>
 
-    <!-- Section: Free Cash Flow (FCF) Calculation -->
     <section class="calculation-section" *ngIf="dcfDetails.fcfCalculations && dcfDetails.fcfCalculations.length > 0">
-        <h3>Free Cash Flow (FCF) - Forecast Period</h3>
+        <h3>Свободный денежный поток (FCF) - Прогнозный период</h3>
 
         <div class="formula-block">
-            <p><strong>Formula (from EBIT):</strong></p>
-            <!-- USE CUSTOM DIRECTIVE -->
+            <p><strong>Формула:</strong></p>
             <div [appKatex]="'FCF = EBIT \\times (1 - T) + D\\&A - CapEx - \\Delta NWC'"></div>
-            <p>(Where T = Tax Rate, D&A = Depreciation & Amortization, CapEx = Capital Expenditures, ΔNWC = Change in Net Working Capital)</p>
-            <p><strong>Present Value (PV) Formula:</strong></p>
-            <!-- USE CUSTOM DIRECTIVE -->
+            <p>(Где EBIT — прибыль до вычета процентов и налогов, T = налоговая ставка на прибыль, D&A = Амортизационные расходы, CapEx = вложения в основные средства компании, ΔNWC = изменения в оборотном капитале компании)</p>
+            <p><strong>Формула приведенной стоимости (PV):</strong></p>
             <div [appKatex]="'PV(FCF) = \\frac{FCF_n}{(1 + WACC)^n}'"></div>
         </div>
 
         <div class="calculation-steps">
-            <h4>Year-by-Year Breakdown:</h4>
+            <h4>Разбивка по годам:</h4>
             <table>
                 <thead>
                 <tr>
-                    <th>Year (n)</th>
+                    <th>Год  (n)</th>
                     <th>EBIT</th>
                     <th>NOPAT <span [appKatex]="'EBIT(1-T)'"></span></th>
                     <th>+ D&A</th>
                     <th>- CapEx</th>
                     <th>- ΔNWC</th>
                     <th>= FCF</th>
-                    <th>Discount Factor <span [appKatex]="'\\frac{1}{(1+WACC)^n}'"></span></th>
+                    <th>Коэффициент дисконтирования <span [appKatex]="'\\frac{1}{(1+WACC)^n}'"></span></th>
                     <th>= PV(FCF)</th>
                 </tr>
                 </thead>
@@ -260,26 +79,26 @@
                 <tr *ngFor="let item of dcfDetails.fcfCalculations">
                     <td>{{ item.year }}</td>
                     <td>{{ item.ebit | number:'1.0-0' }}</td>
-                    <td><!-- NOPAT Calc -->
-                        <span [appKatex]="'(' + formatNumber(item.ebit,0) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs?.incomeTaxRate, 3) + ')) = ' + formatNumber(item.nopat, 0)"></span>
+                    <td>
+                        <span [appKatex]="'(' + formatNumber(item.ebit,0) + ' \\times (1 - ' + formatNumber(dcfDetails.inputs.incomeTaxRate, 3) + ')) = ' + formatNumber(item.nopat, 0)"></span>
                     </td>
                     <td>{{ dcfDetails!.inputs!.deprecationAndAmortization[item.year-1] | number:'1.0-0' }}</td>
                     <td>{{ dcfDetails!.inputs!.capitalExpenditures[item.year-1] | number:'1.0-0' }}</td>
                     <td>{{ dcfDetails!.inputs!.changesInWorkingCapital[item.year-1] | number:'1.0-0' }}</td>
-                    <td> <!-- FCF Value -->
+                    <td>
                         <span [appKatex]="'=' + formatNumber(item.fcf, 0)"></span>
                     </td>
-                    <td> <!-- Discount Factor -->
-                        <span [appKatex]="'\\frac{1}{(1 + ' + formatNumber(dcfDetails.waccCalculation?.calculatedWacc, 4) + ')^{' + item.year + '}} = ' + formatNumber(item.discountFactor, 5)"></span>
+                    <td>
+                        <span [appKatex]="'\\frac{1}{(1 + ' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ')^{' + item.year + '}} = ' + formatNumber(item.discountFactor, 5)"></span>
                     </td>
-                    <td> <!-- PV FCF -->
+                    <td>
                         <span [appKatex]="'(' + formatNumber(item.fcf, 0) + ' \\times ' + formatNumber(item.discountFactor, 5) + ') = \\mathbf{' + formatNumber(item.pvFcf, 0) + '}'"></span>
                     </td>
                 </tr>
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="8" style="text-align: right;"><strong>Total PV of Forecast FCFs:</strong></td>
+                    <td colspan="8" style="text-align: right;"><strong>Итоговая PV прогнозных FCF:</strong></td>
                     <td><strong>{{ dcfDetails.pvForecastFcfsTotal | number:'1.0-0' }}</strong></td>
                 </tr>
                 </tfoot>
@@ -287,60 +106,51 @@
         </div>
     </section>
 
-    <!-- Section: Terminal Value (TV) Calculation -->
     <section class="calculation-section" *ngIf="dcfDetails.terminalValueCalculation && dcfDetails.waccCalculation">
-        <h3>Terminal Value (TV) Calculation</h3>
-        <p>(Using Gordon Growth Model with perpetual growth rate g = {{ (dcfDetails.inputs?.perpetualGrowthRate ?? 0) * 100 }}%)</p>
+        <h3>Расчет терминальной стоимости (TV)</h3>
+        <p>(Используется модель Гордона с постоянным темпом роста g = {{ dcfDetails.inputs.perpetualGrowthRate * 100 }}%)</p>
 
         <div class="calculation-steps">
             <dl>
-                <dt>FCF in Year N+1 (FCF<sub>N+1</sub>)</dt>
+                <dt>FCF в году N+1 (FCF<sub>N+1</sub>)</dt>
                 <dd>
-                    Formula: <span [appKatex]="'FCF_{N+1} = FCF_N \\times (1 + g)'"></span><br/>
-                    Calculation: <span [appKatex]="'FCF_{N+1} = ' + formatNumber(dcfDetails.terminalValueCalculation.finalYearFcf, 0) + ' \\times (1 + ' + formatNumber(dcfDetails.inputs?.perpetualGrowthRate, 3) + ') = ' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0)"></span>
+                    Формула: <span [appKatex]="'FCF_{N+1} = FCF_N \\times (1 + g)'"></span><br/>
+                    Расчет: <span [appKatex]="'FCF_{N+1} = ' + formatNumber(dcfDetails.terminalValueCalculation.finalYearFcf, 0) + ' \\times (1 + ' + formatNumber(dcfDetails.inputs.perpetualGrowthRate, 3) + ') = ' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0)"></span>
                 </dd>
 
-                <dt>Terminal Value (TV)</dt>
+                <dt>Терминальная стоимость (TV)</dt>
                 <dd>
-                    Formula: <span [appKatex]="'TV = \\frac{FCF_{N+1}}{WACC - g}'"></span><br/>
-                    Calculation: <span [appKatex]="'TV = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0) + '}{' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ' - ' + formatNumber(dcfDetails.inputs?.perpetualGrowthRate, 3) + '} = ' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0)"></span>
-                    <!-- Add warning display if WACC <= g was handled -->
-<!--                    <span *ngIf="dcfDetails.warnings?.includes('WACC minus Growth Rate is non-positive')" style="color: red;"> (Warning: WACC <= g, TV calculation may be unreliable or was skipped)</span>-->
+                    Формула: <span [appKatex]="'TV = \\frac{FCF_{N+1}}{WACC - g}'"></span><br/>
+                    Расчет: <span [appKatex]="'TV = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.fcfNPlus1, 0) + '}{' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ' - ' + formatNumber(dcfDetails.inputs.perpetualGrowthRate, 3) + '} = ' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0)"></span>
                 </dd>
 
-                <dt>Present Value of Terminal Value (PV(TV))</dt>
+                <dt>Приведенная стоимость терминальной стоимости (PV(TV))</dt>
                 <dd>
-                    Formula: <span [appKatex]="'PV(TV) = \\frac{TV}{(1 + WACC)^N}'"></span> (N = {{ dcfDetails.fcfCalculations?.length }}) <br/>
-                    Calculation: <span [appKatex]="'PV(TV) = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0) + '}{(1 + ' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ')^{' + dcfDetails.fcfCalculations?.length + '}} = \\mathbf{' + formatNumber(dcfDetails.terminalValueCalculation.pvTerminalValue, 0) + '}'"></span>
+                    Формула: <span [appKatex]="'PV(TV) = \\frac{TV}{(1 + WACC)^N}'"></span> (N = {{ dcfDetails.fcfCalculations.length }}) <br/>
+                    Расчет: <span [appKatex]="'PV(TV) = \\frac{' + formatNumber(dcfDetails.terminalValueCalculation.terminalValueRaw, 0) + '}{(1 + ' + formatNumber(dcfDetails.waccCalculation.calculatedWacc, 4) + ')^{' + dcfDetails.fcfCalculations.length + '}} = \\mathbf{' + formatNumber(dcfDetails.terminalValueCalculation.pvTerminalValue, 0) + '}'"></span>
                 </dd>
             </dl>
         </div>
     </section>
 
-    <!-- Section: Final DCF Value -->
     <section class="calculation-section final-value" *ngIf="dcfDetails.totalDcfValue !== null && dcfDetails.totalDcfValue !== undefined">
-        <h3>Total DCF Valuation</h3>
+        <h3>Итоговая оценка по DCF</h3>
         <div class="formula-block">
-            <p><strong>Formula:</strong></p>
-            <!-- USE CUSTOM DIRECTIVE -->
-            <div [appKatex]="'DCF \\, Value = PV(Forecast \\, FCFs) + PV(Terminal \\, Value)'"></div>
+            <p><strong>Формула:</strong></p>
+            <div [appKatex]="'Стоимость \\, DCF = PV(Прогнозные \\, FCF) + PV(Терминальная \\, Стоимость)'"></div>
         </div>
         <div class="calculation-steps">
-            <h4>Calculation:</h4>
-            <!-- USE CUSTOM DIRECTIVE -->
-            <div [appKatex]="'DCF \\, Value = ' + formatNumber(dcfDetails.pvForecastFcfsTotal, 0) + ' + ' + formatNumber(dcfDetails.terminalValueCalculation?.pvTerminalValue, 0) + ' = \\mathbf{' + formatNumber(dcfDetails.totalDcfValue, 0) + '}'"></div>
-            <p><strong>Estimated Total Value: {{ dcfDetails.totalDcfValue | currency:'USD':'symbol':'1.0-0' }}</strong></p>
+            <h4>Расчет:</h4>
+            <div [appKatex]="'Стоимость \\, DCF = ' + formatNumber(dcfDetails.pvForecastFcfsTotal, 0) + ' + ' + formatNumber(dcfDetails.terminalValueCalculation.pvTerminalValue, 0) + ' = \\mathbf{' + formatNumber(dcfDetails.totalDcfValue, 0) + '}'"></div>
+            <p><strong>Оценочная итоговая стоимость: {{ dcfDetails.totalDcfValue | currency:'RUB':'symbol':'1.0-0':'ru-RU' }}</strong></p>
         </div>
     </section>
 
-    <!-- Fallback if calculation failed -->
     <p *ngIf="dcfDetails.totalDcfValue === null || dcfDetails.totalDcfValue === undefined">
-        Calculation could not be completed. Please check inputs and warnings.
+        Расчет не может быть завершен. Пожалуйста, проверьте входные данные и предупреждения.
     </p>
 
 </div>
-
-<!-- Show loading or default message if dcfDetails is null -->
 <div *ngIf="!dcfDetails">
-    <p>Loading DCF calculation details...</p>
+    <p>Загрузка деталей расчета DCF...</p>
 </div>

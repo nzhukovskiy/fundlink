@@ -2,6 +2,7 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { Startup } from '../../../data/models/startup';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NotificationType } from '../../../constants/notification-type';
 
 @Component({
   selector: 'app-financial-stats',
@@ -64,4 +65,5 @@ export class FinancialStatsComponent implements OnInit {
     }
 
 
+    protected readonly NotificationType = NotificationType;
 }

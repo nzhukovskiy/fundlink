@@ -1,8 +1,11 @@
 div {
-    width: 1800px;
-    max-height: 80vh;
-    overflow: auto;
+
 }
 .financial-stats-chart-container {
     padding: 50px;
+    width: 1200px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }

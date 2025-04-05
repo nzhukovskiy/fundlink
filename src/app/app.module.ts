@@ -12,7 +12,7 @@ import { AllInvestorsComponent } from './components/investors/all-investors/all-
 import { InvestorPageComponent } from './components/investors/investor-page/investor-page.component';
 import { StartupPageComponent } from './components/startups/startup-page/startup-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import { LoginComponent } from './components/auth/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -80,9 +80,10 @@ import { KatexDirective } from './directives/katex.directive';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { TextDialogComponent } from './components/dialogs/text-dialog/text-dialog.component';
+import {RussianPaginatorIntlService} from "./services/paginator/russian-paginator-intl.service";
 
 
-const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001', options: { auth: { token: 'fgfg' } } };
+const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
 registerLocaleData(localeRu, 'ru-RU');
 @NgModule({
     declarations: [
@@ -149,7 +150,8 @@ registerLocaleData(localeRu, 'ru-RU');
         MatTooltipModule,
         NgbdSortableHeaderDirective,
     ],
-    providers: [AppHttpService,
+    providers: [
+        AppHttpService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
@@ -160,7 +162,9 @@ registerLocaleData(localeRu, 'ru-RU');
             useClass: DecimalInterceptor,
             multi: true,
         },
-        ChatSocketService, NotificationsSocketService],
+        { provide: MatPaginatorIntl, useClass: RussianPaginatorIntlService },
+        ChatSocketService,
+        NotificationsSocketService],
     bootstrap: [AppComponent],
 })
 export class AppModule {

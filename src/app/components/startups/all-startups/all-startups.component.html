@@ -9,6 +9,12 @@
         <div id="emailHelp" class="form-text"></div>
     </div>
 </form>
+<div class="form-check only-active-checkbox">
+    <input [formControl]="onlyActive" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+    <label class="form-check-label" for="flexCheckDefault">
+        Только стартапы с активным раундом финансирования
+    </label>
+</div>
 <app-clearable-select [options]="selectOptions" [selectInitialValue]="tag!"
                       (selectChanged)="handleTagChange($event)" label="Тег"></app-clearable-select>
 <div class="startups-list">

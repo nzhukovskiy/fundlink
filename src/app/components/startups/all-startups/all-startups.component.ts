@@ -33,6 +33,7 @@ export class AllStartupsComponent implements OnInit {
     selectOptions: { identifier: string, text: string }[] = [];
 
     startupTitleSearch = new FormControl('');
+    onlyActive = new FormControl(false);
 
     ngOnInit(): void {
 
@@ -49,7 +50,8 @@ export class AllStartupsComponent implements OnInit {
             this.startupTitleSearch.setValue(params['title'], { emitEvent: false });
             this.tag = params['tag'];
             this.isInteresting = params['isInteresting'];
-            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag'], params['isInteresting']).subscribe(res => {
+            this.onlyActive.setValue(params['onlyActive']);
+            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag'], params['isInteresting'], params["onlyActive"]).subscribe(res => {
                 this.startups = res.data;
                 this.totalStartupsNumber = res.meta.totalItems;
             });
@@ -63,6 +65,15 @@ export class AllStartupsComponent implements OnInit {
                     queryParamsHandling: 'merge',
                 }).then();
             });
+
+        this.onlyActive.valueChanges.subscribe(res => {
+            this.router.navigate([], {
+                queryParams: {
+                    onlyActive: res || null,
+                },
+                queryParamsHandling: 'merge',
+            }).then();
+        })
     }
 
     handlePageChange(event: PageEvent) {

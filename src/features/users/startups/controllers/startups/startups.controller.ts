@@ -44,9 +44,10 @@ export class StartupsController {
         @Query("title") title: string,
         @Query("tag") tag: string,
         @Query("isInteresting") isInteresting: boolean,
+        @Query("onlyActive") onlyActive: boolean,
         @Req() req
     ) {
-        return this.startupsService.getAll(query, title, tag, isInteresting, isInteresting && req.token && req.token.payload.role === "investor" ? req.token.payload.id : undefined);
+        return this.startupsService.getAll(query, title, tag, isInteresting, onlyActive, isInteresting && req.token && req.token.payload.role === "investor" ? req.token.payload.id : undefined);
     }
 
     @ApiBearerAuth()

@@ -46,11 +46,13 @@ export class StartupsService {
         title = "",
         tag = "",
         isInteresting = false,
+        onlyActive = false,
         investorId = -1,
         params = {}
     ) {
         const startupsQuery =
             this.startupRepository.createQueryBuilder("startup")
+              .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
 
         if (tag) {
             startupsQuery
@@ -74,10 +76,21 @@ export class StartupsService {
                 )
                 .setParameter("investorId", investorId)
         }
+        if (onlyActive) {
+            startupsQuery
+              .andWhere(
+                `
+            EXISTS (
+                SELECT 1 
+                FROM funding_round fr
+                WHERE fr."startupId" = startup.id and fr."isCurrent" = true
+            )`
+              )
+        }
 
         return this.paginateService.paginate(query, startupsQuery, {
             ...params,
-            relations: ["fundingRounds"],
+            // relations: ["fundingRounds"],
         })
     }
 

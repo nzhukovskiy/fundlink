@@ -4,7 +4,7 @@
 <div class="notification-body investment-notification">
     <div class="notification-header">
         <div class="investor-info">
-            <span class="investor-name">{{notification?.investment?.investor?.name}} {{notification?.investment?.investor?.surname}}</span>
+            <span class="investor-name">{{notification?.investment?.investor?.name}} {{notification?.investment?.investor?.surname + " "}}</span>
             <span class="notification-date">{{notification?.investment?.date | date:"d.LL.y в H:mm" }}</span>
         </div>
         <div class="investment-amount">

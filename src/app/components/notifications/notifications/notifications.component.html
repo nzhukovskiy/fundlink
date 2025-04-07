@@ -37,7 +37,7 @@
 <div *ngIf="notifications.length === 0">
     Здесь пока ничего нет
 </div>
-<mat-paginator class="startups-paginator" [length]="totalNotificationsNumber"
+<mat-paginator *ngIf="notifications.length" class="notifications-paginator" [length]="totalNotificationsNumber"
                [pageIndex]="pageIndex"
                [pageSize]="pageSize"
                [pageSizeOptions]="[5, 8, 10, 25, 100]"

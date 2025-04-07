@@ -1,4 +1,5 @@
 export enum NotificationTypes {
     MESSAGE = 'MESSAGE',
     INVESTMENT = 'INVESTMENT',
+    FUNDING_ROUND_DEADLINE = 'FUNDING_ROUND_DEADLINE'
 }

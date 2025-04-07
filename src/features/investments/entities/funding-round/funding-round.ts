@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { FundingStage } from "../../constants/funding-stage";
 import { Startup } from "../../../users/startups/entities/startup";
 import { Investment } from "../investment/investment";
+import { NotificationTimings } from "../../constants/notification-timings";
 
 @Entity()
 export class FundingRound {
@@ -26,6 +27,9 @@ export class FundingRound {
 
     @Column()
     endDate: Date;
+
+    @Column('simple-array', { default: '' })
+    notificationsSent: NotificationTimings[];
 
     @Column({ default: false })
     isCurrent: boolean;

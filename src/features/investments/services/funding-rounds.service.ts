@@ -8,11 +8,18 @@ import { Cron } from "@nestjs/schedule";
 import { FundingStage } from "../constants/funding-stage";
 import Decimal from "decimal.js";
 import { User } from "../../users/user/user";
+import { NotificationTimings } from "../constants/notification-timings";
+import { FundingRoundNotificationsTimings } from "../constants/funding-round-notifications-timings";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Roles } from "../../users/constants/roles";
+import { NotificationTypes } from "../../notifications/constants/notification-types";
+import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto";
 
 @Injectable()
 export class FundingRoundsService {
     constructor(@InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
-                @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>) {
+                @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
+                private readonly eventEmitter2: EventEmitter2) {
     }
     async create(startupId: number, createFundingRoundDto: CreateFundingRoundDto) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
@@ -90,6 +97,26 @@ export class FundingRoundsService {
             if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate &&
               new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
                 fundingRound.isCurrent = true;
+                const thresholds = [
+                    { type: NotificationTimings.SEVEN_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.SEVEN_DAY] },
+                    { type: NotificationTimings.THREE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.THREE_DAY] },
+                    { type: NotificationTimings.ONE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.ONE_DAY] },
+                ];
+
+                const endTime = fundingRound.endDate.getTime();
+                const remainingTime = endTime - currentDate.getTime();
+
+                for (const { type, value } of thresholds) {
+                    if (remainingTime <= value && !fundingRound.notificationsSent.includes(type)) {
+                        this.eventEmitter2.emit("notification", {
+                            userId: startupId ? startupId : startup.id,
+                            userType: Roles.STARTUP,
+                            type: NotificationTypes.FUNDING_ROUND_DEADLINE,
+                            text: `Для раунда ${fundingRound.stage} осталось ${type}`,
+                        } as CreateNotificationDto)
+                        fundingRound.notificationsSent = [...fundingRound.notificationsSent, type];
+                    }
+                }
                 break;
             } else {
                 fundingRound.isCurrent = false;

@@ -58,7 +58,7 @@ export class FundingRoundsService {
             this.validateBaseConstraints(fundingRound, updateFundingRoundDto);
             await this.changeProposalService.create(fundingRound, {
                 newFundingGoal: updateFundingRoundDto.fundingGoal !== fundingRound.fundingGoal ? updateFundingRoundDto.fundingGoal: undefined,
-                newEndDate: updateFundingRoundDto.endDate !== fundingRound.endDate ? updateFundingRoundDto.endDate: undefined
+                newEndDate: new Date(updateFundingRoundDto.endDate).getTime() !== new Date(fundingRound.endDate).getTime() ? updateFundingRoundDto.endDate: undefined
             })
         }
         // await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);

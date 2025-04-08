@@ -52,6 +52,17 @@ export class FundingRoundsService {
         if (fundingRound.startup.id !== startupData.id) {
             throw new ForbiddenException("Not allowed to perform this action");
         }
+        if (fundingRound.investments.length) {
+            if (new Decimal(updateFundingRoundDto.fundingGoal).lessThan(new Decimal(fundingRound.fundingGoal))) {
+                throw new BadRequestException("Cannot decrease funding goal of round with existing investments")
+            }
+            if (new Date(updateFundingRoundDto.startDate) !== (new Date(fundingRound.startDate))) {
+                throw new BadRequestException("Cannot change start date of round with existing investments")
+            }
+            if (new Date(updateFundingRoundDto.endDate) < (new Date(fundingRound.endDate))) {
+                throw new BadRequestException("Cannot shorten round with existing investments")
+            }
+        }
         await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
         Object.assign(fundingRound, updateFundingRoundDto);
         let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);

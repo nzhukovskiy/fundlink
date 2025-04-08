@@ -14,12 +14,14 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Roles } from "../../users/constants/roles";
 import { NotificationTypes } from "../../notifications/constants/notification-types";
 import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto";
+import { ChangeProposalService } from "./change-proposal-service/change-proposal.service";
 
 @Injectable()
 export class FundingRoundsService {
     constructor(@InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
                 @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
-                private readonly eventEmitter2: EventEmitter2) {
+                private readonly eventEmitter2: EventEmitter2,
+                private readonly changeProposalService: ChangeProposalService) {
     }
     async create(startupId: number, createFundingRoundDto: CreateFundingRoundDto) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
@@ -53,27 +55,23 @@ export class FundingRoundsService {
             throw new ForbiddenException("Not allowed to perform this action");
         }
         if (fundingRound.investments.length) {
-            if (new Decimal(updateFundingRoundDto.fundingGoal).lessThan(new Decimal(fundingRound.fundingGoal))) {
-                throw new BadRequestException("Cannot decrease funding goal of round with existing investments")
-            }
-            if (new Date(updateFundingRoundDto.startDate) !== (new Date(fundingRound.startDate))) {
-                throw new BadRequestException("Cannot change start date of round with existing investments")
-            }
-            if (new Date(updateFundingRoundDto.endDate) < (new Date(fundingRound.endDate))) {
-                throw new BadRequestException("Cannot shorten round with existing investments")
-            }
+            this.validateBaseConstraints(fundingRound, updateFundingRoundDto);
+            await this.changeProposalService.create(fundingRound, {
+                newFundingGoal: updateFundingRoundDto.fundingGoal !== fundingRound.fundingGoal ? updateFundingRoundDto.fundingGoal: undefined,
+                newEndDate: updateFundingRoundDto.endDate !== fundingRound.endDate ? updateFundingRoundDto.endDate: undefined
+            })
         }
-        await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
-        Object.assign(fundingRound, updateFundingRoundDto);
-        let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
-        await this.updateFundingRoundStatus(fundingRound.startup.id);
-        return savedFundingRound;
+        // await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
+        // Object.assign(fundingRound, updateFundingRoundDto);
+        // let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
+        // await this.updateFundingRoundStatus(fundingRound.startup.id);
+        // return savedFundingRound;
     }
 
     async getOne(id: number) {
         let fundingRound = await this.fundingRoundRepository.findOne({
             where: { id: id },
-            relations: ['startup', 'investments']
+            relations: ['startup', 'investments', 'investments.investor']
         });
         if (!fundingRound) {
             throw new NotFoundException(`Funding round with an id ${id} does not exist`);
@@ -168,5 +166,17 @@ export class FundingRoundsService {
             throw new BadRequestException("Cannot delete funding round with existing investments")
         }
         await this.fundingRoundRepository.remove(fundingRound);
+    }
+
+    private validateBaseConstraints(fundingRound: FundingRound, fundingRoundDto: CreateFundingRoundDto) {
+        if (new Decimal(fundingRoundDto.fundingGoal).lessThan(new Decimal(fundingRound.fundingGoal))) {
+            throw new BadRequestException("Cannot decrease funding goal of round with existing investments")
+        }
+        if (new Date(fundingRoundDto.startDate).getTime() !== (new Date(fundingRound.startDate)).getTime()) {
+            throw new BadRequestException("Cannot change start date of round with existing investments")
+        }
+        if (new Date(fundingRoundDto.endDate).getTime() < (new Date(fundingRound.endDate)).getTime()) {
+            throw new BadRequestException("Cannot shorten round with existing investments")
+        }
     }
 }

@@ -9,12 +9,16 @@ import { InvestmentService } from './services/investment.service';
 import { JwtTokenModule } from "../token/jwt-token.module";
 import { Investor } from "../users/investors/entities/investor";
 import { InvestmentsController } from './controllers/investments/investments.controller';
+import { ChangeProposalService } from './services/change-proposal-service/change-proposal.service';
+import { FundingRoundChangeProposal } from "./entities/funding-round-change-proposal/funding-round-change-proposal";
+import { InvestorVote } from "./entities/investor-vote/investor-vote";
+import { InvestorVoteService } from './services/investor-vote-service/investor-vote.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor]),
+    imports: [TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor, FundingRoundChangeProposal, InvestorVote]),
     JwtTokenModule],
     controllers: [FundingRoundsController, InvestmentsController],
-    providers: [FundingRoundsService, InvestmentService],
+    providers: [FundingRoundsService, InvestmentService, ChangeProposalService, InvestorVoteService],
     exports: [FundingRoundsService, InvestmentService]
 })
 export class InvestmentModule {}

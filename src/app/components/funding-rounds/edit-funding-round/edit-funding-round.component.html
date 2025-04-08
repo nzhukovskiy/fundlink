@@ -3,7 +3,7 @@
     <form class="login-form" [formGroup]="fundingRoundFormGroup">
         <div class="mb-3">
             <label for="fundingGoalControlInput" class="form-label">Цель</label>
-            <input appNumericOnly type="number" formControlName="fundingGoal" class="form-control"
+            <input appNumericOnly type="text" formControlName="fundingGoal" class="form-control"
                    id="fundingGoalControlInput" placeholder="10000">
             <div
                 *ngIf="fundingRoundFormGroup.controls.fundingGoal.invalid && (fundingRoundFormGroup.controls.fundingGoal.dirty || fundingRoundFormGroup.controls.fundingGoal.touched)"
@@ -12,7 +12,7 @@
                 Нельзя уменьшать цель раунда при наличии инвестиций
             </div>
         </div>
-        <div class="col-12" *ngIf="!fundingRound?.investments?.length">
+        <div class="col-12">
             <div class="input-group">
                 <div class="mb-3">
                     <label for="startDate" class="form-label">Дата начала</label>
@@ -24,6 +24,7 @@
                             id="startDate"
                             [(ngModel)]="startDate"
                             [ngModelOptions]="{standalone: true}"
+                            [disabled]="fundingRound?.investments?.length !== 0"
                             ngbDatepicker
                             #startDatePicker="ngbDatepicker"
                         />

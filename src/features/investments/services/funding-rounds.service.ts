@@ -97,22 +97,22 @@ export class FundingRoundsService {
             if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate &&
               new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
                 fundingRound.isCurrent = true;
-                const thresholds = [
-                    { type: NotificationTimings.SEVEN_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.SEVEN_DAY] },
-                    { type: NotificationTimings.THREE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.THREE_DAY] },
-                    { type: NotificationTimings.ONE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.ONE_DAY] },
+                const timingsValueAndMessages = [
+                    { type: NotificationTimings.SEVEN_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.SEVEN_DAY], message: `До конца раунда ${fundingRound.stage} осталось 7 дней` },
+                    { type: NotificationTimings.THREE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.THREE_DAY], message: `До конца раунда ${fundingRound.stage} осталось 3 дня` },
+                    { type: NotificationTimings.ONE_DAY, value: FundingRoundNotificationsTimings[NotificationTimings.ONE_DAY], message: `До конца раунда ${fundingRound.stage} остался 1 день`},
                 ];
 
                 const endTime = fundingRound.endDate.getTime();
                 const remainingTime = endTime - currentDate.getTime();
 
-                for (const { type, value } of thresholds) {
+                for (const { type, value, message } of timingsValueAndMessages) {
                     if (remainingTime <= value && !fundingRound.notificationsSent.includes(type)) {
                         this.eventEmitter2.emit("notification", {
                             userId: startupId ? startupId : startup.id,
                             userType: Roles.STARTUP,
                             type: NotificationTypes.FUNDING_ROUND_DEADLINE,
-                            text: `Для раунда ${fundingRound.stage} осталось ${type}`,
+                            text: message,
                         } as CreateNotificationDto)
                         fundingRound.notificationsSent = [...fundingRound.notificationsSent, type];
                     }

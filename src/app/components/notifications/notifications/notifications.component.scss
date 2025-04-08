@@ -1,6 +1,9 @@
 .unread-notification-badge {
     background-color: #dc3545;
     margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .notification-header {
     display: flex;
@@ -12,6 +15,15 @@
 }
 .notification-main-info {
     display: flex;
+
+    div {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 10px;
+        }
+    }
 }
 .notification-created-at {
     margin-right: 10px;

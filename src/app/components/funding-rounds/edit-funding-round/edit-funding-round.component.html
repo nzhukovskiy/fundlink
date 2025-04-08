@@ -1,56 +1,67 @@
 <div class="form-container">
-  <h3>Редактирование раунда инвестирования</h3>
-  <form class="login-form" [formGroup]="fundingRoundFormGroup">
-    <div class="mb-3">
-      <label for="fundingGoalControlInput" class="form-label">Цель</label>
-      <input appNumericOnly type="email" formControlName="fundingGoal" class="form-control" id="fundingGoalControlInput" placeholder="10000">
-    </div>
-    <div class="col-12">
-      <div class="input-group">
+    <h3>Редактирование раунда инвестирования</h3>
+    <form class="login-form" [formGroup]="fundingRoundFormGroup">
         <div class="mb-3">
-          <label for="startDate" class="form-label">Дата начала</label>
-          <div class="date-group">
-            <input
-              class="form-control"
-              placeholder="yyyy-mm-dd"
-              name="dp"
-              id="startDate"
-              [(ngModel)]="startDate"
-              [ngModelOptions]="{standalone: true}"
-              ngbDatepicker
-              #startDatePicker="ngbDatepicker"
-            />
-            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startDatePicker.toggle()" type="button"></button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <form class="row row-cols-sm-auto">
-      <div class="col-12">
-        <div class="input-group">
-          <div class="mb-3">
-            <label for="endDate" class="form-label">Дата окончания</label>
-            <div class="date-group">
-              <input
-                class="form-control"
-                placeholder="yyyy-mm-dd"
-                name="dp"
-                id="endDate"
-                [(ngModel)]="endDate"
-                [ngModelOptions]="{standalone: true}"
-                ngbDatepicker
-                #endDatePicker="ngbDatepicker"
-              />
-              <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endDatePicker.toggle()" type="button"></button>
+            <label for="fundingGoalControlInput" class="form-label">Цель</label>
+            <input appNumericOnly type="number" formControlName="fundingGoal" class="form-control"
+                   id="fundingGoalControlInput" placeholder="10000">
+            <div
+                *ngIf="fundingRoundFormGroup.controls.fundingGoal.invalid && (fundingRoundFormGroup.controls.fundingGoal.dirty || fundingRoundFormGroup.controls.fundingGoal.touched)"
+                class="alert alert-danger"
+            >
+                Нельзя уменьшать цель раунда при наличии инвестиций
             </div>
-
-          </div>
         </div>
-      </div>
+        <div class="col-12" *ngIf="!fundingRound?.investments?.length">
+            <div class="input-group">
+                <div class="mb-3">
+                    <label for="startDate" class="form-label">Дата начала</label>
+                    <div class="date-group">
+                        <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="startDate"
+                            [(ngModel)]="startDate"
+                            [ngModelOptions]="{standalone: true}"
+                            ngbDatepicker
+                            #startDatePicker="ngbDatepicker"
+                        />
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="startDatePicker.toggle()"
+                                type="button"></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <form class="row row-cols-sm-auto">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">Дата окончания</label>
+                        <div class="date-group">
+                            <input
+                                class="form-control"
+                                placeholder="yyyy-mm-dd"
+                                name="dp"
+                                id="endDate"
+                                [(ngModel)]="endDate"
+                                [ngModelOptions]="{standalone: true}"
+                                [minDate]="minDate!"
+                                ngbDatepicker
+                                #endDatePicker="ngbDatepicker"
+                            />
+                            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="endDatePicker.toggle()"
+                                    type="button"></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="mb-3 login-submit-button-group">
+            <button (click)="updateFundingRound()" type="submit" class="btn btn-primary mb-3 action-btn">Обновить
+            </button>
+        </div>
     </form>
-    <div class="mb-3 login-submit-button-group">
-      <button (click)="updateFundingRound()" type="submit" class="btn btn-primary mb-3 action-btn">Обновить</button>
-    </div>
-  </form>
 </div>

@@ -12,10 +12,13 @@
             <button ngbAccordionButton class="notification-header">
                 <div class="notification-main-info">
                     <div *ngIf="notification.type === NotificationType.INVESTMENT">
-                        В ваш стартап совершена новая инвестиция!
+                        <mat-icon>attach_money</mat-icon>В ваш стартап совершена новая инвестиция!
                     </div>
                     <div *ngIf="notification.type === NotificationType.MESSAGE">
-                        Новое сообщение для вас!
+                        <mat-icon> mail_outline</mat-icon>Новое сообщение для вас!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_DEADLINE">
+                        <mat-icon>access_time</mat-icon>Раунд финансирования подходит к концу!
                     </div>
                     <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>
                 </div>
@@ -30,6 +33,9 @@
             </div>
             <div ngbAccordionBody *ngIf="notification.type === NotificationType.MESSAGE">
                 <app-message-notification [notification]="notification"></app-message-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_DEADLINE">
+                <app-funding-round-deadline-notification [notification]="notification"></app-funding-round-deadline-notification>
             </div>
         </div>
     </div>

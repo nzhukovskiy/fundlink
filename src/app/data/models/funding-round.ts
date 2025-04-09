@@ -29,17 +29,10 @@ export class FundingRound {
     @Type(() => Investment)
     investments: Investment[];
 
-    constructor(
-        id: number,
-        stage: FundingStage,
-        fundingGoal: string,
-        currentRaised: string,
-        startDate: Date,
-        endDate: Date,
-        isCurrent: boolean,
-        startup: Startup,
-        investments: Investment[]
-    ) {
+    isUpdating: boolean;
+
+
+    constructor(id: number, stage: FundingStage, fundingGoal: string, currentRaised: string, startDate: Date, endDate: Date, isCurrent: boolean, startup: Startup, investments: Investment[], isUpdating: boolean) {
         this.id = id;
         this.stage = stage;
         this.fundingGoal = fundingGoal;
@@ -49,5 +42,6 @@ export class FundingRound {
         this.isCurrent = isCurrent;
         this.startup = startup;
         this.investments = investments;
+        this.isUpdating = isUpdating;
     }
 }

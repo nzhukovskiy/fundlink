@@ -101,6 +101,13 @@ export class StartupsService {
         if (includeInvestments) {
             startupQuery = startupQuery
                 .leftJoinAndSelect("fundingRound.investments", "investment")
+              .addSelect(`
+            EXISTS (
+                SELECT 1 
+                FROM funding_round_change_proposal frcp  
+                WHERE frcp."fundingRoundId"  = "fundingRound".id and frcp.status = 'pending_review'
+            )`,
+                "isUpdating")
                 .leftJoinAndSelect("investment.investor", "investor")
         }
         if (investorId) {
@@ -128,8 +135,25 @@ export class StartupsService {
                 `Startup with an id ${id} does not exist`
             )
         }
+        const startupEntity = startup.entities[0];
+
+        const rawMap = startup.raw.map((raw) => ({
+            startupId: raw["startup_id"],
+            fundingRoundId: raw["fundingRound_id"],
+            isUpdating: raw["isUpdating"]
+        }));
+
+        for (const fundingRound of startupEntity.fundingRounds) {
+            const match = rawMap.find(
+              (r) => r.startupId === startupEntity.id && r.fundingRoundId === fundingRound.id
+            );
+            if (match) {
+                (fundingRound as any).isUpdating = match.isUpdating;
+            }
+        }
+
         return {
-            ...startup.entities[0],
+            ...startupEntity,
             isInteresting: startup.raw[0].isInteresting,
             dcf: this.calculateDcf(startup.entities[0]),
         }

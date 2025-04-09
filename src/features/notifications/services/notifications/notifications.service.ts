@@ -30,6 +30,14 @@ export class NotificationsService {
                 "message",
                 "investment.investor",
                 "message.chat",
+                "investment.fundingRound",
+                "message.chat.investor",
+                "message.chat.startup",
+                "changes",
+                "changes.fundingRound",
+                "changes.votes",
+                "changes.fundingRound.startup",
+                "changes.votes.investor",
             ],
         })
     }
@@ -50,7 +58,20 @@ export class NotificationsService {
         return this.paginateService.paginate(query, this.notificationRepository, {
             where: whereClause,
             defaultSortBy: [["createdAt", "DESC"]],
-            relations: ["investment", "message", "investment.investor", "message.chat", "investment.fundingRound", "message.chat.investor", "message.chat.startup"]
+            relations: [
+              "investment",
+                "message",
+                "investment.investor",
+                "message.chat",
+                "investment.fundingRound",
+                "message.chat.investor",
+                "message.chat.startup",
+                "changes",
+                "changes.fundingRound",
+                "changes.votes",
+                "changes.fundingRound.startup",
+                "changes.votes.investor",
+            ]
         })
     }
 
@@ -87,6 +108,14 @@ export class NotificationsService {
                 "message",
                 "investment.investor",
                 "message.chat",
+                "investment.fundingRound",
+                "message.chat.investor",
+                "message.chat.startup",
+                "changes",
+                "changes.fundingRound",
+                "changes.votes",
+                "changes.fundingRound.startup",
+                "changes.votes.investor",
             ],
         })
     }

@@ -9,6 +9,9 @@ import { Roles } from "../../../users/constants/roles"
 import { Message } from "../../../chats/entities/message/message"
 import { Investor } from "../../../users/investors/entities/investor"
 import { Investment } from "../../../investments/entities/investment/investment"
+import {
+    FundingRoundChangeProposal
+} from "../../../investments/entities/funding-round-change-proposal/funding-round-change-proposal";
 
 @Entity()
 export class Notification {
@@ -40,4 +43,8 @@ export class Notification {
     @ManyToOne(() => Investment, { nullable: true })
     @JoinColumn()
     investment?: Investment
+
+    @ManyToOne(() => FundingRoundChangeProposal, { nullable: true })
+    @JoinColumn()
+    changes?: FundingRoundChangeProposal
 }

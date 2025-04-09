@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FundingRoundChangeProposal } from "../../entities/funding-round-change-proposal/funding-round-change-proposal";
@@ -11,14 +11,18 @@ import { Investor } from "../../../users/investors/entities/investor";
 import { InvestorVote } from "../../entities/investor-vote/investor-vote";
 import { VoteProposalDto } from "../../dtos/vote-proposal.dto/vote-proposal.dto";
 import { ChangesApprovalStatus } from "../../constants/changes-approval-status";
-import { FundingRoundsService } from "../funding-rounds.service";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Roles } from "../../../users/constants/roles";
+import { NotificationTypes } from "../../../notifications/constants/notification-types";
+import { CreateNotificationDto } from "../../../notifications/entities/dtos/create-notification.dto";
 
 @Injectable()
 export class ChangeProposalService {
     constructor(@InjectRepository(FundingRoundChangeProposal) private readonly fundingRoundChangeProposalRepository: Repository<FundingRoundChangeProposal>,
                 @InjectRepository(InvestorVote) private readonly investorVoteRepository: Repository<InvestorVote>,
                 @InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
-                private readonly investorVoteService: InvestorVoteService) {
+                private readonly investorVoteService: InvestorVoteService,
+                private readonly eventEmitter2: EventEmitter2) {
     }
 
 
@@ -45,6 +49,15 @@ export class ChangeProposalService {
           })
         );
         await this.investorVoteRepository.save(votes);
+        investors.forEach(investor => {
+            this.eventEmitter2.emit("notification", {
+                userId: investor.id,
+                userType: Roles.INVESTOR,
+                type: NotificationTypes.FUNDING_ROUND_CHANGE_PROPOSAL,
+                text: `Стартап ${fundingRound.startup.title} хочет внести изменения в раунд`,
+                changes: savedProposal
+            } as CreateNotificationDto)
+        })
         return savedProposal
     }
 
@@ -53,6 +66,12 @@ export class ChangeProposalService {
             where: { id: proposalId },
             relations: ['votes', 'votes.investor', 'fundingRound']
         });
+        if (proposal.status === ChangesApprovalStatus.COMPLETED) {
+            throw new HttpException(
+              `Voting for proposal ${proposalId} is already closed`,
+              HttpStatus.CONFLICT
+            );
+        }
 
         const vote = proposal.votes.find(v => v.investor.id === investorId);
         if (!vote) {
@@ -61,7 +80,10 @@ export class ChangeProposalService {
         vote.approved = voteProposalDto.approve;
         await this.investorVoteRepository.save(vote);
         await this.checkProposalComplete(proposal);
-        return vote
+        return await this.fundingRoundChangeProposalRepository.findOne({
+            where: { id: proposal.id },
+            relations: ['votes', 'votes.investor', 'fundingRound']
+        });
     }
 
     private async checkProposalComplete(proposal: FundingRoundChangeProposal) {
@@ -79,7 +101,7 @@ export class ChangeProposalService {
         }
 
         await this.fundingRoundChangeProposalRepository.save(proposal);
-        //notify all
+        //possibly notify all
     }
 
     private async applyChanges(proposal: FundingRoundChangeProposal) {

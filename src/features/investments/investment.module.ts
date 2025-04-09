@@ -13,11 +13,12 @@ import { ChangeProposalService } from './services/change-proposal-service/change
 import { FundingRoundChangeProposal } from "./entities/funding-round-change-proposal/funding-round-change-proposal";
 import { InvestorVote } from "./entities/investor-vote/investor-vote";
 import { InvestorVoteService } from './services/investor-vote-service/investor-vote.service';
+import { ProposalsController } from './controllers/proposal/proposals.controller';
 
 @Module({
     imports: [TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor, FundingRoundChangeProposal, InvestorVote]),
     JwtTokenModule],
-    controllers: [FundingRoundsController, InvestmentsController],
+    controllers: [FundingRoundsController, InvestmentsController, ProposalsController],
     providers: [FundingRoundsService, InvestmentService, ChangeProposalService, InvestorVoteService],
     exports: [FundingRoundsService, InvestmentService]
 })

@@ -56,10 +56,14 @@ export class FundingRoundsService {
         }
         if (fundingRound.investments.length) {
             this.validateBaseConstraints(fundingRound, updateFundingRoundDto);
-            await this.changeProposalService.create(fundingRound, {
-                newFundingGoal: updateFundingRoundDto.fundingGoal !== fundingRound.fundingGoal ? updateFundingRoundDto.fundingGoal: undefined,
-                newEndDate: new Date(updateFundingRoundDto.endDate).getTime() !== new Date(fundingRound.endDate).getTime() ? updateFundingRoundDto.endDate: undefined
-            })
+            if (updateFundingRoundDto.fundingGoal !== fundingRound.fundingGoal ||
+              new Date(updateFundingRoundDto.endDate).getTime() !== new Date(fundingRound.endDate).getTime()) {
+                await this.changeProposalService.create(fundingRound, {
+                    newFundingGoal: updateFundingRoundDto.fundingGoal !== fundingRound.fundingGoal ? updateFundingRoundDto.fundingGoal: undefined,
+                    newEndDate: new Date(updateFundingRoundDto.endDate).getTime() !== new Date(fundingRound.endDate).getTime() ? updateFundingRoundDto.endDate: undefined
+                })
+            }
+
         }
         // await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
         // Object.assign(fundingRound, updateFundingRoundDto);

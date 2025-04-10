@@ -10,7 +10,10 @@ export class InvestorVote {
     @ManyToOne(() => Investor)
     investor: Investor;
 
-    @ManyToOne(() => FundingRoundChangeProposal)
+    @ManyToOne(() => FundingRoundChangeProposal,
+        proposal => proposal.votes,
+      {onDelete: "CASCADE"}
+      )
     proposal: FundingRoundChangeProposal;
 
     @Column({ nullable: true })

@@ -7,6 +7,7 @@ import { InvestmentService } from "../services/investment.service";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RolesGuard } from "../../auth/guards/roles.guard";
 import { Roles } from "../../auth/decorators/roles.decorator";
+import { VoteProposalDto } from "../dtos/vote-proposal.dto/vote-proposal.dto";
 
 @Controller('funding-rounds')
 @ApiTags('funding-rounds')
@@ -43,5 +44,12 @@ export class FundingRoundsController {
     @Delete(':id')
     deleteFundingRound(@Param('id') id: number, @Req() req) {
         return this.fundingRoundsService.delete(id, req.token.payload);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post(':id/cancel-proposal')
+    cancelUpdateProposal(@Param('id') id: number, @Req() req) {
+        return this.fundingRoundsService.cancelProposal(id, req.token.payload.id);
     }
 }

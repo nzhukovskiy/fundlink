@@ -2,13 +2,13 @@ import {
     Column,
     CreateDateColumn,
     Entity, JoinColumn, ManyToOne,
-    PrimaryGeneratedColumn,
-} from "typeorm"
-import { NotificationTypes } from "../../constants/notification-types"
-import { Roles } from "../../../users/constants/roles"
-import { Message } from "../../../chats/entities/message/message"
-import { Investor } from "../../../users/investors/entities/investor"
-import { Investment } from "../../../investments/entities/investment/investment"
+    PrimaryGeneratedColumn
+} from "typeorm";
+import { NotificationTypes } from "../../constants/notification-types";
+import { Roles } from "../../../users/constants/roles";
+import { Message } from "../../../chats/entities/message/message";
+import { Investor } from "../../../users/investors/entities/investor";
+import { Investment } from "../../../investments/entities/investment/investment";
 import {
     FundingRoundChangeProposal
 } from "../../../investments/entities/funding-round-change-proposal/funding-round-change-proposal";
@@ -16,35 +16,41 @@ import {
 @Entity()
 export class Notification {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
-    userId: number
+    userId: number;
 
     @Column({ type: "enum", enum: Roles })
-    userType: Roles
+    userType: Roles;
 
     @Column({ type: "enum", enum: NotificationTypes })
-    type: NotificationTypes
+    type: NotificationTypes;
 
     @Column()
-    text: string
+    text: string;
 
     @Column({ default: false })
-    read: boolean
+    read: boolean;
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @ManyToOne(() => Message, { nullable: true })
     @JoinColumn()
-    message?: Message
+    message?: Message;
 
     @ManyToOne(() => Investment, { nullable: true })
     @JoinColumn()
-    investment?: Investment
+    investment?: Investment;
 
-    @ManyToOne(() => FundingRoundChangeProposal, { nullable: true })
+    @ManyToOne(
+      () => FundingRoundChangeProposal,
+        proposal => proposal.notifications,
+      {
+          nullable: true,
+          onDelete: "CASCADE"
+      })
     @JoinColumn()
-    changes?: FundingRoundChangeProposal
+    changes?: FundingRoundChangeProposal;
 }

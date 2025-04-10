@@ -1,4 +1,11 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+    BadRequestException,
+    ForbiddenException,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException
+} from "@nestjs/common";
 import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FundingRound } from "../entities/funding-round/funding-round";
@@ -15,11 +22,14 @@ import { Roles } from "../../users/constants/roles";
 import { NotificationTypes } from "../../notifications/constants/notification-types";
 import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto";
 import { ChangeProposalService } from "./change-proposal-service/change-proposal.service";
+import { FundingRoundChangeProposal } from "../entities/funding-round-change-proposal/funding-round-change-proposal";
+import { ChangesApprovalStatus } from "../constants/changes-approval-status";
 
 @Injectable()
 export class FundingRoundsService {
     constructor(@InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
                 @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
+                @InjectRepository(FundingRoundChangeProposal) private readonly fundingRoundChangeProposalRepository: Repository<FundingRoundChangeProposal>,
                 private readonly eventEmitter2: EventEmitter2,
                 private readonly changeProposalService: ChangeProposalService) {
     }
@@ -53,6 +63,13 @@ export class FundingRoundsService {
         let fundingRound = await this.getOne(fundingRoundId);
         if (fundingRound.startup.id !== startupData.id) {
             throw new ForbiddenException("Not allowed to perform this action");
+        }
+        const proposal = await this.fundingRoundChangeProposalRepository.findOne({
+            where: {fundingRound: {id: fundingRoundId}, status: ChangesApprovalStatus.PENDING_REVIEW}
+        })
+        console.log(proposal)
+        if (proposal) {
+            throw new BadRequestException("Funding round has uncompleted updates")
         }
         if (fundingRound.investments.length) {
             this.validateBaseConstraints(fundingRound, updateFundingRoundDto);
@@ -170,6 +187,30 @@ export class FundingRoundsService {
             throw new BadRequestException("Cannot delete funding round with existing investments")
         }
         await this.fundingRoundRepository.remove(fundingRound);
+    }
+
+    async cancelProposal(fundingRoundId: number, userId: number) {
+        let fundingRound = await this.getOne(fundingRoundId);
+        if (fundingRound.startup.id !== userId) {
+            throw new ForbiddenException("Not allowed to perform this action");
+        }
+        const proposal = await this.fundingRoundChangeProposalRepository.findOne({
+            where: {fundingRound: {id: fundingRoundId}, status: ChangesApprovalStatus.PENDING_REVIEW},
+            relations: ["votes"]
+        })
+        if (!proposal) {
+            throw new HttpException(
+              "Cannot cancel proposal with status different from pending",
+              HttpStatus.CONFLICT
+            );
+        }
+        if (proposal.votes.filter(x => x.approved !== null).length) {
+            throw new HttpException(
+              "Cannot cancel proposal with already existing votes",
+              HttpStatus.CONFLICT
+            );
+        }
+        await this.fundingRoundChangeProposalRepository.delete(proposal.id)
     }
 
     private validateBaseConstraints(fundingRound: FundingRound, fundingRoundDto: CreateFundingRoundDto) {

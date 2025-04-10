@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 import { FundingRound } from "../funding-round/funding-round";
 import { ChangesApprovalStatus } from "../../constants/changes-approval-status";
 import { InvestorVote } from "../investor-vote/investor-vote";
+import { Notification } from "../../../notifications/entities/notification/notification";
 
 @Entity()
 export class FundingRoundChangeProposal {
@@ -35,4 +36,7 @@ export class FundingRoundChangeProposal {
 
     @OneToMany(() => InvestorVote, vote => vote.proposal)
     votes: InvestorVote[];
+
+    @OneToMany(() => Notification, notification => notification.changes)
+    notifications: Notification[];
 }

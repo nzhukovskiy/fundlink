@@ -5,6 +5,7 @@ import { Investment } from "../../../investments/entities/investment/investment"
 import {
     FundingRoundChangeProposal
 } from "../../../investments/entities/funding-round-change-proposal/funding-round-change-proposal";
+import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 
 export class CreateNotificationDto {
     userId: number
@@ -20,4 +21,6 @@ export class CreateNotificationDto {
     investment?: Investment
 
     changes?: FundingRoundChangeProposal
+
+    fundingRound?: FundingRound
 }

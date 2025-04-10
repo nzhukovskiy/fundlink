@@ -124,6 +124,7 @@ export class FundingRoundsService {
         }
         for (let fundingRound of startup.fundingRounds) {
             let currentDate = new Date();
+            const initialFundingRoundStatus = fundingRound.isCurrent;
             if (fundingRound.startDate < currentDate && fundingRound.endDate > currentDate &&
               new Decimal(fundingRound.currentRaised).minus(new Decimal(fundingRound.fundingGoal)) < new Decimal(0)) {
                 fundingRound.isCurrent = true;
@@ -150,6 +151,15 @@ export class FundingRoundsService {
                 break;
             } else {
                 fundingRound.isCurrent = false;
+                if (initialFundingRoundStatus === true) {
+                    this.eventEmitter2.emit("notification", {
+                        userId: startupId ? startupId : startup.id,
+                        userType: Roles.STARTUP,
+                        type: NotificationTypes.FUNDING_ROUND_ENDED,
+                        text: "Раунд финансирования закончился",
+                        fundingRound: fundingRound
+                    } as CreateNotificationDto)
+                }
             }
         }
         await this.fundingRoundRepository.save(startup.fundingRounds);

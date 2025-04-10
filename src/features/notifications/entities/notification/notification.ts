@@ -12,6 +12,7 @@ import { Investment } from "../../../investments/entities/investment/investment"
 import {
     FundingRoundChangeProposal
 } from "../../../investments/entities/funding-round-change-proposal/funding-round-change-proposal";
+import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 
 @Entity()
 export class Notification {
@@ -53,4 +54,8 @@ export class Notification {
       })
     @JoinColumn()
     changes?: FundingRoundChangeProposal;
+
+    @ManyToOne(() => FundingRound, { nullable: true, onDelete: "CASCADE" })
+    @JoinColumn()
+    fundingRound?: FundingRound;
 }

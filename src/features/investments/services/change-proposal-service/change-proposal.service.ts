@@ -64,7 +64,7 @@ export class ChangeProposalService {
     async vote(proposalId: number, investorId: number, voteProposalDto: VoteProposalDto) {
         const proposal = await this.fundingRoundChangeProposalRepository.findOne({
             where: { id: proposalId },
-            relations: ['votes', 'votes.investor', 'fundingRound']
+            relations: ['votes', 'votes.investor', 'fundingRound', 'fundingRound.startup']
         });
         if (proposal.status === ChangesApprovalStatus.COMPLETED) {
             throw new HttpException(
@@ -101,7 +101,13 @@ export class ChangeProposalService {
         }
 
         await this.fundingRoundChangeProposalRepository.save(proposal);
-        //possibly notify all
+        this.eventEmitter2.emit("notification", {
+            userId: proposal.fundingRound.startup.id,
+            userType: Roles.STARTUP,
+            type: NotificationTypes.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED,
+            text: proposal.status === ChangesApprovalStatus.COMPLETED ? 'Изменения подтверждены' : 'Изменения отклонены',
+            changes: proposal
+        } as CreateNotificationDto)
     }
 
     private async applyChanges(proposal: FundingRoundChangeProposal) {

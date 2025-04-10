@@ -1,4 +1,4 @@
-<div class="approval-container" *ngIf="(userService.currentUser$ | async)?.role === Roles.INVESTOR">
+<div class="approval-container">
     <div class="header">
         <h1 class="startup-name">Стартап {{notification?.changes?.fundingRound?.startup?.title}}</h1>
         <h2 class="round-name">Изменения в раунд финансирования {{notification?.changes?.fundingRound?.stage}}</h2>
@@ -41,13 +41,13 @@
     <div *ngIf="currentInvestorVoted && notification?.changes?.status === ChangesApprovalStatus.PENDING_REVIEW">
         Вы проголосовали по данному изменению, ожидайте решения других инвесторов
     </div>
-    <div *ngIf="currentInvestorVoted && notification?.changes?.status === ChangesApprovalStatus.COMPLETED" class="status-banner status-approved">
+    <div *ngIf="notification?.changes?.status === ChangesApprovalStatus.COMPLETED" class="status-banner status-approved">
         <span class="status-icon">✓</span>
         <div class="status-message">
             Изменения подтверждены
         </div>
     </div>
-    <div *ngIf="currentInvestorVoted && notification?.changes?.status === ChangesApprovalStatus.REJECTED" class="status-banner status-rejected">
+    <div *ngIf="notification?.changes?.status === ChangesApprovalStatus.REJECTED" class="status-banner status-rejected">
         <span class="status-icon">✗</span>
         <div class="status-message">
             Изменения отклонены

@@ -47,6 +47,10 @@ export class StartupProfileComponent implements OnInit {
     selectOptions: { identifier: string, text: string }[] = [];
 
     ngOnInit(): void {
+        this.initializeStartupsAndTags()
+    }
+
+    initializeStartupsAndTags() {
         forkJoin({
             tags: this.tagService.getAllTags(),
             startup: this.startupService.getCurrentStartup(),
@@ -81,28 +85,6 @@ export class StartupProfileComponent implements OnInit {
             this.selectOptions = this.getSelectOptions();
         });
     }
-
-    // getCurrentStartupAndTags() {
-    //     forkJoin({
-    //         tags: this.tagService.getAllTags(),
-    //         startup: this.startupService.getCurrentStartup(),
-    //     }).subscribe(({tags, startup}) => {
-    //         this.startup = startup;
-    //         this.allTags = tags;
-    //         this.allTags = this.allTags.filter(tag => !this.startup?.tags.some(x => x.id === tag.id))
-    //         console.log(this.allTags)
-    //         this.startupService.getInvestors(startup.id).subscribe(res => {
-    //             this.investors = res;
-    //             this.lineChartData = {
-    //                 labels: this.investors.map(x => x.name + ' ' + x.surname),
-    //                 datasets: [{
-    //                     data: this.investors.map(x => parseInt(x.totalInvestment)),
-    //                 }],
-    //             };
-    //             this.selectOptions = this.getSelectOptions();
-    //         });
-    //     })
-    // }
 
     deleteFundingRound(id: number) {
         const dialogRef = this.dialog.open(SubmitDialogComponent);
@@ -189,6 +171,12 @@ export class StartupProfileComponent implements OnInit {
                 this.rejectInvestment(investmentId);
             }
         });
+    }
+
+    cancelFundingRoundUpdateProposal(fundingRoundId: number) {
+        this.fundingRoundsService.cancelUpdateProposal(fundingRoundId).subscribe(() => {
+            this.initializeStartupsAndTags();
+        })
     }
 
     protected readonly InvestmentStage = InvestmentStage;

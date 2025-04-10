@@ -23,6 +23,14 @@
                     <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL">
                         <mat-icon>compare_arrows</mat-icon>Стартап хочет внести изменения в раунд финансирования!
                     </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED">
+                        <ng-container *ngIf="notification.changes?.status === ChangesApprovalStatus.COMPLETED">
+                            <mat-icon>check</mat-icon>Ваши изменения приняты!
+                        </ng-container>
+                        <ng-container *ngIf="notification.changes?.status === ChangesApprovalStatus.REJECTED">
+                            <mat-icon>close</mat-icon>Ваши изменения отклонены!
+                        </ng-container>
+                    </div>
                     <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>
                 </div>
                 <div class="notification-created-at">
@@ -41,6 +49,9 @@
                 <app-funding-round-deadline-notification [notification]="notification"></app-funding-round-deadline-notification>
             </div>
             <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL">
+                <app-funding-round-change-proposal-notification [notification]="notification"></app-funding-round-change-proposal-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED">
                 <app-funding-round-change-proposal-notification [notification]="notification"></app-funding-round-change-proposal-notification>
             </div>
         </div>

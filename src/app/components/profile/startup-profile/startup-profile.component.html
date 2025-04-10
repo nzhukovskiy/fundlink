@@ -47,6 +47,11 @@
                         <mat-icon>refresh</mat-icon>
                         Изменения обрабатываются</a>
                 </div>
+                <div *ngIf="fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
+                    <a (click)="cancelFundingRoundUpdateProposal(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
+                        <mat-icon>close</mat-icon>
+                        Отменить изменения</a>
+                </div>
                 <div *ngIf="fundingRound.investments.length === 0" class="mb-3 edit-funding-round-button-group">
                     <a (click)="deleteFundingRound(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
                         <mat-icon>delete</mat-icon>

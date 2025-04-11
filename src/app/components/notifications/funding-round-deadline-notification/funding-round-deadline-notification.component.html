@@ -1,3 +1,10 @@
 <div>
     {{notification?.text}}
 </div>
+<div>Вы можете продлить раунд</div>
+<div *ngIf="!notification?.changes?.fundingRound?.isUpdating" class="mb-3">
+    <a [routerLink]="['/profile']"
+       class="btn btn-primary mb-3 action-btn go-to-profile-button">
+        <mat-icon>account_circle</mat-icon>
+        Перейти в профиль</a>
+</div>

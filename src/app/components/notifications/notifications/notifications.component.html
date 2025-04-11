@@ -31,6 +31,9 @@
                             <mat-icon>close</mat-icon>Ваши изменения отклонены!
                         </ng-container>
                     </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_ENDED">
+                        <mat-icon>access_time</mat-icon>Раунд закончился!
+                    </div>
                     <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>
                 </div>
                 <div class="notification-created-at">
@@ -53,6 +56,9 @@
             </div>
             <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED">
                 <app-funding-round-change-proposal-notification [notification]="notification"></app-funding-round-change-proposal-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_ENDED">
+                <app-funding-round-ended-notification [notification]="notification"></app-funding-round-ended-notification>
             </div>
         </div>
     </div>

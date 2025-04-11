@@ -83,6 +83,7 @@ import { TextDialogComponent } from './components/dialogs/text-dialog/text-dialo
 import {RussianPaginatorIntlService} from "./services/paginator/russian-paginator-intl.service";
 import { FundingRoundDeadlineNotificationComponent } from './components/notifications/funding-round-deadline-notification/funding-round-deadline-notification.component';
 import { FundingRoundChangeProposalNotificationComponent } from './components/notifications/funding-round-change-proposal-notification/funding-round-change-proposal-notification.component';
+import { FundingRoundEndedNotificationComponent } from './components/notifications/funding-round-ended-notification/funding-round-ended-notification.component';
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
@@ -135,6 +136,7 @@ registerLocaleData(localeRu, 'ru-RU');
         TextDialogComponent,
         FundingRoundDeadlineNotificationComponent,
         FundingRoundChangeProposalNotificationComponent,
+        FundingRoundEndedNotificationComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,88 @@
+.outcome-container {
+    margin: 25px 0;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 12px;
+    background-color: #eee;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    min-width: 120px;
+    text-align: right;
+    font-weight: 600;
+}
+
+.status-success {
+    border: 1px solid #a5d6a7;
+    color: #2e7d32;
+}
+
+.outcome-message.status-success {
+    background-color: #e8f5e9;
+}
+
+.status-warning {
+    border: 1px solid #ffcc80;
+    color: #ef6c00;
+}
+
+.outcome-message.status-warning {
+    background-color: #fff3e0;
+}
+
+.status-info {
+    border: 1px solid #90caf9;
+    color: #1565c0;
+}
+
+.outcome-message.status-info {
+    background-color: #e3f2fd;
+}
+
+.outcome-message {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.status-icon {
+    font-size: 24px;
+}
+
+.funding-actions {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+//.btn-secondary {
+//    background-color: #78909c;
+//    color: white;
+//}
+
+app-progress-bar {
+    flex-grow: 1;
+}

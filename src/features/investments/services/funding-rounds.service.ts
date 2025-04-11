@@ -67,7 +67,6 @@ export class FundingRoundsService {
         const proposal = await this.fundingRoundChangeProposalRepository.findOne({
             where: {fundingRound: {id: fundingRoundId}, status: ChangesApprovalStatus.PENDING_REVIEW}
         })
-        console.log(proposal)
         if (proposal) {
             throw new BadRequestException("Funding round has uncompleted updates")
         }
@@ -82,11 +81,13 @@ export class FundingRoundsService {
             }
 
         }
-        // await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
-        // Object.assign(fundingRound, updateFundingRoundDto);
-        // let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
-        // await this.updateFundingRoundStatus(fundingRound.startup.id);
-        // return savedFundingRound;
+        else {
+            await this.ensureNoRoundsOverlap(updateFundingRoundDto, fundingRound.startup.id, fundingRoundId);
+            Object.assign(fundingRound, updateFundingRoundDto);
+            let savedFundingRound = await this.fundingRoundRepository.save(fundingRound);
+            await this.updateFundingRoundStatus(fundingRound.startup.id);
+            return savedFundingRound;
+        }
     }
 
     async getOne(id: number) {

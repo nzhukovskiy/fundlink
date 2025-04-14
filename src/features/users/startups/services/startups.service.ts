@@ -3,9 +3,9 @@ import {
     Injectable,
     NotFoundException,
 } from "@nestjs/common"
-import { InjectRepository } from "@nestjs/typeorm"
+import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
 import { Startup } from "../entities/startup"
-import { Repository } from "typeorm"
+import { DataSource, getConnection, Repository } from "typeorm"
 import { CreateStartupDto } from "../dtos/requests/create-startup-dto"
 import * as bcrypt from "bcrypt"
 import { PaginateQuery } from "nestjs-paginate"
@@ -20,6 +20,7 @@ import Decimal from "decimal.js"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
 import { DcfDetailedDto } from "../dtos/responses/dcf-detailed.dto/dcf-detailed.dto"
 import { WaccDetailsDto } from "../dtos/responses/wacc-details.dto/wacc-details.dto"
+import { FundingRound } from "../../../investments/entities/funding-round/funding-round"
 
 @Injectable()
 export class StartupsService {
@@ -29,10 +30,13 @@ export class StartupsService {
         @InjectRepository(Investor)
         private readonly investorRepository: Repository<Investor>,
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+        @InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
         private readonly usersService: UsersService,
         private readonly jwtTokenService: JwtTokenService,
         private readonly paginateService: PaginateService,
-        private readonly fundingRoundsService: FundingRoundsService
+        private readonly fundingRoundsService: FundingRoundsService,
+        @InjectDataSource()
+        private dataSource: DataSource
     ) {}
 
     incomeTaxRate = "0.18"
@@ -407,6 +411,72 @@ export class StartupsService {
             (x) => x.id !== startupId
         )
         return this.investorRepository.save(investor)
+    }
+
+    async getMostPopularStartups() {
+        const recentInvestmentsSubQuery = this.fundingRoundRepository
+            .createQueryBuilder("fundingRound")
+            .select(`SUM(i.amount) as investments_amount`)
+            .leftJoin('fundingRound.investments', 'i')
+            .where('"fundingRound"."startupId" = startup.id and "i".stage=\'completed\' and "i"."date" >  CURRENT_DATE - interval \'30 days\'')
+            .getQuery();
+
+        const startups = await this.startupRepository
+            .createQueryBuilder("startup")
+            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
+            .leftJoinAndSelect("fundingRound.investments", "investment")
+            .leftJoinAndSelect("investment.investor", "investor")
+            // .getMany()
+            .addSelect(
+                'startup.id, startup.title , SUM(investment.amount) as "totalInvestment"'
+            )
+            .addSelect(`(${recentInvestmentsSubQuery})`, 'recentInvestmentsTotal')
+            .andWhere("investment.stage ='completed'")
+            .orderBy('"totalInvestment"', "DESC")
+            .groupBy("startup.id, fundingRound.id, investment.id, investor.id")
+            .getRawAndEntities()
+
+        // const startupResults = Map<number, number>
+        // const totalInvestments = Map<number, number>
+        // const totalRecentInvestments = Map<number, number>
+        // for (const startup of startups) {
+        //     totalInvestments[startup.id] = startup.fundingRounds.reduce(acc => acc + acc, 0);
+        // }
+
+        console.log(startups)
+
+        const mappedStartups = startups.entities.map((x, i) => ({
+            ...x,
+            totalInvestments: startups.raw.find(y => y.startup_id === x.id).totalInvestment,
+            totalRecentInvestment: startups.raw[i].recentInvestmentsTotal,
+        }))
+        const startupResults = Map<number, number>
+        const minTotalInvestment = Math.min(...mappedStartups.map(x => x.totalInvestments as number))
+        const maxTotalInvestment = Math.max(...mappedStartups.map(x => x.totalInvestments as number))
+        const minRecentInvestment = Math.min(...mappedStartups.map(x => x.totalRecentInvestment as number))
+        const maxRecentInvestment = Math.min(...mappedStartups.map(x => x.totalRecentInvestment as number))
+
+        console.log(minTotalInvestment, maxTotalInvestment, minRecentInvestment, maxRecentInvestment)
+        for (const startup of mappedStartups) {
+
+        }
+
+        return mappedStartups
+    }
+
+    getMostFundedStartups() {
+        return this.startupRepository
+            .createQueryBuilder("startup")
+            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
+            .leftJoinAndSelect("fundingRound.investments", "investment")
+            .leftJoinAndSelect("investment.investor", "investor")
+            .select(
+                "startup.id, startup.title , SUM(investment.amount) as totalInvestment"
+            )
+            .andWhere("investment.stage ='completed'")
+            .orderBy("totalInvestment", "DESC")
+            .groupBy("startup.id")
+            .getRawMany()
     }
 
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {

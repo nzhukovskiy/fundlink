@@ -58,6 +58,11 @@ export class StartupsController {
         return this.startupsService.getCurrent(req.token.payload);
     }
 
+    @Get('most-popular')
+    getMostPopularStartups(@Req() req) {
+        return this.startupsService.getMostPopularStartups();
+    }
+
     @UseGuards(OptionalAuthGuard)
     @Get(':id')
     findOne(@Param('id') id: number,

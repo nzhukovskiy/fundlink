@@ -17,11 +17,7 @@
 </div>
 <app-clearable-select [options]="selectOptions" [selectInitialValue]="tag!"
                       (selectChanged)="handleTagChange($event)" label="Тег"></app-clearable-select>
-<div class="startups-list">
-    <div *ngFor="let startup of startups">
-        <app-single-startup [startup]="startup"></app-single-startup>
-    </div>
-</div>
+<app-startups-list [startups]="startups"></app-startups-list>
 <mat-paginator class="startups-paginator" [length]="totalStartupsNumber"
                [pageIndex]="pageIndex"
                [pageSize]="pageSize"

@@ -1,21 +1,25 @@
 .startups-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
+
 .startups-paginator {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
+
 .tag-filter-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
 .tag-filter-group mat-icon {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .only-active-checkbox, .only-active-checkbox label {
     cursor: pointer;
 }

@@ -84,6 +84,8 @@ import {RussianPaginatorIntlService} from "./services/paginator/russian-paginato
 import { FundingRoundDeadlineNotificationComponent } from './components/notifications/funding-round-deadline-notification/funding-round-deadline-notification.component';
 import { FundingRoundChangeProposalNotificationComponent } from './components/notifications/funding-round-change-proposal-notification/funding-round-change-proposal-notification.component';
 import { FundingRoundEndedNotificationComponent } from './components/notifications/funding-round-ended-notification/funding-round-ended-notification.component';
+import { MostPopularStartupsComponent } from './components/startups/most-popular-startups/most-popular-startups.component';
+import { StartupsListComponent } from './components/startups/startups-list/startups-list.component';
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
@@ -137,6 +139,8 @@ registerLocaleData(localeRu, 'ru-RU');
         FundingRoundDeadlineNotificationComponent,
         FundingRoundChangeProposalNotificationComponent,
         FundingRoundEndedNotificationComponent,
+        MostPopularStartupsComponent,
+        StartupsListComponent,
     ],
     imports: [
         BrowserModule,

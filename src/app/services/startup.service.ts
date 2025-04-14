@@ -95,4 +95,8 @@ export class StartupService {
     removeStartupFromInteresting(startupId: number) {
         return this.appHttpService.post<Startup>(`startups/${startupId}/remove-from-interesting`, {});
     }
+
+    getMostPopular() {
+        return this.appHttpService.get<Startup>(`startups/most-popular`);
+    }
 }

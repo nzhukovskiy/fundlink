@@ -13,6 +13,7 @@ import { JwtTokenModule } from "../token/jwt-token.module"
 import { Investment } from "../investments/entities/investment/investment"
 import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
+import { RecommendationService } from './investors/services/recommendation/recommendation.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag]),
@@ -21,7 +22,7 @@ import { PaginateModule } from "../../common/paginate/paginate.module"
         PaginateModule,
     ],
     controllers: [StartupsController, InvestorsController],
-    providers: [StartupsService, UsersService, InvestorsService],
+    providers: [StartupsService, UsersService, InvestorsService, RecommendationService],
     exports: [StartupsService, UsersService],
 })
 export class UsersModule {

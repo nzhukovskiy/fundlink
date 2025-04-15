@@ -99,4 +99,8 @@ export class StartupService {
     getMostPopular() {
         return this.appHttpService.get<Startup[]>(`startups/most-popular`);
     }
+
+    getMostFunded() {
+        return this.appHttpService.get<Startup[]>(`startups/most-funded`);
+    }
 }

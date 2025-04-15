@@ -86,6 +86,7 @@ import { FundingRoundChangeProposalNotificationComponent } from './components/no
 import { FundingRoundEndedNotificationComponent } from './components/notifications/funding-round-ended-notification/funding-round-ended-notification.component';
 import { MostPopularStartupsComponent } from './components/startups/most-popular-startups/most-popular-startups.component';
 import { StartupsListComponent } from './components/startups/startups-list/startups-list.component';
+import { MostFundedStartupsComponent } from './components/startups/most-funded-startups/most-funded-startups.component';
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
@@ -141,6 +142,7 @@ registerLocaleData(localeRu, 'ru-RU');
         FundingRoundEndedNotificationComponent,
         MostPopularStartupsComponent,
         StartupsListComponent,
+        MostFundedStartupsComponent,
     ],
     imports: [
         BrowserModule,

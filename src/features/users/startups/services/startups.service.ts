@@ -474,7 +474,6 @@ export class StartupsService {
         const minInterestingCount = Math.min(...mappedStartups.map(x => x.interestingCount as number));
         const maxInterestingCount = Math.max(...mappedStartups.map(x => x.interestingCount as number));
 
-        console.log(minTotalInvestment, maxTotalInvestment, minRecentInvestment, maxRecentInvestment);
         for (const startup of mappedStartups) {
             const recentScore = (startup.recentInvestmentsTotal - minRecentInvestment) / (maxRecentInvestment - minRecentInvestment) * 100;
             const totalScore = (startup.investmentsTotal - minTotalInvestment) / (maxTotalInvestment - minTotalInvestment) * 100;
@@ -482,23 +481,35 @@ export class StartupsService {
             const interestingScore = (startup.interestingCount - minInterestingCount) / (maxInterestingCount - minInterestingCount) * 100;
             startupResults[startup.id] = recentScore * 0.4 + totalScore * 0.2 + investorsScore * 0.25 + interestingScore * 0.15;
         }
-        console.log(startupResults);
         return mappedStartups.sort((a, b) => -(startupResults[a.id] - startupResults[b.id]));
     }
 
-    getMostFundedStartups() {
-        return this.startupRepository
+    async getMostFundedStartups() {
+        const totalInvestmentsSubQuery = this.fundingRoundRepository
+          .createQueryBuilder("fundingRound")
+          .select(`COALESCE(SUM(i.amount), 0) as total_investments`)
+          .leftJoin("fundingRound.investments", "i")
+          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='completed'")
+          .getQuery();
+
+        const startupsRawAndEntities = await this.startupRepository
           .createQueryBuilder("startup")
           .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-          .leftJoinAndSelect("fundingRound.investments", "investment")
-          .leftJoinAndSelect("investment.investor", "investor")
-          .select(
-            "startup.id, startup.title , SUM(investment.amount) as totalInvestment"
-          )
-          .andWhere("investment.stage ='completed'")
-          .orderBy("totalInvestment", "DESC")
-          .groupBy("startup.id")
-          .getRawMany();
+          .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
+          .take(10)
+          .getRawAndEntities();
+
+        const aggregatedMap: Record<string, number> = {};
+        startupsRawAndEntities.raw.forEach(raw => {
+            aggregatedMap[raw.startup_id] = Number(raw.investmentsTotal);
+        });
+
+        return startupsRawAndEntities.entities.map(startup => (
+          {
+              ...startup,
+              investmentsTotal: aggregatedMap[startup.id] || 0
+          }
+        )).sort((a, b) => b.investmentsTotal - a.investmentsTotal)
     }
 
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {

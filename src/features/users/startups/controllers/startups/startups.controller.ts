@@ -63,6 +63,11 @@ export class StartupsController {
         return this.startupsService.getMostPopularStartups();
     }
 
+    @Get('most-funded')
+    getMostFundedStartups(@Req() req) {
+        return this.startupsService.getMostFundedStartups();
+    }
+
     @UseGuards(OptionalAuthGuard)
     @Get(':id')
     findOne(@Param('id') id: number,

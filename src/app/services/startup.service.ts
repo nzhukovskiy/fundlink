@@ -97,6 +97,6 @@ export class StartupService {
     }
 
     getMostPopular() {
-        return this.appHttpService.get<Startup>(`startups/most-popular`);
+        return this.appHttpService.get<Startup[]>(`startups/most-popular`);
     }
 }

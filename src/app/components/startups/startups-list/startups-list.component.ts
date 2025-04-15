@@ -10,4 +10,7 @@ export class StartupsListComponent {
 
     @Input()
     startups: Startup[] = [];
+
+    @Input()
+    showTotalInvestments = false
 }

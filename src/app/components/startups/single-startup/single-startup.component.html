@@ -8,11 +8,14 @@
     <div class="card-body">
         <h5><a [routerLink]="['/startups', startup?.id]" class="card-title startup-card-title">{{ startup?.title }}</a>
         </h5>
-        <ng-container *ngIf="currentFundingRound">
+        <ng-container *ngIf="currentFundingRound && !showTotalInvestments">
             <strong>Текущий раунд: {{ currentFundingRound.stage }}</strong>
             <p>
-                Необходимо на текущем раунде: <strong>{{ getRemainingFunding() }}</strong>
+                Необходимо на текущем раунде: <strong>{{ getRemainingFunding().toNumber() | currency:'RUB':'symbol':'1.0-0':'ru-RU' }}</strong>
             </p>
+        </ng-container>
+        <ng-container *ngIf="showTotalInvestments">
+            <p>Всего собрано: <strong>{{startup!.investmentsTotal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</strong></p>
         </ng-container>
 
         <p class="card-text">{{ startup?.description!.length > 50 ? startup?.description!.substring(0, 50) + "..." : startup?.description }}</p>

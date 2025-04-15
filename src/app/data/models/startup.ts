@@ -8,7 +8,7 @@ import { DcfDetailedDto } from '../dtos/responses/dcf-calculation-details';
 export class Startup extends User {
 
 
-    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: DcfDetailedDto, isInteresting: boolean, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[]) {
+    constructor(id: number, email: string, password: string, title: string, description: string, fundingGoal: string, presentationPath: string, logoPath: string, autoApproveInvestments: boolean, teamExperience: string, industry: string, tamMarket: string, samMarket: string, somMarket: string, fundingRounds: FundingRound[], tags: Tag[], dcf: DcfDetailedDto, isInteresting: boolean, investmentsTotal: number, revenuePerYear: number[], capitalExpenditures: number[], changesInWorkingCapital: number[], deprecationAndAmortization: number[]) {
         super(id, email, password);
         this.title = title;
         this.description = description;
@@ -25,6 +25,7 @@ export class Startup extends User {
         this.tags = tags;
         this.dcf = dcf;
         this.isInteresting = isInteresting;
+        this.investmentsTotal = investmentsTotal;
         this.revenuePerYear = revenuePerYear;
         this.capitalExpenditures = capitalExpenditures;
         this.changesInWorkingCapital = changesInWorkingCapital;
@@ -66,6 +67,8 @@ export class Startup extends User {
     dcf: DcfDetailedDto
 
     isInteresting: boolean
+
+    investmentsTotal: number
 
     @Expose({name: 'revenue_per_year'})
     revenuePerYear: number[];

@@ -29,6 +29,9 @@ export class SingleStartupComponent implements OnInit {
     @Input()
     startup?: Startup;
 
+    @Input()
+    showTotalInvestments = false
+
     currentFundingRound?: FundingRound;
 
     getRemainingFunding() {

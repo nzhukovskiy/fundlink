@@ -13,6 +13,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter"
 import { Roles } from "../../users/constants/roles"
 import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto"
 import { NotificationTypes } from "../../notifications/constants/notification-types"
+import Decimal from "decimal.js";
 
 @Injectable()
 export class InvestmentService {
@@ -23,6 +24,9 @@ export class InvestmentService {
                 private eventEmitter: EventEmitter2) {
     }
     async create(fundingRoundId: number, createInvestmentDto: CreateInvestmentDto, investorData: User) {
+        if (new Decimal(createInvestmentDto.amount).cmp(0) <= 0) {
+            throw new BadRequestException("Invalid investment amount");
+        }
         let fundingRound = await this.fundingRoundsService.getOne(fundingRoundId);
         if (!fundingRound.isCurrent) {
             throw new BadRequestException("Cannot invest in rounds that are not current");

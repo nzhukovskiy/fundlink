@@ -1,0 +1,75 @@
+<section class="stats-section">
+    <h2 class="section-title">Статистика платформы</h2>
+
+    <div class="stats-grid">
+        <!-- Total Raised -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <mat-icon> show_chart</mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{stats?.totalRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</h3>
+                <p class="stat-title">Всего инвестировано</p>
+            </div>
+        </div>
+
+        <!-- Total Startups -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <mat-icon>rocket</mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{stats?.totalStartups}}</h3>
+                <p class="stat-title">Всего стартапов на платформе</p>
+            </div>
+        </div>
+
+        <!-- Recent Additions -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <mat-icon>schedule</mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{stats?.newStartupsPerLastMonth}}</h3>
+                <p class="stat-title">Новых стартапов за последние 30 дней</p>
+            </div>
+        </div>
+
+<!--        <div class="stat-card">-->
+<!--            <div class="stat-icon">-->
+<!--                <i class="fas fa-dollar-sign"></i>-->
+<!--            </div>-->
+<!--            <div class="stat-content">-->
+<!--                <h3 class="stat-value">$1.2M</h3>-->
+<!--                <p class="stat-title">Avg. Funding</p>-->
+<!--                <div class="stat-trend negative">-->
+<!--                    <i class="fas fa-arrow-down"></i> 3% from last quarter-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="stat-card">-->
+<!--            <div class="stat-icon">-->
+<!--                <i class="fas fa-trophy"></i>-->
+<!--            </div>-->
+<!--            <div class="stat-content">-->
+<!--                <h3 class="stat-value">327</h3>-->
+<!--                <p class="stat-title">Successful Exits</p>-->
+<!--                <div class="stat-trend positive">-->
+<!--                    <i class="fas fa-arrow-up"></i> 15% YoY growth-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <!-- Investors -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <mat-icon>groups</mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{stats?.totalInvestors}}</h3>
+                <p class="stat-title">Инвесторов на платформе</p>
+            </div>
+        </div>
+    </div>
+</section>

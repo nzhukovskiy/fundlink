@@ -1,3 +1,4 @@
+<app-main-stats></app-main-stats>
 <div *ngIf="role == Roles.INVESTOR">
     <h3 class="section-title">Рекомендации</h3>
     <app-recommended-startups></app-recommended-startups>
@@ -9,7 +10,4 @@
 <div>
     <h3 class="section-title">С наибольшим объемом инвестиций</h3>
     <app-most-funded-startups></app-most-funded-startups>
-</div>
-<div *ngIf="role == Roles.STARTUP || role == undefined">
-    <app-all-startups></app-all-startups>
 </div>

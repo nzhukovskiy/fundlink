@@ -1,0 +1,91 @@
+.stats-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #2d3436;
+    font-size: 2.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: #4b7bec;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.stat-icon .fa-rocket { background: #e55039; }
+.stat-icon .fa-clock { background: #f6b93b; }
+.stat-icon .fa-dollar-sign { background: #2ecc71; }
+.stat-icon .fa-trophy { background: #e84393; }
+.stat-icon .fa-users { background: #0984e3; }
+
+.stat-value {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #2d3436;
+}
+
+.stat-title {
+    color: #636e72;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.stat-trend {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-trend.positive { color: #2ecc71; }
+.stat-trend.negative { color: #e55039; }
+.stat-trend.neutral { color: #636e72; }
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+    }
+}
+
+mat-icon {
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
+}

@@ -23,7 +23,7 @@ import { RecommendationService } from './investors/services/recommendation/recom
     ],
     controllers: [StartupsController, InvestorsController],
     providers: [StartupsService, UsersService, InvestorsService, RecommendationService],
-    exports: [StartupsService, UsersService],
+    exports: [StartupsService, UsersService, InvestorsService],
 })
 export class UsersModule {
 }

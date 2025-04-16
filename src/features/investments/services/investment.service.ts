@@ -77,6 +77,13 @@ export class InvestmentService {
         return investment;
     }
 
+    getTotalInvestments() {
+        return this.investmentRepository.createQueryBuilder("investment")
+          .select('sum(investment.amount) as "totalInvestments"')
+          .where("investment.stage = 'completed'")
+          .getRawOne()
+    }
+
     private async getInvestment(investmentId: number, startupId: number) {
         const investment = await this.investmentRepository.findOne({
             where: {

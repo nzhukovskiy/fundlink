@@ -512,6 +512,17 @@ export class StartupsService {
         )).sort((a, b) => b.investmentsTotal - a.investmentsTotal)
     }
 
+    getStartupsNumber() {
+        return this.startupRepository.createQueryBuilder("startup").getCount();
+    }
+
+    getRecentlyJoinedNumber() {
+        return this.startupRepository
+          .createQueryBuilder("startup")
+          .where(`startup."joinedAt" >  CURRENT_DATE - interval '30 days'`)
+          .getCount();
+    }
+
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {
         const waccResult: Partial<WaccDetailsDto> = {};
         const v = totalInvestments.plus(new Decimal(startup.debtAmount));

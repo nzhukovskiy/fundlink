@@ -135,4 +135,8 @@ export class InvestorsService {
     getCurrent(payload: User) {
         return this.getOne(payload.id, ["interestingStartups"])
     }
+
+    getInvestorsNumber() {
+        return this.investorRepository.createQueryBuilder("investor").getCount()
+    }
 }

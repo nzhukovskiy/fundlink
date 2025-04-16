@@ -25,6 +25,7 @@ import { NotificationsModule } from './features/notifications/notifications.modu
 import { BaseGateway } from './common/gateways/base/base.gateway';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PaginateModule } from './common/paginate/paginate.module';
+import { StatisticsModule } from './features/statistics/statistics.module';
 
 
 @Module({
@@ -62,6 +63,7 @@ import { PaginateModule } from './common/paginate/paginate.module';
         ChatsModule,
         NotificationsModule,
         PaginateModule,
+        StatisticsModule,
     ],
     controllers: [AppController, StartupsController, FundingRoundsController],
     providers: [AppService],

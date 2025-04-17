@@ -18,6 +18,7 @@ import { Investment } from "../../../investments/entities/investment/investment"
 import { plainToInstance } from "class-transformer"
 import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
+import { InvestorStatisticsDto } from "../dtos/investor-statistics.dto/investor-statistics.dto";
 
 @Injectable()
 export class InvestorsService {
@@ -70,6 +71,7 @@ export class InvestorsService {
     }
 
     async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {
+        console.log(investorData)
         const investor = await this.investorRepository.findOne({
             where: { id: investorData.id },
         })
@@ -79,6 +81,7 @@ export class InvestorsService {
             )
         }
         Object.assign(investor, updateInvestorDto)
+        console.log(investor)
         return this.investorRepository.save(investor)
     }
 
@@ -138,5 +141,38 @@ export class InvestorsService {
 
     getInvestorsNumber() {
         return this.investorRepository.createQueryBuilder("investor").getCount()
+    }
+
+    async getStats(investorId: number) {
+        const averageInvestmentAmount = (await this.investorRepository
+          .createQueryBuilder("investor")
+          .leftJoinAndSelect("investor.investments", "investment")
+          .select("AVG(investment.amount) as avg")
+          .where("investor.id = :id", {id: investorId})
+          .getRawOne()).avg
+
+        if (averageInvestmentAmount == null) {
+            return {}
+        }
+
+        const startupsCount = await this.startupRepository
+          .createQueryBuilder("startup")
+          .leftJoin("startup.fundingRounds", "fundingRound")
+          .leftJoin("fundingRound.investments", "investment")
+          .leftJoinAndSelect("investment.investor", "investor")
+          .where("investor.id = :id", {id: investorId})
+          .getCount()
+
+        const lastInvestmentDate = (await this.investmentRepository
+          .createQueryBuilder("investment")
+          .leftJoin("investment.investor", "investor")
+          .where("investor.id = :id", { id: investorId })
+          .take(1)
+          .orderBy("investment.date", "DESC")
+          .getOne()).date
+        return {
+            averageInvestmentAmount,
+            startupsCount,
+            lastInvestmentDate} as InvestorStatisticsDto
     }
 }

@@ -59,12 +59,17 @@ export class InvestorsController {
     @UseGuards(AuthGuard, RolesGuard)
     @Patch()
     update(@Body() updateInvestorDto: UpdateInvestorDto, @Req() req) {
-        return this.investorsService.update(updateInvestorDto, req.token.payload.id);
+        return this.investorsService.update(updateInvestorDto, req.token.payload);
     }
 
     @Get(':id/startups')
     getStartups(@Param('id') id: number) {
         return this.investorsService.getStartupsForInvestor(id);
+    }
+
+    @Get(':id/stats')
+    getInvestorStats(@Param('id') id: number) {
+        return this.investorsService.getStats(id);
     }
 
 }

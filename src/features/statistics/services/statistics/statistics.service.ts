@@ -20,4 +20,6 @@ export class StatisticsService {
             totalInvestors: await this.investorsService.getInvestorsNumber()
         } as MainStatisticsDto;
     }
+
+    getInvestorStats
 }

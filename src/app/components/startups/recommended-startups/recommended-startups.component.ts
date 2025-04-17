@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InvestorsService } from 'src/app/services/investors.service';
+import {catchError} from "rxjs";
 
 @Component({
     selector: 'app-recommended-startups',
@@ -13,10 +14,14 @@ export class RecommendedStartupsComponent implements OnInit {
     recommendedStartups: any[] = [];
 
     ngOnInit(): void {
-        this.investorsService.getRecommendations().subscribe(res => {
-            this.recommendedStartups = (res as any).recommendedStartups;
-            console.log(this.recommendedStartups);
-        });
+        this.investorsService.getRecommendations().subscribe({
+            next: (res) => {
+                this.recommendedStartups = (res as any).recommendedStartups;
+                console.log(this.recommendedStartups);
+            },
+        error: (err) => {
+            this.recommendedStartups = []
+        }});
     }
 
 }

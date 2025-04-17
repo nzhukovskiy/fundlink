@@ -1,8 +1,50 @@
-<div class="investors-info-group">
-    <h3>{{investor?.name}} {{investor?.surname}}</h3>
-    <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role !== Roles.INVESTOR" [userToChatWith]="investor"></app-goto-chat>
+<!--<div class="investors-info-group">-->
+<!--    <h3>{{investor?.name}} {{investor?.surname}}</h3>-->
+<!--    <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role !== Roles.INVESTOR" [userToChatWith]="investor"></app-goto-chat>-->
+<!--</div>-->
+<!--<p>Email: {{investor?.email}}</p>-->
+
+<div class="investor-card">
+    <div class="avatar-section">
+        <!-- Replace with avatar image if available -->
+        <div class="avatar">{{investor!.name[0].toUpperCase()}}{{investor!.surname[0].toUpperCase()}}</div>
+        <!-- <img src="avatar.jpg" alt="John Doe"> -->
+    </div>
+
+    <div class="content-section">
+        <div class="investors-info-group">
+            <h1 class="name">{{investor?.name}} {{investor?.surname}}</h1>
+            <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role !== Roles.INVESTOR" [userToChatWith]="investor"></app-goto-chat>
+        </div>
+
+
+        <div *ngIf="investor?.location" class="location">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span>{{investor?.location}}</span>
+        </div>
+
+        <p class="bio">
+            {{investor?.description}}
+        </p>
+
+        <div class="stats" *ngIf="Object.keys(investorStats!).length">
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.averageInvestmentAmount | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+                <div class="stat-label">Средний размер инвестиции</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.startupsCount}}</div>
+                <div class="stat-label">Количество инвестированных стартапов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.lastInvestmentDate | date:"d.LL.y"}}</div>
+                <div class="stat-label">Последняя инвестиция</div>
+            </div>
+        </div>
+    </div>
 </div>
-<p>Email: {{investor?.email}}</p>
 <!--<div>-->
 <!--    <h4>Совершенные инвестиции</h4>-->
 <!--    <table class="table table-striped">-->

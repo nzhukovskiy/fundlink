@@ -31,7 +31,10 @@ export class EditInvestorComponent implements OnInit {
                     name: res.name,
                     surname: res.surname,
                     email: "",
-                    password: ""
+                    password: "",
+                    title: res.title,
+                    location: res.location,
+                    description: res.description
                 });
             });
         }
@@ -42,6 +45,9 @@ export class EditInvestorComponent implements OnInit {
         password: new FormControl<string>("", ),
         name: new FormControl<string>(''),
         surname: new FormControl<string>(''),
+        title: new FormControl<string>(''),
+        location: new FormControl<string>(''),
+        description: new FormControl<string>(''),
     });
 
     handleFormSubmission() {
@@ -57,6 +63,9 @@ export class EditInvestorComponent implements OnInit {
         this.investorsService.update({
             name: this.investorFormGroup.controls.name.getRawValue()!,
             surname: this.investorFormGroup.controls.surname.getRawValue()!,
+            title: this.investorFormGroup.controls.title.getRawValue()!,
+            description: this.investorFormGroup.controls.description.getRawValue()!,
+            location: this.investorFormGroup.controls.location.getRawValue()!,
         }).subscribe(res => {
             this.router.navigate(['/profile']).then();
         });
@@ -68,6 +77,9 @@ export class EditInvestorComponent implements OnInit {
             surname: this.investorFormGroup.controls.surname.getRawValue()!,
             email: this.investorFormGroup.controls.email.getRawValue()!,
             password: this.investorFormGroup.controls.password.getRawValue()!,
+            title: this.investorFormGroup.controls.title.getRawValue()!,
+            description: this.investorFormGroup.controls.description.getRawValue()!,
+            location: this.investorFormGroup.controls.location.getRawValue()!,
         }).subscribe(res => {
             this.router.navigate(['']).then();
         })

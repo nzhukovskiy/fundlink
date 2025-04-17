@@ -3,26 +3,50 @@
     <form class="register-form" [formGroup]="investorFormGroup">
         <ng-container *ngIf="formType === FormType.CREATE">
             <div class="mb-3">
-                <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты</label>
-                <input type="email" formControlName="email" class="form-control" id="investorRegisterEmailField"
+                <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты<span class="text-danger">*</span></label>
+                <input required type="email" formControlName="email" class="form-control" id="investorRegisterEmailField"
                        placeholder="name@example.com">
             </div>
             <div class="mb-3">
-                <label for="investorRegisterPasswordField" class="form-label">Пароль</label>
+                <label for="investorRegisterPasswordField" class="form-label">Пароль<span class="text-danger">*</span></label>
                 <input class="form-control" formControlName="password" type="password"
                        id="investorRegisterPasswordField">
             </div>
         </ng-container>
         <div class="mb-3">
-            <label for="investorUpdateNameField" class="form-label">Имя пользователя</label>
+            <label for="investorUpdateNameField" class="form-label">Имя пользователя<span class="text-danger">*</span></label>
             <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField"
                    placeholder="Alexander">
         </div>
         <div class="mb-3">
-            <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя</label>
+            <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя<span class="text-danger">*</span></label>
             <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField"
                    placeholder="Alexandrov">
         </div>
+        <div class="mb-3">
+            <label for="investorUpdateSurnameField" class="form-label">Название</label>
+            <input type="text" formControlName="title" class="form-control" id="investorUpdateTitleField"
+                   placeholder="VC firm">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+            <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1"
+                      rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="investorUpdateSurnameField" class="form-label">Локация</label>
+            <input type="text" formControlName="location" class="form-control" id="investorUpdateLocationField"
+                   placeholder="Москва, Россия">
+        </div>
+<!--        <div class="mb-3">-->
+<!--            <label for="formFile" class="form-label">Логотип</label>-->
+<!--            <div class="investor-logo-group">-->
+<!--                <input #startupLogoInput (change)="onImageChanged($event)" class="form-control" type="file"-->
+<!--                       id="formFile">-->
+<!--                <mat-icon (click)="removeImage()">close</mat-icon>-->
+<!--            </div>-->
+<!--            <img #startupLogoPreview class="investor-logo-preview" alt="" src="">-->
+<!--        </div>-->
         <div class="mb-3 register-submit-button-group">
             <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">
                 {{formType === FormType.UPDATE ? "Обновить информацию": "Зарегистрироваться"}}

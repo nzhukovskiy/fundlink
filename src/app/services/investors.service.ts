@@ -5,6 +5,7 @@ import { Investment } from '../data/models/investment';
 import { UpdateInvestorDto } from '../data/dtos/update-investor.dto';
 import { Startup } from '../data/models/startup';
 import { StartupFullDto } from '../data/dtos/responses/startup-full.dto';
+import {InvestorStatsDto} from "../data/dtos/responses/investor-stats.dto";
 
 @Injectable({
     providedIn: 'root',
@@ -40,5 +41,9 @@ export class InvestorsService {
 
     getStartups(id: number) {
         return this.appHttpService.get<StartupFullDto[]>(`investors/${id}/startups`);
+    }
+
+    getInvestorStats(id: number) {
+        return this.appHttpService.get<InvestorStatsDto>(`investors/${id}/stats`);
     }
 }

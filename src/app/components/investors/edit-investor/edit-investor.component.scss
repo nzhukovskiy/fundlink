@@ -1,0 +1,13 @@
+.investor-logo-preview {
+    margin-top: 20px;
+    max-height: 200px;
+    width: auto;
+}
+.investor-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.investor-logo-group mat-icon {
+    cursor: pointer;
+}

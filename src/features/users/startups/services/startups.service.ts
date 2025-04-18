@@ -447,7 +447,7 @@ export class StartupsService {
           .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
           .addSelect(`(${uniqueInvestorsSubQuery})`, "uniqueInvestors")
           .addSelect(`(${interestingCountSubQuery})`, "interestingCount")
-          .take(10)
+          .take(5)
           .getRawAndEntities();
 
         const rawMap = new Map<number, any>();
@@ -496,7 +496,7 @@ export class StartupsService {
           .createQueryBuilder("startup")
           .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
           .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
-          .take(10)
+          .take(5)
           .getRawAndEntities();
 
         const aggregatedMap: Record<string, number> = {};

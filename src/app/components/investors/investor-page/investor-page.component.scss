@@ -47,11 +47,23 @@
 }
 
 .location {
+    margin-bottom: 8px;
+}
+
+.email {
+    margin-bottom: 15px;
+}
+
+.email a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.location, .email {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: #666;
-    margin-bottom: 1.5rem;
 }
 
 .location svg {

@@ -30,7 +30,7 @@ const routes: Routes = [
     {path: '', component: MainPageComponent},
     {path: 'investors', component: AllInvestorsComponent},
     {path: 'investors/edit', component: EditInvestorComponent, canActivate: [authGuard, rolesGuard(Roles.INVESTOR)]},
-    {path: 'investors/:id', component: InvestorPageComponent, resolve: {investor: investorResolver}},
+    {path: 'investors/:id', component: InvestorPageComponent, resolve: {data: investorResolver}},
     {path: 'startups', component: AllStartupsComponent},
     {path: 'startups/edit', component: EditStartupComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'startups/:id', component: StartupPageComponent, resolve: {startup: startupResolver}},

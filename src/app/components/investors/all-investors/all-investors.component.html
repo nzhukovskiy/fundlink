@@ -1,9 +1,11 @@
-<div class="investors-list" >
-  <div *ngFor="let investor of investors" class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">{{investor.name}} {{investor.surname}}</h5>
-      <p>{{investor.email}}</p>
-      <a [routerLink]="['/investors', investor.id]" class="btn btn-primary">Профиль</a>
+<div class="investors-list">
+    <div *ngFor="let investor of investors" class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <a class="investor-link"
+                                      [routerLink]="['/investors', investor.id]">{{investor.name}} {{investor.surname}}</a>
+            </h5>
+            <p>{{investor.email}}</p>
+        </div>
     </div>
-  </div>
 </div>

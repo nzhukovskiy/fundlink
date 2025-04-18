@@ -2,12 +2,14 @@
     display: flex;
     justify-content: space-between;
 }
+
 .nav-menu-section {
     flex-grow: unset;
     padding-right: 20px;
 }
+
 .header-navigation {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 
@@ -29,7 +31,7 @@
     right: 0;
     top: 100%;
     background-color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 1rem;
     min-width: 200px;
@@ -67,9 +69,11 @@
     font-weight: 600;
     position: relative;
 }
+
 .header-nav-bar {
     gap: 10px;
 }
+
 .unread-messages-badge {
     background-color: #dc3545;
     display: flex;
@@ -79,8 +83,14 @@
     width: 20px;
     height: 20px;
 }
+
 .profile-icon .unread-messages-badge {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.outer-header {
+    background-color: #f8f9fa !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }

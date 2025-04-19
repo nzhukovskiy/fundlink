@@ -14,9 +14,10 @@ import { Investment } from "../investments/entities/investment/investment"
 import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
 import { RecommendationService } from './investors/services/recommendation/recommendation.service';
+import { Exit } from "./startups/entities/exit";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag]),
+    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag, Exit]),
         InvestmentModule,
         JwtTokenModule,
         PaginateModule,

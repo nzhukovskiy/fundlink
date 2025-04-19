@@ -11,6 +11,7 @@ import {
     FundingRoundChangeProposal
 } from "../features/investments/entities/funding-round-change-proposal/funding-round-change-proposal";
 import { InvestorVote } from "../features/investments/entities/investor-vote/investor-vote";
+import { Exit } from "../features/users/startups/entities/exit";
 
-export const entities = [Startup, Investor, FundingRound, Investment, Tag, Chat, Message, Notification, FundingRoundChangeProposal, InvestorVote];
+export const entities = [Startup, Investor, FundingRound, Investment, Tag, Chat, Message, Notification, FundingRoundChangeProposal, InvestorVote, Exit];
 export const migrations = ['src/migrations/*.ts'];

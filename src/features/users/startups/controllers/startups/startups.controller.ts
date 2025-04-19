@@ -27,6 +27,7 @@ import { fileStorage } from "../../storage/file-storage";
 import { AssignTagDto } from "../../dtos/requests/assign-tag-dto";
 import { logoFileFilter } from "../../storage/logos/logo-file-filter";
 import { OptionalAuthGuard } from "../../../../auth/guards/optional-auth/optional-auth.guard"
+import { ExitStartupDto } from "../../dtos/requests/exit-startup.dto";
 
 
 @Controller('startups')
@@ -45,9 +46,10 @@ export class StartupsController {
         @Query("tag") tag: string,
         @Query("isInteresting") isInteresting: boolean,
         @Query("onlyActive") onlyActive: boolean,
+        @Query("includeExited") includeExited: boolean,
         @Req() req
     ) {
-        return this.startupsService.getAll(query, title, tag, isInteresting, onlyActive, isInteresting && req.token && req.token.payload.role === "investor" ? req.token.payload.id : undefined);
+        return this.startupsService.getAll(query, title, tag, isInteresting, onlyActive, includeExited, isInteresting && req.token && req.token.payload.role === "investor" ? req.token.payload.id : undefined);
     }
 
     @ApiBearerAuth()
@@ -185,5 +187,12 @@ export class StartupsController {
     @Post(":id/remove-from-interesting")
     removeFromInteresting(@Param('id') id: number, @Req() req) {
         return this.startupsService.removeFromInteresting(id, req.token.payload.id);
+    }
+
+    @Roles('startup')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Post("exit")
+    exitStartup(@Body() exitStartupDto: ExitStartupDto, @Req() req) {
+        return this.startupsService.exitStartup(req.token.payload.id, exitStartupDto);
     }
 }

@@ -1,9 +1,12 @@
 import { User } from "../../user/user";
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
 import { Roles } from "../../constants/roles";
 import { Tag } from "../../../tags/entities/tag/tag";
 import { InvestmentApprovalType } from "../../../investments/constants/investment-approval-type";
+import { FundingStage } from "../../../investments/constants/funding-stage";
+import { StartupStage } from "../../constants/startup-stage";
+import { Exit } from "./exit";
 
 @Entity()
 export class Startup extends User {
@@ -56,12 +59,22 @@ export class Startup extends User {
     @CreateDateColumn()
     joinedAt: Date;
 
+    @Column({
+        type: 'enum',
+        enum: StartupStage,
+        default: StartupStage.ACTIVE,
+    })
+    stage: StartupStage;
+
     @OneToMany(() => FundingRound, (fundingRound) => fundingRound.startup)
     fundingRounds: FundingRound[];
 
     @ManyToMany(() => Tag, tag => tag.startups)
     @JoinTable()
     tags: Tag[]
+
+    @OneToOne(() => Exit, exit => exit.startup, { cascade: true })
+    exit: Exit;
 
     getRole(): Roles {
         return Roles.STARTUP;

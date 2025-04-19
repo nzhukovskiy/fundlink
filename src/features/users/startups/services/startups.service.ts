@@ -17,6 +17,13 @@ import { PaginateService } from "../../../../common/paginate/services/paginate/p
 import { DcfDetailedDto } from "../dtos/responses/dcf-detailed.dto/dcf-detailed.dto";
 import { WaccDetailsDto } from "../dtos/responses/wacc-details.dto/wacc-details.dto";
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
+import { ExitStartupDto } from "../dtos/requests/exit-startup.dto";
+import { Exit } from "../entities/exit";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Roles } from "../../constants/roles";
+import { NotificationTypes } from "../../../notifications/constants/notification-types";
+import { ExitType } from "../../constants/exit-type";
+import { StartupStage } from "../../constants/startup-stage";
 
 @Injectable()
 export class StartupsService {
@@ -27,12 +34,14 @@ export class StartupsService {
       private readonly investorRepository: Repository<Investor>,
       @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
       @InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
+      @InjectRepository(Exit) private readonly exitRepository: Repository<Exit>,
       private readonly usersService: UsersService,
       private readonly jwtTokenService: JwtTokenService,
       private readonly paginateService: PaginateService,
       private readonly fundingRoundsService: FundingRoundsService,
       @InjectDataSource()
-      private dataSource: DataSource
+      private dataSource: DataSource,
+      private readonly eventEmitter2: EventEmitter2
     ) {
     }
 
@@ -48,6 +57,7 @@ export class StartupsService {
       tag = "",
       isInteresting = false,
       onlyActive = false,
+      includeExited = false,
       investorId = -1,
       params = {}
     ) {
@@ -89,6 +99,10 @@ export class StartupsService {
               );
         }
 
+        if (!includeExited) {
+            startupsQuery.andWhere("startup.stage = 'ACTIVE'")
+        }
+
         return this.paginateService.paginate(query, startupsQuery, {
             ...params
             // relations: ["fundingRounds"],
@@ -128,6 +142,7 @@ export class StartupsService {
           .where("startup.id = :id", { id })
           .orderBy("fundingRound.startDate", "ASC")
           .leftJoinAndSelect("startup.tags", "tag")
+          .leftJoinAndSelect("startup.exit", "exit")
           .where("startup.id = :id", { id })
           .getRawAndEntities();
 
@@ -521,6 +536,34 @@ export class StartupsService {
           .createQueryBuilder("startup")
           .where(`startup."joinedAt" >  CURRENT_DATE - interval '30 days'`)
           .getCount();
+    }
+
+    async exitStartup(startupId: number, exitStartupDto: ExitStartupDto) {
+        const startup = await this.getOne(startupId);
+        if (startup.exit) {
+            throw new BadRequestException("Startup already exited")
+        }
+        if (exitStartupDto.type === ExitType.BANKRUPT) {
+            exitStartupDto.value = "0";
+        }
+        else if (!exitStartupDto.value) {
+            throw new BadRequestException("Exit value must be provided")
+        }
+        startup.exit = this.exitRepository.create(exitStartupDto);
+        startup.stage = StartupStage.EXITED;
+        const investors = await this.getInvestors(startup.id);
+        const savedStartup = await this.startupRepository.save(startup);
+
+        investors.forEach(investor => {
+            this.eventEmitter2.emit("notification", {
+                userId: investor.id,
+                userType: Roles.INVESTOR,
+                type: NotificationTypes.STARTUP_EXIT,
+                text: `Стартап ${savedStartup.title} вышел по сценарию ${savedStartup.exit.type}`,
+                exit: savedStartup.exit
+            });
+        })
+        return savedStartup;
     }
 
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {

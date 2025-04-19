@@ -10,9 +10,15 @@
     </div>
 </form>
 <div class="form-check only-active-checkbox">
-    <input [formControl]="onlyActive" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-    <label class="form-check-label" for="flexCheckDefault">
+    <input [formControl]="onlyActive" class="form-check-input" type="checkbox" value="" id="onlyActive">
+    <label class="form-check-label" for="onlyActive">
         Только стартапы с активным раундом финансирования
+    </label>
+</div>
+<div class="form-check only-active-checkbox">
+    <input [formControl]="includeExited" class="form-check-input" type="checkbox" value="" id="includeExited">
+    <label class="form-check-label" for="includeExited">
+        Показывать вышедшие
     </label>
 </div>
 <app-clearable-select [options]="selectOptions" [selectInitialValue]="tag!"

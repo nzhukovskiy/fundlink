@@ -34,6 +34,7 @@ export class AllStartupsComponent implements OnInit {
 
     startupTitleSearch = new FormControl('');
     onlyActive = new FormControl(false);
+    includeExited = new FormControl(false);
 
     ngOnInit(): void {
 
@@ -51,7 +52,8 @@ export class AllStartupsComponent implements OnInit {
             this.tag = params['tag'];
             this.isInteresting = params['isInteresting'];
             this.onlyActive.setValue(params['onlyActive']);
-            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag'], params['isInteresting'], params["onlyActive"]).subscribe(res => {
+            this.includeExited.setValue(params['includeExited']);
+            this.startupService.getAll(this.pageIndex + 1, this.pageSize, params['title'], params['tag'], params['isInteresting'], params["onlyActive"], params['includeExited']).subscribe(res => {
                 this.startups = res.data;
                 this.totalStartupsNumber = res.meta.totalItems;
             });
@@ -74,6 +76,15 @@ export class AllStartupsComponent implements OnInit {
                 queryParamsHandling: 'merge',
             }).then();
         })
+
+        this.includeExited.valueChanges.subscribe(res => {
+            this.router.navigate([], {
+                queryParams: {
+                    includeExited: res || null,
+                },
+                queryParamsHandling: 'merge',
+            }).then();
+        })
     }
 
     handlePageChange(event: PageEvent) {
@@ -89,6 +100,15 @@ export class AllStartupsComponent implements OnInit {
         this.router.navigate([], {
             queryParams: {
                 tag: tag || null,
+            },
+            queryParamsHandling: 'merge',
+        }).then();
+    }
+
+    private navigateAndMergeParamsSub = (res: boolean) => {
+        this.router.navigate([], {
+            queryParams: {
+                onlyActive: res || null,
             },
             queryParamsHandling: 'merge',
         }).then();

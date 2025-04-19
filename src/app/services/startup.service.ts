@@ -19,7 +19,7 @@ export class StartupService {
     constructor(private readonly appHttpService: AppHttpService) {
     }
 
-    getAll(page?: number, itemsPerPage?: number, searchPattern?: string, tag?: string, isInteresting?: boolean, onlyActive?: boolean) {
+    getAll(page?: number, itemsPerPage?: number, searchPattern?: string, tag?: string, isInteresting?: boolean, onlyActive?: boolean, includeExited?: boolean) {
         let query = new HttpParams();
         if (typeof searchPattern !== 'undefined') {
             query = query.append('title', searchPattern);
@@ -32,6 +32,9 @@ export class StartupService {
         }
         if (typeof onlyActive !== 'undefined') {
             query = query.append('onlyActive', onlyActive);
+        }
+        if (typeof includeExited !== 'undefined') {
+            query = query.append('includeExited', includeExited);
         }
         if (typeof page !== 'undefined') {
             query = query.append('page', page);

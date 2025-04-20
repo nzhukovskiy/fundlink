@@ -14,6 +14,7 @@ import { Roles } from "../../users/constants/roles"
 import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto"
 import { NotificationTypes } from "../../notifications/constants/notification-types"
 import Decimal from "decimal.js";
+import { StartupStage } from "../../users/constants/startup-stage";
 
 @Injectable()
 export class InvestmentService {
@@ -30,6 +31,9 @@ export class InvestmentService {
         let fundingRound = await this.fundingRoundsService.getOne(fundingRoundId);
         if (!fundingRound.isCurrent) {
             throw new BadRequestException("Cannot invest in rounds that are not current");
+        }
+        if (fundingRound.startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot create funding round for a startup which have already exited");
         }
         let investor = await this.investorRepository.findOneBy({id: investorData.id});
         const stage = fundingRound.startup.autoApproveInvestments ? InvestmentStage.COMPLETED : InvestmentStage.PENDING_REVIEW;

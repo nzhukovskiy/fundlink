@@ -24,6 +24,7 @@ import { CreateNotificationDto } from "../../notifications/entities/dtos/create-
 import { ChangeProposalService } from "./change-proposal-service/change-proposal.service";
 import { FundingRoundChangeProposal } from "../entities/funding-round-change-proposal/funding-round-change-proposal";
 import { ChangesApprovalStatus } from "../constants/changes-approval-status";
+import { StartupStage } from "../../users/constants/startup-stage";
 
 @Injectable()
 export class FundingRoundsService {
@@ -35,6 +36,9 @@ export class FundingRoundsService {
     }
     async create(startupId: number, createFundingRoundDto: CreateFundingRoundDto) {
         let startup = await this.startupRepository.findOne({where: {id: startupId}, relations: {fundingRounds: true}});
+        if (startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot create funding round for a startup which have already exited");
+        }
         await this.ensureNoRoundsOverlap(createFundingRoundDto, startup.id);
         let fundingRound = await this.fundingRoundRepository.create(createFundingRoundDto);
         if (startup.fundingRounds.length == 0) {
@@ -61,6 +65,9 @@ export class FundingRoundsService {
 
     async update(fundingRoundId: number, updateFundingRoundDto: CreateFundingRoundDto, startupData: User) {
         let fundingRound = await this.getOne(fundingRoundId);
+        if (fundingRound.startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot update funding round for a startup which have already exited");
+        }
         if (fundingRound.startup.id !== startupData.id) {
             throw new ForbiddenException("Not allowed to perform this action");
         }

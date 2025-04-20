@@ -214,6 +214,9 @@ export class StartupsService {
               `Startup with an id ${id} does not exist`
             );
         }
+        if (startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot update the exited startup");
+        }
         Object.assign(startup, updateStartupDto);
         if (!updateStartupDto.logoPath) {
             startup.logoPath = null;
@@ -256,6 +259,9 @@ export class StartupsService {
         if (!startup) {
             throw new NotFoundException("Startup with this id not found");
         }
+        if (startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot update the exited startup");
+        }
         startup.presentationPath = fileName;
         return this.startupRepository.save(startup);
     }
@@ -266,6 +272,9 @@ export class StartupsService {
         if (!tag) {
             throw new NotFoundException(`Tag with id ${tagId} not found`);
         }
+        if (startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot update the exited startup");
+        }
         if (!startup.tags.some((x) => x.id === tagId)) {
             startup.tags.push(tag);
         }
@@ -274,6 +283,9 @@ export class StartupsService {
 
     async removeTag(tagId: number, startupId: number) {
         const startup = await this.getOne(startupId);
+        if (startup.stage !== StartupStage.ACTIVE) {
+            throw new BadRequestException("Cannot update the exited startup");
+        }
         startup.tags = startup.tags.filter((tag) => tag.id !== tagId);
         return this.startupRepository.save(startup);
     }
@@ -563,7 +575,7 @@ export class StartupsService {
                 exit: savedStartup.exit
             });
         })
-        return savedStartup;
+        return this.getOne(startupId, true);
     }
 
     private calculateDiscountRate(startup: Startup, totalInvestments: Decimal) {

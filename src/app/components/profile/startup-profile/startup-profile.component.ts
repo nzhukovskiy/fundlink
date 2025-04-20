@@ -15,6 +15,9 @@ import {InvestmentsService} from "../../../services/investments.service";
 import {InvestmentStage} from "../../../constants/investment-stage";
 import { start } from '@popperjs/core';
 import { Roles } from '../../../constants/roles';
+import {FormType} from "../../../constants/form-type";
+import {StartupStage} from "../../../constants/startup-stage";
+import {ExitStartupComponent} from "../exit-startup/exit-startup.component";
 
 @Component({
     selector: 'app-startup-profile',
@@ -179,7 +182,25 @@ export class StartupProfileComponent implements OnInit {
         })
     }
 
+    openStartupExitDialog() {
+        const dialogRef = this.dialog.open(ExitStartupComponent);
+
+        dialogRef.afterClosed().subscribe((result) => {
+            this.startupService.exitStartup(result).subscribe(startup => {
+                this.startup = startup;
+            })
+            // if (result === SubmitDialogReturn.ACCEPT) {
+            //     this.approveInvestment(investmentId);
+            // }
+            // else if (result === SubmitDialogReturn.REJECT) {
+            //     this.rejectInvestment(investmentId);
+            // }
+        });
+    }
+
     protected readonly InvestmentStage = InvestmentStage;
     protected readonly start = start;
     protected readonly Roles = Roles;
+    protected readonly FormType = FormType;
+    protected readonly StartupStage = StartupStage;
 }

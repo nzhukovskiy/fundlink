@@ -23,6 +23,9 @@ export class SingleFundingRoundComponent implements OnInit {
     @Output()
     newInvestment = new EventEmitter<number>();
 
+    @Input()
+    investmentAllowed = true;
+
     fundingPercent?: Decimal;
 
     openInvestmentDialog() {

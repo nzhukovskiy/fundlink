@@ -1,104 +1,130 @@
-<div class="startup-profile-top-group">
-    <h2>Профиль стартапа {{ startup?.title }}</h2>
-    <div class="mb-3 edit-funding-round-button-group">
-        <a [routerLink]="['/startups/edit']" class="btn btn-primary mb-3 action-btn">
-            <mat-icon>edit</mat-icon>
-            Редактировать</a>
-    </div>
-</div>
-<app-tags-list *ngIf="startup" [tags]="startup!.tags" [allTags]="filteredTags" [editAllowed]="true" (tagAddEvent)="addTag($event)" (tagRemoveEvent)="removeTag($event)"></app-tags-list>
-<h4>Общая цель: {{ startup?.fundingGoal! }} руб.</h4>
-<p style="white-space: pre-line;">{{ startup?.description }}</p>
-<div>Объем рынка TAM {{ startup?.tamMarket }} млн руб.</div>
-<div>Объем рынка SAM {{ startup?.samMarket }} млн руб.</div>
-<div>Объем рынка SOM {{ startup?.somMarket }} млн руб.</div>
-<a *ngIf="startup?.presentationPath"
-   [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath">Презентация</a>
-<div class="mb-3">
-    <label for="formFile" class="form-label">Загрузить презентацию</label>
-    <div class="startup-logo-group">
-        <input (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
-    </div>
-</div>
-<div *ngIf="startup?.dcf?.totalDcfValue && startup?.dcf?.totalDcfValue != 0">Оценка по методу
-    DCF: {{ startup?.dcf?.totalDcfValue | number:'1.2-2' }} млн руб.
-</div>
-<div class="startup-profile-top-group">
-    <h4>Раунды инвестирования:</h4>
-    <div *ngIf="startup?.fundingRounds!.length < 7" class="mb-3 edit-funding-round-button-group">
-        <a [routerLink]="['/fundingRounds/create']" type="submit" class="btn btn-primary mb-3 action-btn">
-            <mat-icon>add</mat-icon>
-            Добавить раунд</a>
-    </div>
-</div>
-<div *ngFor="let fundingRound of startup?.fundingRounds; index as i" class="card funding-round-card" style="width: 18rem;">
-    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
-        <div class="funding-round-top-group">
-            <h5 class="card-title">{{ fundingRound.stage }}</h5>
-            <div class="buttons">
-                <div *ngIf="!fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
-                    <a [routerLink]="['/fundingRounds', fundingRound.id, 'edit']"
-                       class="btn btn-primary mb-3 action-btn">
-                        <mat-icon>edit</mat-icon>
-                        Редактировать</a>
+
+<ng-container *ngIf="startup">
+    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+            <button ngbNavLink>Основная информация</button>
+            <ng-template ngbNavContent>
+                <div class="startup-profile-top-group">
+                    <h2>Профиль стартапа {{ startup.title }}</h2>
+                    <div class="mb-3 edit-funding-round-button-group">
+                        <a *ngIf="startup.stage === StartupStage.ACTIVE" [routerLink]="['/startups/edit']" class="btn btn-primary mb-3 action-btn">
+                            <mat-icon>edit</mat-icon>
+                            Редактировать</a>
+                    </div>
                 </div>
-                <div matTooltip="Вы не можете редактировать раунд, пока предыдущие изменения не были приняты инвесторами" *ngIf="fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
-                    <a class="btn btn-primary mb-3 action-btn disabled">
-                        <mat-icon>refresh</mat-icon>
-                        Изменения обрабатываются</a>
+                <app-tags-list *ngIf="startup" [tags]="startup.tags" [allTags]="filteredTags" [editAllowed]="startup.stage === StartupStage.ACTIVE" (tagAddEvent)="addTag($event)" (tagRemoveEvent)="removeTag($event)"></app-tags-list>
+                <h4>Общая цель: {{ startup.fundingGoal! }} руб.</h4>
+                <p>Статус: {{startup.stage}}</p>
+                <p style="white-space: pre-line;">{{ startup.description }}</p>
+                <div>Объем рынка TAM {{ startup.tamMarket }} млн руб.</div>
+                <div>Объем рынка SAM {{ startup.samMarket }} млн руб.</div>
+                <div>Объем рынка SOM {{ startup.somMarket }} млн руб.</div>
+                <a *ngIf="startup.presentationPath"
+                   [href]="'http://localhost:3000/uploads/presentations/' + startup.presentationPath">Презентация</a>
+                <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3">
+                    <label for="formFile" class="form-label">Загрузить презентацию</label>
+                    <div class="startup-logo-group">
+                        <input (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
+                    </div>
                 </div>
-                <div *ngIf="fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
-                    <a (click)="cancelFundingRoundUpdateProposal(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
-                        <mat-icon>close</mat-icon>
-                        Отменить изменения</a>
+                <div *ngIf="startup.dcf?.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
+                    DCF: {{ startup.dcf?.totalDcfValue | number:'1.2-2' }} млн руб.
                 </div>
-                <div *ngIf="fundingRound.investments.length === 0" class="mb-3 edit-funding-round-button-group">
-                    <a (click)="deleteFundingRound(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
-                        <mat-icon>delete</mat-icon>
-                        Удалить</a>
+                <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3 button-group">
+                    <a type="submit" (click)="openStartupExitDialog()" class="btn btn-dark mb-3 action-btn exit-button"><mat-icon>close</mat-icon>Экзит стартапа</a>
                 </div>
-            </div>
-        </div>
-        <p>Цель: {{ fundingRound.fundingGoal }} руб.</p>
-        <p>Собрано: {{ fundingRound.currentRaised }} руб.</p>
-        <p>Начало: {{ fundingRound.startDate | date: "dd.MM.yy" }}</p>
-        <p>Окончание: {{ fundingRound.endDate | date: "dd.MM.yy" }}</p>
-        <div class="accordion investment-info-container" id="accordionExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">
-                        Подробная информация об инвестициях
-                    </button>
-                </h2>
-                <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div>
-                            <app-investments-table
-                                [investments]="fundingRound.investments"
-                                [investmentsFor]="Roles.STARTUP"
-                                (approveInvestmentDialogClick)="openApproveInvestmentDialog($event)"></app-investments-table>
-                            <ng-template #noInvestmentsYet>
-                                Здесь пока пусто
-                            </ng-template>
+            </ng-template>
+        </li>
+        <li ngbNavItem>
+            <button ngbNavLink>Раунды финансирования</button>
+            <ng-template ngbNavContent>
+                <div class="startup-profile-top-group">
+                    <h4>Раунды инвестирования:</h4>
+                    <div *ngIf="startup.fundingRounds!.length < 7 && startup.stage === StartupStage.ACTIVE" class="mb-3 edit-funding-round-button-group">
+                        <a [routerLink]="['/fundingRounds/create']" type="submit" class="btn btn-primary mb-3 action-btn">
+                            <mat-icon>add</mat-icon>
+                            Добавить раунд</a>
+                    </div>
+                </div>
+                <div *ngFor="let fundingRound of startup.fundingRounds; index as i" class="card funding-round-card" style="width: 18rem;">
+                    <div class="card-body" [ngClass]="fundingRound.isCurrent ? 'current-round-card' : ''">
+                        <div class="funding-round-top-group">
+                            <h5 class="card-title">{{ fundingRound.stage }}</h5>
+                            <div class="buttons">
+                                <div *ngIf="!fundingRound.isUpdating && startup.stage === StartupStage.ACTIVE" class="mb-3 edit-funding-round-button-group">
+                                    <a [routerLink]="['/fundingRounds', fundingRound.id, 'edit']"
+                                       class="btn btn-primary mb-3 action-btn">
+                                        <mat-icon>edit</mat-icon>
+                                        Редактировать</a>
+                                </div>
+                                <div matTooltip="Вы не можете редактировать раунд, пока предыдущие изменения не были приняты инвесторами" *ngIf="fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
+                                    <a class="btn btn-primary mb-3 action-btn disabled">
+                                        <mat-icon>refresh</mat-icon>
+                                        Изменения обрабатываются</a>
+                                </div>
+                                <div *ngIf="fundingRound.isUpdating" class="mb-3 edit-funding-round-button-group">
+                                    <a (click)="cancelFundingRoundUpdateProposal(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
+                                        <mat-icon>close</mat-icon>
+                                        Отменить изменения</a>
+                                </div>
+                                <div *ngIf="fundingRound.investments.length === 0 && startup.stage === StartupStage.ACTIVE" class="mb-3 edit-funding-round-button-group">
+                                    <a (click)="deleteFundingRound(fundingRound.id)" class="btn btn-danger mb-3 action-btn">
+                                        <mat-icon>delete</mat-icon>
+                                        Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Цель: {{ fundingRound.fundingGoal }} руб.</p>
+                        <p>Собрано: {{ fundingRound.currentRaised }} руб.</p>
+                        <p>Начало: {{ fundingRound.startDate | date: "dd.MM.yy" }}</p>
+                        <p>Окончание: {{ fundingRound.endDate | date: "dd.MM.yy" }}</p>
+                        <div class="accordion investment-info-container" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">
+                                        Подробная информация об инвестициях
+                                    </button>
+                                </h2>
+                                <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div>
+                                            <app-investments-table
+                                                [investments]="fundingRound.investments"
+                                                [investmentsFor]="Roles.STARTUP"
+                                                (approveInvestmentDialogClick)="openApproveInvestmentDialog($event)"></app-investments-table>
+                                            <ng-template #noInvestmentsYet>
+                                                Здесь пока пусто
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<h4>Инвесторы</h4>
-<app-clearable-select *ngIf="startup" [options]="selectOptions" [selectInitialValue]="''"
-                      (selectChanged)="loadInvestmentsData($event)" label="Раунд финансирования"></app-clearable-select>
-<div class="investors-chart-container">
-    <canvas *ngIf="investors.length; else noInvestmentsData"
-        baseChart
-        [data]="lineChartData"
-        [type]="'pie'"
-        [options]="lineChartOptions"
-    ></canvas>
-    <ng-template #noInvestmentsData>
-        В рамках данного раунда пока не было совершено ни одной инвестиции
-    </ng-template>
-</div>
+            </ng-template>
+        </li>
+        <li ngbNavItem>
+            <button ngbNavLink>Инвесторы</button>
+            <ng-template ngbNavContent>
+                <h4>Инвесторы</h4>
+                <app-clearable-select *ngIf="startup" [options]="selectOptions" [selectInitialValue]="''"
+                                      (selectChanged)="loadInvestmentsData($event)" label="Раунд финансирования"></app-clearable-select>
+                <div class="investors-chart-container">
+                    <canvas *ngIf="investors.length; else noInvestmentsData"
+                            baseChart
+                            [data]="lineChartData"
+                            [type]="'pie'"
+                            [options]="lineChartOptions"
+                    ></canvas>
+                    <ng-template #noInvestmentsData>
+                        В рамках данного раунда пока не было совершено ни одной инвестиции
+                    </ng-template>
+                </div>
+            </ng-template>
+        </li>
+    </ul>
+    <div [ngbNavOutlet]="nav"></div>
+
+</ng-container>

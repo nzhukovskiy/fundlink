@@ -186,3 +186,37 @@
 .open-financial-stats-icon {
     cursor: pointer;
 }
+
+
+.startup-exit {
+    margin-bottom: 30px;
+}
+.startup-exit {
+
+}
+.exit-type {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 500;
+}
+.exit-type.acquired {
+    background-color: #e3fcef;
+    color: #008a45;
+}
+
+.exit-type.ipo {
+    background-color: #e3f2ff;
+    color: #0050b3;
+}
+
+.exit-type.bankrupt {
+    background-color: #ffe3e3;
+    color: #b30000;
+}
+.startup-exit p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}

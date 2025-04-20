@@ -14,6 +14,9 @@ export class FundingRoundsListComponent {
     @Output()
     newInvestment = new EventEmitter<number>();
 
+    @Input()
+    investmentAllowed = true;
+
     openInvestmentDialog(fundingRoundId: number) {
         this.newInvestment.emit(fundingRoundId);
     }

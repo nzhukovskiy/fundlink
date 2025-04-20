@@ -10,6 +10,7 @@ import { Observable, map, tap } from 'rxjs';
 import { ObserversModule } from '@angular/cdk/observers';
 import { FundingRound } from '../data/models/funding-round';
 import { Tag } from '../data/models/tag';
+import {ExitStartupDto} from "../data/dtos/exit-startup.dto";
 
 @Injectable({
     providedIn: 'root',
@@ -105,5 +106,9 @@ export class StartupService {
 
     getMostFunded() {
         return this.appHttpService.get<Startup[]>(`startups/most-funded`);
+    }
+
+    exitStartup(exitStartupDto: ExitStartupDto) {
+        return this.appHttpService.post<Startup>(`startups/exit`, exitStartupDto);
     }
 }

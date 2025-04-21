@@ -11,7 +11,7 @@
             </app-user-avatar>
             <h1 class="startup-name"><a [routerLink]="['/startups', notification!.exit!.startup!.id]">{{notification!.exit!.startup.title}}</a></h1>
         </div>
-        <div class="exit-type">{{notification!.exit!.type}}</div>
+        <div class="exit-type">{{"startup.exit." + notification!.exit!.type | translate}}</div>
     </div>
 
     <div class="details-row">

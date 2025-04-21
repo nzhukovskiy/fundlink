@@ -90,10 +90,15 @@ import { MostFundedStartupsComponent } from './components/startups/most-funded-s
 import { MainStatsComponent } from './components/main-page/main-stats/main-stats.component';
 import { ExitStartupComponent } from './components/profile/exit-startup/exit-startup.component';
 import { ExitNotificationComponent } from './components/notifications/exit-notification/exit-notification.component';
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
 registerLocaleData(localeRu, 'ru-RU');
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @NgModule({
     declarations: [
         AppComponent,
@@ -167,6 +172,14 @@ registerLocaleData(localeRu, 'ru-RU');
         NgChartsModule,
         MatTooltipModule,
         NgbdSortableHeaderDirective,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            },
+            defaultLanguage: 'ru'
+        }),
     ],
     providers: [
         AppHttpService,

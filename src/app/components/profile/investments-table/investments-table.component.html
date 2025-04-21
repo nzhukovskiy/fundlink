@@ -4,7 +4,7 @@
         <th scope="col" sortable="date" (sort)="onSort($event)">Дата</th>
         <th scope="col" sortable="amount" (sort)="onSort($event)">Размер</th>
         <th scope="col" sortable="stage" (sort)="onSort($event)">Статус</th>
-        <th scope="col" sortable="approvalType" (sort)="onSort($event)">Тип</th>
+        <th scope="col" sortable="approvalType" (sort)="onSort($event)">Тип принятия</th>
         <th scope="col">{{investmentsFor === Roles.STARTUP ? "Инвестор" : "Стартап"}}</th>
     </tr>
     </thead>
@@ -24,7 +24,7 @@
                  (click)="investmentsFor === Roles.STARTUP && investment.stage === InvestmentStage.PENDING_REVIEW ? emitApproveDialogClick(investment.id) : undefined"
             >
                 <span class="status-icon"></span>
-                {{investment.stage}}
+                {{"investment.stage." + investment.stage | translate}}
             </div>
         </td>
         <td>
@@ -35,7 +35,7 @@
             [matTooltip]="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE ? 'Инвестиция принимается автоматически' : 'Стартап должен принять инвестицию вручную'">
                 <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE">done</mat-icon>
                 <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE">settings</mat-icon>
-                {{investment.approvalType}}
+                {{"investment.type." + investment.approvalType | translate}}
             </div>
         </td>
         <td>

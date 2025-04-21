@@ -1,0 +1,21 @@
+{
+    "startup": {
+        "exit": {
+            "ACQUIRED": "Приобретен",
+            "IPO": "IPO",
+            "BANKRUPT": "Банкрот"
+        }
+    },
+    "investment": {
+        "stage": {
+            "pending_review": "Ожидает рассмотрения",
+            "committed": "committed",
+            "completed": "Завершено",
+            "rejected": "Отклонено"
+        },
+        "type": {
+            "auto_approve": "Автоматически",
+            "startup_approve": "Ручное"
+        }
+    }
+}

@@ -19,10 +19,7 @@ export class ExitStartupComponent implements OnInit {
         type: new FormControl(''),
         value: new FormControl(''),
     })
-    selectOptions: { identifier: string, text: string }[] = [];
-    onTypeChanged(data: any) {
-
-    }
+    showExitValue = true;
 
     exitStartup() {
         this.dialogRef.close(this.exitFormGroup.getRawValue())
@@ -30,6 +27,14 @@ export class ExitStartupComponent implements OnInit {
 
     ngOnInit(): void {
         this.exitFormGroup.controls.type.setValue(ExitType.ACQUIRED);
+        this.exitFormGroup.controls.type.valueChanges.subscribe(value => {
+            if (value === ExitType.BANKRUPT) {
+                this.showExitValue = false;
+            }
+            else {
+                this.showExitValue = true;
+            }
+        })
     }
 
     protected readonly Object = Object;

@@ -1,6 +1,6 @@
 
 <ng-container *ngIf="startup">
-    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <ul ngbNav #nav="ngbNav" class="nav-tabs profile-nav-tabs">
         <li ngbNavItem>
             <button ngbNavLink>Основная информация</button>
             <ng-template ngbNavContent>
@@ -27,8 +27,8 @@
                         <input (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
                     </div>
                 </div>
-                <div *ngIf="startup.dcf?.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
-                    DCF: {{ startup.dcf?.totalDcfValue | number:'1.2-2' }} млн руб.
+                <div *ngIf="startup.dcf.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
+                    DCF: {{ startup.dcf.totalDcfValue | number:'1.2-2' }} млн руб.
                 </div>
                 <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3 button-group">
                     <a type="submit" (click)="openStartupExitDialog()" class="btn btn-dark mb-3 action-btn exit-button"><mat-icon>close</mat-icon>Экзит стартапа</a>

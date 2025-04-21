@@ -185,22 +185,13 @@ export class StartupProfileComponent implements OnInit {
     openStartupExitDialog() {
         const dialogRef = this.dialog.open(ExitStartupComponent);
 
-        dialogRef.afterClosed().subscribe((result) => {
+        dialogRef.afterClosed().pipe(filter(x => x != undefined)).subscribe((result) => {
             this.startupService.exitStartup(result).subscribe(startup => {
                 this.startup = startup;
             })
-            // if (result === SubmitDialogReturn.ACCEPT) {
-            //     this.approveInvestment(investmentId);
-            // }
-            // else if (result === SubmitDialogReturn.REJECT) {
-            //     this.rejectInvestment(investmentId);
-            // }
         });
     }
 
-    protected readonly InvestmentStage = InvestmentStage;
-    protected readonly start = start;
     protected readonly Roles = Roles;
-    protected readonly FormType = FormType;
     protected readonly StartupStage = StartupStage;
 }

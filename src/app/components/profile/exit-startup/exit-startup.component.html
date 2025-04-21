@@ -9,7 +9,7 @@
             </select>
         </div>
     </div>
-    <div class="mb-3">
+    <div *ngIf="showExitValue" class="mb-3">
         <label for="exitValue" class="form-label">Цена</label>
         <input formControlName="value" appNumericOnly class="form-control" id="exitValue">
     </div>

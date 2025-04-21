@@ -1,113 +1,85 @@
-<div class="investor-profile-top-group">
-    <h3>{{ investor?.name }} {{ investor?.surname }}</h3>
-    <div class="mb-3 button-group">
-        <a [routerLink]="['/investors/edit']" class="btn btn-primary mb-3 action-btn">
-            <mat-icon>edit</mat-icon>
-            Редактировать</a>
-    </div>
-</div>
-<p>Email: {{ investor?.email }}</p>
-<h4>Портфолио</h4>
-<div class="startups-chart-container">
-    <canvas *ngIf="startups.length; else noInvestmentsData"
-            baseChart
-            [data]="lineChartData"
-            [type]="'pie'"
-    ></canvas>
-    <ng-template #noInvestmentsData>
-        Вы пока не совершили ни одной инвестиции
-    </ng-template>
-</div>
-<h4>Мои стартапы</h4>
-<div class="accordion" id="accordionExample">
-    <div class="accordion-item" *ngFor="let startup of startups; index as i">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">
-                {{ startup.title }}
-            </button>
-        </h2>
-        <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <!--                <div>-->
-                <!--                    <p>Всего инвестировано: {{startup.totalInvestment}}</p>-->
-                <!--                    <p>Моя доля: {{startup.sharePercentage | number}} %</p>-->
-                <!--                    <ng-template #noInvestmentsYet>-->
-                <!--                        Здесь пока пусто-->
-                <!--                    </ng-template>-->
-                <!--                </div>-->
-                <div class="startup-info-card">
-                    <div class="startup-header">
-                        <h3><a class="startup-link" [routerLink]="['/startups', startup.id]">{{ startup.title }}</a>
-                        </h3>
-                    </div>
-                    <div class="startup-details">
-                        <div class="investment-info">
-                            <span class="label">Всего инвестировано Вами:</span>
-                            <span class="value">{{ startup.totalInvestment | number }}</span>
-                        </div>
-                        <div class="share-info">
-                            <span class="label">Ваша доля:</span>
-                            <span class="value">{{ startup.sharePercentage | number }} %</span>
-                        </div>
-                        <div class="investor-share-chart">
-                            <canvas
-                                baseChart
-                                [data]="startupsShareData[i]"
-                                [type]="'doughnut'"
-                            ></canvas>
+<ul ngbNav #nav="ngbNav" class="nav-tabs profile-nav-tabs">
+    <li ngbNavItem>
+        <button ngbNavLink>Основная информация</button>
+        <ng-template ngbNavContent>
+            <div class="investor-profile-top-group">
+                <h3>{{ investor?.name }} {{ investor?.surname }}</h3>
+                <div class="mb-3 button-group">
+                    <a [routerLink]="['/investors/edit']" class="btn btn-primary mb-3 action-btn">
+                        <mat-icon>edit</mat-icon>
+                        Редактировать</a>
+                </div>
+            </div>
+            <p>Email: {{ investor?.email }}</p>
+            <h4>Портфолио</h4>
+            <div class="startups-chart-container">
+                <canvas *ngIf="startups.length; else noInvestmentsData"
+                        baseChart
+                        [data]="lineChartData"
+                        [type]="'pie'"
+                ></canvas>
+                <ng-template #noInvestmentsData>
+                    Вы пока не совершили ни одной инвестиции
+                </ng-template>
+            </div>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <button ngbNavLink>Мои стартапы</button>
+        <ng-template ngbNavContent>
+            <h4>Мои стартапы</h4>
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item" *ngFor="let startup of startups; index as i">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" aria-controls="collapseOne">
+                            {{ startup.title }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <!--                <div>-->
+                            <!--                    <p>Всего инвестировано: {{startup.totalInvestment}}</p>-->
+                            <!--                    <p>Моя доля: {{startup.sharePercentage | number}} %</p>-->
+                            <!--                    <ng-template #noInvestmentsYet>-->
+                            <!--                        Здесь пока пусто-->
+                            <!--                    </ng-template>-->
+                            <!--                </div>-->
+                            <div class="startup-info-card">
+                                <div class="startup-header">
+                                    <h3><a class="startup-link" [routerLink]="['/startups', startup.id]">{{ startup.title }}</a>
+                                    </h3>
+                                </div>
+                                <div class="startup-details">
+                                    <div class="investment-info">
+                                        <span class="label">Всего инвестировано Вами:</span>
+                                        <span class="value">{{ startup.totalInvestment | number }}</span>
+                                    </div>
+                                    <div class="share-info">
+                                        <span class="label">Ваша доля:</span>
+                                        <span class="value">{{ startup.sharePercentage | number }} %</span>
+                                    </div>
+                                    <div class="investor-share-chart">
+                                        <canvas
+                                            baseChart
+                                            [data]="startupsShareData[i]"
+                                            [type]="'doughnut'"
+                                        ></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-</div>
-<div>
-    <h4>Совершенные инвестиции</h4>
-    <app-investments-table [investments]="investments" [investmentsFor]="Roles.INVESTOR"></app-investments-table>
-<!--    <table class="table table-striped">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th scope="col">Дата</th>-->
-<!--            <th scope="col">Размер</th>-->
-<!--            <th scope="col">Статус</th>-->
-<!--            <th scope="col">Тип</th>-->
-<!--            <th scope="col">Стартап</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--            <tr *ngFor="let investment of investments">-->
-<!--                <td>{{ investment.date | date:"d.LL.y в H:mm" }}</td>-->
-<!--                <td>-->
-<!--                    {{ investment.amount }}-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <div class="status-badge" [ngClass]="{-->
-<!--                        'completed': investment.stage === InvestmentStage.COMPLETED,-->
-<!--                        'pending-review': investment.stage === InvestmentStage.PENDING_REVIEW,-->
-<!--                        'rejected': investment.stage === InvestmentStage.REJECTED,-->
-<!--                        }"-->
-<!--                    >-->
-<!--                        <span class="status-icon"></span>-->
-<!--                        {{investment.stage}}-->
-<!--                    </div>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <div class="approval-type" [ngClass]="{-->
-<!--                        'auto-approve': investment.approvalType === InvestmentApprovalType.AUTO_APPROVE,-->
-<!--                        'startup-approve': investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE,-->
-<!--                        }">-->
-<!--                        <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE">done</mat-icon>-->
-<!--                        <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE">settings</mat-icon>-->
-<!--                        {{investment.approvalType}}-->
-<!--                    </div>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <a [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-</div>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <button ngbNavLink>Мои инвестиции</button>
+        <ng-template ngbNavContent>
+            <h4>Совершенные инвестиции</h4>
+            <app-investments-table [investments]="investments" [investmentsFor]="Roles.INVESTOR"></app-investments-table>
+        </ng-template>
+    </li>
+</ul>
+<div [ngbNavOutlet]="nav"></div>

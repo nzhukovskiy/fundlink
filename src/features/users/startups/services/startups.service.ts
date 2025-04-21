@@ -566,15 +566,18 @@ export class StartupsService {
         const investors = await this.getInvestors(startup.id);
         const savedStartup = await this.startupRepository.save(startup);
 
-        investors.forEach(investor => {
+        for (const investor of investors) {
+            const share = await this.calculateInvestorShareForStartup(investor.id, savedStartup.id)
+            const investorResult = new Decimal(startup.exit.value).mul(new Decimal(share.sharePercentage)).div(100)
             this.eventEmitter2.emit("notification", {
                 userId: investor.id,
                 userType: Roles.INVESTOR,
                 type: NotificationTypes.STARTUP_EXIT,
                 text: `Стартап ${savedStartup.title} вышел по сценарию ${savedStartup.exit.type}`,
-                exit: savedStartup.exit
+                exit: savedStartup.exit,
+                exitInvestorShare: investorResult.toString()
             });
-        })
+        }
         return this.getOne(startupId, true);
     }
 
@@ -616,5 +619,35 @@ export class StartupsService {
             totalCapitalValue: v.toNumber(),
             calculatedWacc: result.toNumber()
         } as WaccDetailsDto;
+    }
+
+    private async calculateInvestorShareForStartup(investorId: number, startupId: number) {
+        return await this.startupRepository
+          .createQueryBuilder("startup")
+          .select(["startup.*"])
+          .addSelect('SUM(investment.amount) AS "totalInvestment"')
+          .addSelect(
+            `(SUM(investment.amount) * 100.0) / (
+            SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
+          )
+          .addSelect(
+            `(SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "totalInvestmentsForStartup"`
+          )
+          .innerJoin("startup.fundingRounds", "fundingRound")
+          .innerJoin("fundingRound.investments", "investment")
+          .innerJoin("investment.investor", "investor")
+          .where('investor.id = :investorId', { investorId })
+          .andWhere('startup.id = :startupId', { startupId })
+          .andWhere("investment.stage = 'completed'")
+          .groupBy("startup.id")
+          .getRawOne()
     }
 }

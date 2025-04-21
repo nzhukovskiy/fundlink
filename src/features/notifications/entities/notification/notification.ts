@@ -63,4 +63,7 @@ export class Notification {
     @ManyToOne(() => Exit, { nullable: true, onDelete: "CASCADE" })
     @JoinColumn()
     exit?: Exit;
+
+    @Column({type: "decimal", nullable: true})
+    exitInvestorShare?: string;
 }

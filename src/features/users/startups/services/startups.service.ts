@@ -307,7 +307,7 @@ export class StartupsService {
             );
         });
         if (totalInvestments.equals(0)) {
-            return dcf;
+            return dcf.toNumber();
         }
         const calculationResult: Partial<DcfDetailedDto> = {
             inputs: {

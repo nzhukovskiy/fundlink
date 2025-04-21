@@ -1,4 +1,9 @@
-<div class="exit-card acquired" *ngIf="notification!.exit!.type === ExitType.ACQUIRED">
+<div class="exit-card acquired"
+     [ngStyle]="{
+     'acquired': notification!.exit!.type === ExitType.ACQUIRED,
+     'ipo': notification!.exit!.type === ExitType.IPO,
+     'bankrupt': notification!.exit!.type === ExitType.BANKRUPT,
+     }">
     <div class="header">
         <div class="startup-group">
             <app-user-avatar [avatarStyle]="'image'"
@@ -14,49 +19,49 @@
         <span class="value">{{notification!.exit!.date | date:"d.LL.y в H:mm"}}</span>
     </div>
 
-    <div class="financial-details">
+    <div class="financial-details" *ngIf="notification!.exit!.type !== ExitType.BANKRUPT">
         <div class="details-row">
             <span class="label">Стоимость</span>
             <span class="value positive">{{notification!.exit!.value | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</span>
         </div>
         <div class="details-row">
             <span class="label">Ваша доля</span>
-            <span class="value positive">$12.5M</span>
+            <span class="value positive">{{notification!.exitInvestorShare | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</span>
         </div>
     </div>
 </div>
 
-<div class="exit-card bankrupt" *ngIf="notification!.exit!.type === ExitType.BANKRUPT">
-    <div class="header">
-        <div class="startup-name">EcoFarm Solutions</div>
-        <div class="exit-type">Bankrupt</div>
-    </div>
+<!--<div class="exit-card bankrupt" *ngIf="notification!.exit!.type === ExitType.BANKRUPT">-->
+<!--    <div class="header">-->
+<!--        <div class="startup-name">EcoFarm Solutions</div>-->
+<!--        <div class="exit-type">Bankrupt</div>-->
+<!--    </div>-->
 
-    <div class="details-row">
-        <span class="label">Exit Date</span>
-        <span class="value">2024-02-28</span>
-    </div>
-</div>
+<!--    <div class="details-row">-->
+<!--        <span class="label">Exit Date</span>-->
+<!--        <span class="value">2024-02-28</span>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="exit-card ipo" *ngIf="notification!.exit!.type === ExitType.IPO">
-    <div class="header">
-        <div class="startup-name">MediHealth Analytics</div>
-        <div class="exit-type">IPO</div>
-    </div>
+<!--<div class="exit-card ipo" *ngIf="notification!.exit!.type === ExitType.IPO">-->
+<!--    <div class="header">-->
+<!--        <div class="startup-name">MediHealth Analytics</div>-->
+<!--        <div class="exit-type">IPO</div>-->
+<!--    </div>-->
 
-    <div class="details-row">
-        <span class="label">Exit Date</span>
-        <span class="value">2024-04-01</span>
-    </div>
+<!--    <div class="details-row">-->
+<!--        <span class="label">Exit Date</span>-->
+<!--        <span class="value">2024-04-01</span>-->
+<!--    </div>-->
 
-    <div class="financial-details">
-        <div class="details-row">
-            <span class="label">Valuation</span>
-            <span class="value positive">$1.2B</span>
-        </div>
-        <div class="details-row">
-            <span class="label">Your Stake</span>
-            <span class="value positive">2.4%</span>
-        </div>
-    </div>
-</div>
+<!--    <div class="financial-details">-->
+<!--        <div class="details-row">-->
+<!--            <span class="label">Valuation</span>-->
+<!--            <span class="value positive">$1.2B</span>-->
+<!--        </div>-->
+<!--        <div class="details-row">-->
+<!--            <span class="label">Your Stake</span>-->
+<!--            <span class="value positive">2.4%</span>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

@@ -31,8 +31,9 @@ export class Notification {
 
     exit?: Exit;
 
+    exitInvestorShare?: string;
 
-    constructor(id: number, userId: number, userType: Roles, type: NotificationType, text: string, read: boolean, createdAt: Date, message: Message, investment: Investment, changes: FundingRoundChangeProposal, fundingRound: FundingRound, exit: Exit) {
+    constructor(id: number, userId: number, userType: Roles, type: NotificationType, text: string, read: boolean, createdAt: Date, message: Message, investment: Investment, changes: FundingRoundChangeProposal, fundingRound: FundingRound, exit: Exit, exitInvestorShare: string) {
         this.id = id;
         this.userId = userId;
         this.userType = userType;
@@ -45,5 +46,6 @@ export class Notification {
         this.changes = changes;
         this.fundingRound = fundingRound;
         this.exit = exit;
+        this.exitInvestorShare = exitInvestorShare;
     }
 }

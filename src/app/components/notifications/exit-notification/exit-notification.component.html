@@ -1,5 +1,5 @@
-<div class="exit-card acquired"
-     [ngStyle]="{
+<div class="exit-card"
+     [ngClass]="{
      'acquired': notification!.exit!.type === ExitType.ACQUIRED,
      'ipo': notification!.exit!.type === ExitType.IPO,
      'bankrupt': notification!.exit!.type === ExitType.BANKRUPT,

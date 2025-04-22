@@ -1,6 +1,6 @@
 export enum InvestmentStage {
-    PENDING_REVIEW = "pending_review",
-    COMMITTED = "committed",
-    COMPLETED = "completed",
-    REJECTED = "rejected"
+    PENDING_REVIEW = "PENDING_REVIEW",
+    COMMITTED = "COMMITTED",
+    COMPLETED = "COMPLETED",
+    REJECTED = "REJECTED"
 }

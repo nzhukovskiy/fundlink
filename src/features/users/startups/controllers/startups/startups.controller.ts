@@ -53,7 +53,7 @@ export class StartupsController {
     }
 
     @ApiBearerAuth()
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Get('current-startup')
     findCurrentStartup(@Req() req) {
@@ -86,7 +86,7 @@ export class StartupsController {
 
     @ApiBearerAuth()
     @ApiBody({ type: UpdateStartupDto })
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Patch('')
     update(@Body() updateStartupDto: UpdateStartupDto, @Req() req) {
@@ -95,7 +95,7 @@ export class StartupsController {
 
     @ApiBearerAuth()
     @ApiBody({ type: CreateFundingRoundDto })
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post('funding-rounds')
     createFundingRound(@Body() createFundingRoundDto: CreateFundingRoundDto, @Req() req) {
@@ -130,7 +130,7 @@ export class StartupsController {
             },
         },
     })
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post('upload-presentation')
     @UseInterceptors(FileInterceptor('presentation', {
@@ -145,21 +145,21 @@ export class StartupsController {
         return this.startupsService.uploadPresentation(user.id, file.filename);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post("assign-tag")
     assignTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
         return this.startupsService.assignTag(assignTagDto.tagId, req.token.payload.id);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post("remove-tag")
     removeTag(@Body() assignTagDto: AssignTagDto, @Req() req) {
         return this.startupsService.removeTag(assignTagDto.tagId, req.token.payload.id);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post('upload-logo')
     @UseInterceptors(FileInterceptor('logo', {
@@ -175,21 +175,21 @@ export class StartupsController {
         return this.startupsService.uploadLogo(user.id, file.filename);
     }
 
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(":id/mark-as-interesting")
     markAsInteresting(@Param('id') id: number, @Req() req) {
         return this.startupsService.markAsInteresting(id, req.token.payload.id);
     }
 
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(":id/remove-from-interesting")
     removeFromInteresting(@Param('id') id: number, @Req() req) {
         return this.startupsService.removeFromInteresting(id, req.token.payload.id);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post("exit")
     exitStartup(@Body() exitStartupDto: ExitStartupDto, @Req() req) {

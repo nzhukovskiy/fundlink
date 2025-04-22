@@ -22,7 +22,7 @@ export class FundingRoundsController {
 
     @ApiBearerAuth()
     @ApiBody({ type: CreateFundingRoundDto })
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Put(':id')
     update(@Param('id') id: number, @Body() updateFundingRoundDto: CreateFundingRoundDto, @Req() req) {
@@ -31,7 +31,7 @@ export class FundingRoundsController {
 
     @ApiBearerAuth()
     @ApiBody({ type: CreateInvestmentDto })
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/investments')
     createInvestment(@Param('id') id: number, @Body() createInvestmentDto: CreateInvestmentDto, @Req() req) {
@@ -39,14 +39,14 @@ export class FundingRoundsController {
     }
 
     @ApiBearerAuth()
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Delete(':id')
     deleteFundingRound(@Param('id') id: number, @Req() req) {
         return this.fundingRoundsService.delete(id, req.token.payload);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/cancel-proposal')
     cancelUpdateProposal(@Param('id') id: number, @Req() req) {

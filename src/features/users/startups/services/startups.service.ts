@@ -120,7 +120,7 @@ export class StartupsService {
             EXISTS (
                 SELECT 1 
                 FROM funding_round_change_proposal frcp  
-                WHERE frcp."fundingRoundId"  = "fundingRound".id and frcp.status = 'pending_review'
+                WHERE frcp."fundingRoundId"  = "fundingRound".id and frcp.status = 'PENDING_REVIEW'
             )`,
                 "isUpdating")
               .leftJoinAndSelect("investment.investor", "investor");
@@ -238,7 +238,7 @@ export class StartupsService {
           .innerJoin("investment.fundingRound", "fundingRound")
           .innerJoin("fundingRound.startup", "startup")
           .where(whereClause, { id, fundingRoundId })
-          .andWhere("investment.stage = 'completed'")
+          .andWhere("investment.stage = 'COMPLETED'")
           .select([
               "investor.id as id",
               "investor.name as name",
@@ -442,14 +442,14 @@ export class StartupsService {
           .createQueryBuilder("fundingRound")
           .select(`SUM(i.amount) as investments_amount`)
           .leftJoin("fundingRound.investments", "i")
-          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='completed' and \"i\".\"date\" >  CURRENT_DATE - interval '30 days'")
+          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='COMPLETED' and \"i\".\"date\" >  CURRENT_DATE - interval '30 days'")
           .getQuery();
 
         const totalInvestmentsSubQuery = this.fundingRoundRepository
           .createQueryBuilder("fundingRound")
           .select(`SUM(i.amount) as total_investments`)
           .leftJoin("fundingRound.investments", "i")
-          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='completed'")
+          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='COMPLETED'")
           .getQuery();
 
         const uniqueInvestorsSubQuery = this.fundingRoundRepository
@@ -457,7 +457,7 @@ export class StartupsService {
           .select(`COUNT(DISTINCT(investor.id)) as investors_count`)
           .leftJoin("fundingRound.investments", "investment")
           .leftJoin("investment.investor", "investor")
-          .where("\"fundingRound\".\"startupId\" = startup.id and \"investment\".stage='completed'")
+          .where("\"fundingRound\".\"startupId\" = startup.id and \"investment\".stage='COMPLETED'")
           .getQuery();
 
         const interestingCountSubQuery = this.dataSource
@@ -516,7 +516,7 @@ export class StartupsService {
           .createQueryBuilder("fundingRound")
           .select(`COALESCE(SUM(i.amount), 0) as total_investments`)
           .leftJoin("fundingRound.investments", "i")
-          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='completed'")
+          .where("\"fundingRound\".\"startupId\" = startup.id and \"i\".stage='COMPLETED'")
           .getQuery();
 
         const startupsRawAndEntities = await this.startupRepository
@@ -646,7 +646,7 @@ export class StartupsService {
           .innerJoin("investment.investor", "investor")
           .where('investor.id = :investorId', { investorId })
           .andWhere('startup.id = :startupId', { startupId })
-          .andWhere("investment.stage = 'completed'")
+          .andWhere("investment.stage = 'COMPLETED'")
           .groupBy("startup.id")
           .getRawOne()
     }

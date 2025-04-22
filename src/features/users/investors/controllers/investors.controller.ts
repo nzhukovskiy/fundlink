@@ -21,7 +21,7 @@ export class InvestorsController {
     }
 
     @ApiBearerAuth()
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Get('current-investor')
     findCurrentInvestor(@Req() req) {
@@ -29,14 +29,14 @@ export class InvestorsController {
     }
 
     @ApiBearerAuth()
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Get('investments')
     getInvestments(@Req() req) {
         return this.investorsService.getFullInvestmentsInfo(req.token.payload.id);
     }
 
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Get('recommendations')
     getRecommendations(@Req() req) {
@@ -55,7 +55,7 @@ export class InvestorsController {
 
     @ApiBearerAuth()
     @ApiBody({ type: UpdateInvestorDto })
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Patch()
     update(@Body() updateInvestorDto: UpdateInvestorDto, @Req() req) {

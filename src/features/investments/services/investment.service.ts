@@ -84,7 +84,7 @@ export class InvestmentService {
     getTotalInvestments() {
         return this.investmentRepository.createQueryBuilder("investment")
           .select('sum(investment.amount) as "totalInvestments"')
-          .where("investment.stage = 'completed'")
+          .where("investment.stage = 'COMPLETED'")
           .getRawOne()
     }
 

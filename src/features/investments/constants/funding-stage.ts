@@ -1,8 +1,8 @@
 export enum FundingStage {
-    SEED = 'seed',
-    SERIES_A = 'series_a',
-    SERIES_B = 'series_b',
-    SERIES_C = 'series_c',
-    SERIES_D = 'series_d',
-    SERIES_E = 'series_e',
+    SEED = 'SEED',
+    SERIES_A = 'SERIES_A',
+    SERIES_B = 'SERIES_B',
+    SERIES_C = 'SERIES_C',
+    SERIES_D = 'SERIES_D',
+    SERIES_E = 'SERIES_E',
 }

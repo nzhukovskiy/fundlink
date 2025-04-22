@@ -109,7 +109,7 @@ export class InvestorsService {
             .innerJoin("fundingRound.investments", "investment")
             .innerJoin("investment.investor", "investor")
             .where("investor.id = :id", { id })
-            .andWhere("investment.stage = 'completed'")
+            .andWhere("investment.stage = 'COMPLETED'")
             .groupBy("startup.id")
             .getRawMany()
 

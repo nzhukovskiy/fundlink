@@ -11,7 +11,7 @@ export class ProposalsController {
     constructor(private readonly changeProposalService: ChangeProposalService) {
     }
 
-    @Roles('investor')
+    @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/vote')
     vote(@Param('id') id: number, @Body() voteProposalDto: VoteProposalDto, @Req() req) {

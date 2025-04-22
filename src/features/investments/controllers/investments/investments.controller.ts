@@ -10,14 +10,14 @@ import { InvestmentService } from "../../services/investment.service";
 export class InvestmentsController {
     constructor(private readonly investmentService: InvestmentService) {
     }
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/approve')
     approveInvestment(@Param('id') id: number, @Req() req) {
         return this.investmentService.approveInvestment(id, req.token.payload.id);
     }
 
-    @Roles('startup')
+    @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/reject')
     rejectInvestment(@Param('id') id: number, @Req() req) {

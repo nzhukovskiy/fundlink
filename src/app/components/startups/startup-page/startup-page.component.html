@@ -27,7 +27,13 @@
     </div>
 </div>
 <div *ngIf="startup?.exit" class="stat-card startup-exit">
-    <h2 class="exit-type acquired">{{startup!.exit.type}}</h2>
+    <h2 class="exit-type"
+        [ngClass]="{
+     'acquired': startup!.exit!.type === ExitType.ACQUIRED,
+     'ipo': startup!.exit!.type === ExitType.IPO,
+     'bankrupt': startup!.exit!.type === ExitType.BANKRUPT,
+     }">
+        {{"startup.exit." + startup!.exit.type | translate}}</h2>
     <p class="exit-time"><mat-icon>schedule</mat-icon>{{startup!.exit.date | date:"d.LL.y в H:mm"}}</p>
     <p class="exit-value" *ngIf="startup!.exit.value"><mat-icon>attach_money</mat-icon>Итоговая стоимость: {{startup!.exit.value | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</p>
 </div>

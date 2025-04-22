@@ -1,5 +1,5 @@
 export enum ChangesApprovalStatus {
-    PENDING_REVIEW = "pending_review",
-    COMPLETED = "completed",
-    REJECTED = "rejected"
+    PENDING_REVIEW = "PENDING_REVIEW",
+    COMPLETED = "COMPLETED",
+    REJECTED = "REJECTED"
 }

@@ -8,14 +8,14 @@
     },
     "investment": {
         "stage": {
-            "pending_review": "Ожидает рассмотрения",
-            "committed": "committed",
-            "completed": "Завершено",
-            "rejected": "Отклонено"
+            "PENDING_REVIEW": "Ожидает рассмотрения",
+            "COMMITTED": "committed",
+            "COMPLETED": "Завершено",
+            "REJECTED": "Отклонено"
         },
         "type": {
-            "auto_approve": "Автоматически",
-            "startup_approve": "Ручное"
+            "AUTO_APPROVE": "Автоматически",
+            "STARTUP_APPROVE": "Ручное"
         }
     }
 }

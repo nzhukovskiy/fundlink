@@ -1,4 +1,4 @@
 export enum Roles {
-    STARTUP = "startup",
-    INVESTOR = "investor"
+    STARTUP = "STARTUP",
+    INVESTOR = "INVESTOR"
 }

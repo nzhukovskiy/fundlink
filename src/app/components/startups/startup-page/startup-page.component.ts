@@ -14,6 +14,7 @@ import Decimal from 'decimal.js';
 import {ChartConfiguration, ChartOptions} from "chart.js";
 import { SubmitDialogComponent } from '../../../dialogs/submit-dialog/submit-dialog.component';
 import { FinancialStatsComponent } from '../financial-stats/financial-stats.component';
+import {ExitType} from "../../../constants/exit-type";
 
 @Component({
     selector: 'app-startup-page',
@@ -166,4 +167,5 @@ export class StartupPageComponent implements OnInit {
     }
 
     protected readonly Roles = Roles;
+    protected readonly ExitType = ExitType;
 }

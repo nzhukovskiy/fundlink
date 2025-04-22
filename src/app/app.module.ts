@@ -92,6 +92,7 @@ import { ExitStartupComponent } from './components/profile/exit-startup/exit-sta
 import { ExitNotificationComponent } from './components/notifications/exit-notification/exit-notification.component';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {MatMenuModule} from "@angular/material/menu";
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
@@ -180,6 +181,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             },
             defaultLanguage: 'ru'
         }),
+        MatMenuModule,
     ],
     providers: [
         AppHttpService,

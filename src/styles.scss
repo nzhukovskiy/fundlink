@@ -24,3 +24,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 .full-width-el {
   width: 100%;
 }
+.notifications-menu-item .mat-mdc-menu-item-text {
+    display: flex;
+}

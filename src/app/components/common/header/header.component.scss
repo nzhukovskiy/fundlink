@@ -12,6 +12,17 @@
     margin-bottom: 30px;
 }
 
+.profile-menu-mobile {
+    display: none;
+
+    mat-icon {
+        font-size: 30px;
+    }
+}
+
+.mobile-menu-trigger-button {
+    position: relative;
+}
 
 .profile-section {
     display: flex;
@@ -74,6 +85,9 @@
 
 .header-nav-bar {
     gap: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row !important;
 }
 
 .unread-messages-badge {
@@ -86,6 +100,12 @@
     height: 20px;
 }
 
+.unread-messages-badge-mobile {
+    position: absolute;
+    top: -10px;
+    right: -6px;
+}
+
 .profile-icon .unread-messages-badge {
     position: absolute;
     top: 0;
@@ -95,4 +115,30 @@
 .outer-header {
     background-color: #f8f9fa !important;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu-icon {
+    margin: 0 10px !important;
+}
+
+.notifications-menu-item span {
+    display: flex !important
+}
+
+.accordion-item {
+    margin: 0 !important;
+}
+
+
+
+@media (max-width: 768px) {
+    .profile-menu-mobile {
+        display: block;
+    }
+    .nav-menu-container {
+        display: none;
+    }
+    .profile-menu-item {
+        gap: 0;
+    }
 }

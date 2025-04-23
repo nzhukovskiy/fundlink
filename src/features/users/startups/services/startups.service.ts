@@ -24,6 +24,7 @@ import { Roles } from "../../constants/roles";
 import { NotificationTypes } from "../../../notifications/constants/notification-types";
 import { ExitType } from "../../constants/exit-type";
 import { StartupStage } from "../../constants/startup-stage";
+import { ErrorCode } from "../../../../constants/error-code";
 
 @Injectable()
 export class StartupsService {
@@ -146,9 +147,13 @@ export class StartupsService {
           .where("startup.id = :id", { id })
           .getRawAndEntities();
 
-        if (!startup) {
-            throw new NotFoundException(
-              `Startup with an id ${id} does not exist`
+        console.log(startup)
+        if (!startup.raw.length) {
+            throw new NotFoundException({
+                errorCode: ErrorCode.STARTUP_WITH_ID_DOES_NOT_EXISTS,
+                data: { id },
+                message: `Startup with an id ${id} does not exist`
+              }
             );
         }
         const startupEntity = startup.entities[0];

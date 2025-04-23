@@ -25,6 +25,7 @@ import { ChangeProposalService } from "./change-proposal-service/change-proposal
 import { FundingRoundChangeProposal } from "../entities/funding-round-change-proposal/funding-round-change-proposal";
 import { ChangesApprovalStatus } from "../constants/changes-approval-status";
 import { StartupStage } from "../../users/constants/startup-stage";
+import { ErrorCode } from "../../../constants/error-code";
 
 @Injectable()
 export class FundingRoundsService {
@@ -191,7 +192,12 @@ export class FundingRoundsService {
               (new Date(newRound.endDate) >= new Date(round.startDate) && new Date(newRound.endDate) <= new Date(round.endDate)) ||
               (new Date(newRound.startDate) <= new Date(round.startDate) && new Date(newRound.endDate) >= new Date(round.endDate))
             ) {
-                throw new BadRequestException('New funding round dates overlap with existing rounds for this startup');
+                throw new BadRequestException(
+                  {
+                      errorCode: ErrorCode.FUNDING_ROUND_OVERLAP,
+                      message: 'New funding round dates overlap with existing rounds for this startup'
+                  }
+                  );
             }
         }
     }

@@ -3,6 +3,7 @@ import { LoginUserDto } from "../../users/dtos/login-user-dto";
 import { UsersService } from "../../users/services/users.service";
 import * as bcrypt from "bcrypt";
 import { JwtTokenService } from "../../token/services/jwt-token.service";
+import { ErrorCode } from "../../../constants/error-code";
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,10 @@ export class AuthService {
                 accessToken: await this.jwtTokenService.generateToken(user),
             };
         }
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({
+            errorCode: ErrorCode.UNAUTHORIZED,
+            message: "Wrong login or password"
+        });
     }
 
 }

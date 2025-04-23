@@ -1,33 +1,49 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor, HttpErrorResponse
+    HttpRequest,
+    HttpHandler,
+    HttpEvent,
+    HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import {LocalStorageService} from "../services/local-storage.service";
 import {ToastrService} from "ngx-toastr";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private readonly localStorageService: LocalStorageService,
-              private readonly toastrService: ToastrService) {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let authReq = request.clone();
-    const token = this.localStorageService.getToken();
-    if (token) {
-      authReq = request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+    constructor(private readonly localStorageService: LocalStorageService,
+                private readonly toastrService: ToastrService,
+                private readonly injector: Injector) {
     }
-    return next.handle(authReq).pipe(
-      catchError((err: HttpErrorResponse) => {
-        if (!authReq.url.includes('chatBetweenUsers') && !authReq.url.includes('recommendations')) {
-          this.toastrService.error(JSON.stringify(err.error));
+
+    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
+        let authReq = request.clone();
+        const token = this.localStorageService.getToken();
+        if (token) {
+            authReq = request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
         }
-        return throwError(() => err);
-      })
-    );
-  }
+        return next.handle(authReq).pipe(
+            catchError((err: HttpErrorResponse) => {
+                if (!authReq.url.includes('chatBetweenUsers') && !authReq.url.includes('recommendations')) {
+                    const errorData = err.error?.data || {};
+                    this.translate.get(`errors.${err.error.errorCode}`, errorData).subscribe(translated => {
+                        this.toastrService.error(translated);
+                    })
+                }
+                return throwError(() => err);
+            })
+        );
+    }
+
+    private _translateService?: TranslateService;
+
+    private get translate(): TranslateService {
+        if (!this._translateService) {
+            this._translateService = this.injector.get(TranslateService);
+        }
+        return this._translateService;
+    }
 }

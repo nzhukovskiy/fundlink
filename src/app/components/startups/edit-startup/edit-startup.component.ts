@@ -46,7 +46,7 @@ export class EditStartupComponent implements OnInit {
         tamMarket: new FormControl<string>('', {validators: [Validators.required]}),
         samMarket: new FormControl<string>('', {validators: [Validators.required]}),
         somMarket: new FormControl<string>('', {validators: [Validators.required]}),
-        teamExperience: new FormControl<string>(''),
+        teamExperience: new FormControl<string | null>(null),
         // industry: new FormControl<string>("", ),
         revenuePerYear: new FormArray(
             Array(5).fill(null).map(() => new FormControl<number>(0, {

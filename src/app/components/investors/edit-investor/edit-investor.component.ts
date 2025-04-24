@@ -1,11 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvestorsService } from 'src/app/services/investors.service';
 import {FormType} from "../../../constants/form-type";
 import { AuthService } from '../../../services/auth.service';
 import { ChatService } from '../../../services/chat.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import {markAllControlsAsTouched, showErrors} from "../../../utils/validate-form-utils";
 
 @Component({
   selector: 'app-edit-investor',
@@ -41,16 +42,20 @@ export class EditInvestorComponent implements OnInit {
     }
 
     investorFormGroup = new FormGroup({
-        email: new FormControl<string>("", ),
-        password: new FormControl<string>("", ),
-        name: new FormControl<string>(''),
-        surname: new FormControl<string>(''),
+        email: new FormControl<string>("", {validators: [Validators.required, Validators.email]}),
+        password: new FormControl<string>("", {validators: [Validators.required, Validators.minLength(8)]}),
+        name: new FormControl<string>('', {validators: [Validators.required]}),
+        surname: new FormControl<string>('', {validators: [Validators.required]}),
         title: new FormControl<string>(''),
         location: new FormControl<string>(''),
         description: new FormControl<string>(''),
     });
 
     handleFormSubmission() {
+        if (this.investorFormGroup.invalid) {
+            markAllControlsAsTouched(this.investorFormGroup);
+            return;
+        }
         if (this.formType === FormType.UPDATE) {
             this.updateInvestor();
         }
@@ -86,4 +91,5 @@ export class EditInvestorComponent implements OnInit {
     }
 
     protected readonly FormType = FormType;
+    protected readonly showErrors = showErrors;
 }

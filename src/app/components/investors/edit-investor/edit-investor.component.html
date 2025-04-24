@@ -6,22 +6,59 @@
                 <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты<span class="text-danger">*</span></label>
                 <input required type="email" formControlName="email" class="form-control" id="investorRegisterEmailField"
                        placeholder="name@example.com">
+                <div *ngIf="showErrors(investorFormGroup.controls.email)"
+                     class="alert">
+
+                    <div *ngIf="investorFormGroup.controls.email.errors?.['required']">
+                        {{"form-validation-errors.EMAIL_REQUIRED" | translate}}
+                    </div>
+                    <div *ngIf="investorFormGroup.controls.email.errors?.['email']">
+                        {{"form-validation-errors.EMAIL_INVALID" | translate}}
+                    </div>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="investorRegisterPasswordField" class="form-label">Пароль<span class="text-danger">*</span></label>
                 <input class="form-control" formControlName="password" type="password"
                        id="investorRegisterPasswordField">
+                <div *ngIf="showErrors(investorFormGroup.controls.password)"
+                     class="alert">
+
+                    <div *ngIf="investorFormGroup.controls.password.errors?.['required']">
+                        {{"form-validation-errors.PASSWORD_REQUIRED" | translate}}
+                    </div>
+                    <div *ngIf="investorFormGroup.controls.password.errors?.['minlength']">
+                        {{"form-validation-errors.PASSWORD_MINLENGTH" | translate}}
+                    </div>
+
+                </div>
             </div>
         </ng-container>
         <div class="mb-3">
             <label for="investorUpdateNameField" class="form-label">Имя пользователя<span class="text-danger">*</span></label>
             <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField"
                    placeholder="Alexander">
+            <div *ngIf="showErrors(investorFormGroup.controls.name)"
+                 class="alert">
+
+                <div *ngIf="investorFormGroup.controls.name.errors?.['required']">
+                    {{"form-validation-errors.NAME_REQUIRED" | translate}}
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя<span class="text-danger">*</span></label>
             <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField"
                    placeholder="Alexandrov">
+            <div *ngIf="showErrors(investorFormGroup.controls.surname)"
+                 class="alert">
+
+                <div *ngIf="investorFormGroup.controls.surname.errors?.['required']">
+                    {{"form-validation-errors.SURNAME_REQUIRED" | translate}}
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="investorUpdateSurnameField" class="form-label">Название</label>

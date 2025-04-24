@@ -14,9 +14,10 @@ export class DecimalInterceptor implements HttpInterceptor {
     private decimalFields = new Set(['amount']);
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const expectsJson = req.responseType === 'json';
         return next.handle(req).pipe(
             map(event => {
-                if (event instanceof HttpResponse) {
+                if (event instanceof HttpResponse && expectsJson && event.body) {
                     const modifiedBody = this.convertDecimalFields(event.body);
                     return event.clone({ body: modifiedBody });
                 }

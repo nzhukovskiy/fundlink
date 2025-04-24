@@ -38,7 +38,7 @@ const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
     {path: 'fundingRounds/:id/edit', component: EditFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)], resolve: {fundingRound: fundingRoundResolver}},
-    {path: 'fundingRounds/create', component: CreateFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
+    {path: 'fundingRounds/create', component: EditFundingRoundComponent, canActivate: [authGuard, rolesGuard(Roles.STARTUP)]},
     {path: 'chats', component: AllChatsComponent, canActivate: [authGuard]},
     {path: 'chats/new', component: ChatComponent, canActivate: [authGuard]},
     {path: 'chats/:id', component: ChatComponent, canActivate: [authGuard], resolve: {chat: chatResolver}},

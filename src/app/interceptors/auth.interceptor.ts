@@ -29,6 +29,9 @@ export class AuthInterceptor implements HttpInterceptor {
             catchError((err: HttpErrorResponse) => {
                 if (!authReq.url.includes('chatBetweenUsers') && !authReq.url.includes('recommendations')) {
                     const errorData = err.error?.data || {};
+                    if (err.error?.message.length > 0) {
+                        console.log('hghf')
+                    }
                     this.translate.get(`errors.${err.error.errorCode}`, errorData).subscribe(translated => {
                         this.toastrService.error(translated);
                     })

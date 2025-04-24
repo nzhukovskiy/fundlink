@@ -1,29 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #f5f5f5 !important; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #f5f5f5 !important;
+}
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 .form-container {
-  max-width: 600px;
-  margin: 0 auto;
+    max-width: 600px;
+    margin: 0 auto;
 }
+
 @import 'ngx-toastr/toastr';
 .button-group a, .button-group button {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
+
 .flex-horizontal-container {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
+
 .clickable {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .full-width-el {
-  width: 100%;
+    width: 100%;
 }
+
 .notifications-menu-item .mat-mdc-menu-item-text {
     display: flex;
+}
+
+
+.ng-valid.ng-dirty[required],
+.ng-valid.ng-touched[required],
+.ng-valid.ng-dirty.required,
+.ng-valid.ng-touched.required {
+    border-left: 5px solid #42A948;
+}
+
+.ng-invalid.ng-dirty:not(form),
+.ng-invalid.ng-touched:not(form) {
+    border-left: 5px solid #a94442;
+}
+
+.alert div {
+    background-color: #fed3d3;
+    color: #820000;
+    padding: 1rem;
+}
+.alert {
+    margin-bottom: 0;
+    padding: 1rem 1rem 0;
 }

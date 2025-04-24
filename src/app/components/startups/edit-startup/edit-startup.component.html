@@ -6,10 +6,33 @@
                 <label for="registerEmailField" class="form-label">Адрес электронной почты</label>
                 <input type="email" formControlName="email" class="form-control" id="registerEmailField"
                        placeholder="name@example.com">
+                <div *ngIf="startupEditFormGroup.controls.email.invalid && (startupEditFormGroup.controls.email.dirty || startupEditFormGroup.controls.email.touched)"
+                     class="alert">
+
+                    <div *ngIf="startupEditFormGroup.controls.email.errors?.['required']">
+                        Email is required.
+                    </div>
+                    <div *ngIf="startupEditFormGroup.controls.email.errors?.['email']">
+                        Email must be a correct email.
+                    </div>
+
+                </div>
             </div>
+
             <div class="mb-3">
                 <label for="registerPasswordField" class="form-label">Пароль</label>
                 <input class="form-control" formControlName="password" type="password" id="registerPasswordField">
+                <div *ngIf="startupEditFormGroup.controls.password.invalid && (startupEditFormGroup.controls.password.dirty || startupEditFormGroup.controls.password.touched)"
+                     class="alert">
+
+                    <div *ngIf="startupEditFormGroup.controls.password.errors?.['required']">
+                        Password is required.
+                    </div>
+                    <div *ngIf="startupEditFormGroup.controls.password.errors?.['minlength']">
+                        Password must consist of no less than 8 characters.
+                    </div>
+
+                </div>
             </div>
         </ng-container>
 
@@ -17,11 +40,26 @@
             <label for="registerNameField" class="form-label">Название</label>
             <input type="text" formControlName="title" class="form-control" id="registerNameField"
                    placeholder="Мой стартап">
+            <div *ngIf="startupEditFormGroup.controls.title.invalid && (startupEditFormGroup.controls.title.dirty || startupEditFormGroup.controls.title.touched)"
+                 class="alert">
+
+                <div *ngIf="startupEditFormGroup.controls.title.errors?.['required']">
+                    Title is required.
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Описание стартапа</label>
             <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1"
                       rows="3"></textarea>
+            <div *ngIf="startupEditFormGroup.controls.description.invalid && (startupEditFormGroup.controls.description.dirty || startupEditFormGroup.controls.description.touched)"
+                 class="alert">
+
+                <div *ngIf="startupEditFormGroup.controls.description.errors?.['required']">
+                    Description is required.
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="formFile" class="form-label">Логотип</label>
@@ -44,6 +82,13 @@
             </label>
             <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalField"
                    placeholder="50000">
+            <div *ngIf="startupEditFormGroup.controls.fundingGoal.invalid && (startupEditFormGroup.controls.fundingGoal.dirty || startupEditFormGroup.controls.fundingGoal.touched)"
+                 class="alert">
+
+                <div *ngIf="startupEditFormGroup.controls.fundingGoal.errors?.['required']">
+                    Funding goal is required.
+                </div>
+            </div>
         </div>
         <div *ngIf="formType === FormType.CREATE" class="mb-3">
             <label for="registerNameField" class="form-label">Начальное финансирование
@@ -51,18 +96,42 @@
             </label>
             <input type="text" formControlName="initialFundingGoal" class="form-control" id="initialFundingGoalField"
                    placeholder="50000">
+            <div *ngIf="showErrors(startupEditFormGroup.controls.fundingGoal)"
+                 class="alert">
+                <div *ngIf="startupEditFormGroup.controls.fundingGoal.errors?.['required']">
+                    Funding goal is required.
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="tamField" class="form-label">Объем рынка TAM, млн руб.</label>
             <input type="text" formControlName="tamMarket" class="form-control" id="tamField" placeholder="50000">
+            <div *ngIf="showErrors(startupEditFormGroup.controls.tamMarket)"
+                 class="alert">
+                <div *ngIf="startupEditFormGroup.controls.tamMarket.errors?.['required']">
+                    TAM is required.
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="samField" class="form-label">Объем рынка SAM, млн руб.</label>
             <input type="text" formControlName="samMarket" class="form-control" id="samField" placeholder="50000">
+            <div *ngIf="showErrors(startupEditFormGroup.controls.samMarket)"
+                 class="alert">
+                <div *ngIf="startupEditFormGroup.controls.samMarket.errors?.['required']">
+                    SAM is required.
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="somField" class="form-label">Объем рынка SOM, млн руб.</label>
             <input type="text" formControlName="somMarket" class="form-control" id="somField" placeholder="50000">
+            <div *ngIf="showErrors(startupEditFormGroup.controls.somMarket)"
+                 class="alert">
+                <div *ngIf="startupEditFormGroup.controls.somMarket.errors?.['required']">
+                    SOM is required.
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="teamExperienceField" class="form-label">Опыт команды</label>

@@ -1,17 +1,17 @@
 <div class="auth-container">
-  <ul ngbNav #nav="ngbNav" class="nav-tabs">
-    <li ngbNavItem>
-      <button ngbNavLink>Стартап</button>
-      <ng-template ngbNavContent>
-        <app-edit-startup [formType]="FormType.CREATE"></app-edit-startup>
-      </ng-template>
-    </li>
-    <li ngbNavItem>
-      <button ngbNavLink>Инвестор</button>
-      <ng-template ngbNavContent>
-          <app-edit-investor [formType]="FormType.CREATE"></app-edit-investor>
-      </ng-template>
-    </li>
-  </ul>
-  <div [ngbNavOutlet]="nav"></div>
+    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+            <button ngbNavLink>Стартап</button>
+            <ng-template ngbNavContent>
+                <app-edit-startup [formType]="FormType.CREATE"></app-edit-startup>
+            </ng-template>
+        </li>
+        <li ngbNavItem>
+            <button ngbNavLink>Инвестор</button>
+            <ng-template ngbNavContent>
+                <app-edit-investor [formType]="FormType.CREATE"></app-edit-investor>
+            </ng-template>
+        </li>
+    </ul>
+    <div [ngbNavOutlet]="nav"></div>
 </div>

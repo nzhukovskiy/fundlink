@@ -8,9 +8,9 @@ import { environment } from '../../../../environments/environment';
 import { FormType } from '../../../constants/form-type';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import { CreateInvestmentComponent } from '../../dialogs/create-investment/create-investment.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TextDialogComponent } from '../../dialogs/text-dialog/text-dialog.component';
+import {markAllControlsAsTouched, showErrors} from "../../../utils/validate-form-utils";
 
 @Component({
     selector: 'app-edit-startup',
@@ -36,16 +36,16 @@ export class EditStartupComponent implements OnInit {
 
     startupEditFormGroup = new FormGroup({
         email: new FormControl<string>('', {validators: [Validators.required, Validators.email]}),
-        password: new FormControl<string>(''),
-        title: new FormControl<string>(''),
-        description: new FormControl<string>(''),
+        password: new FormControl<string>('', {validators: [Validators.required, Validators.minLength(8)]}),
+        title: new FormControl<string>('', {validators: [Validators.required]}),
+        description: new FormControl<string>('', {validators: [Validators.required]}),
         logo: new FormControl<File | undefined>(undefined),
         autoApproveInvestments: new FormControl(true),
-        fundingGoal: new FormControl<string>(''),
-        initialFundingGoal: new FormControl<string>(''),
-        tamMarket: new FormControl<string>(''),
-        samMarket: new FormControl<string>(''),
-        somMarket: new FormControl<string>(''),
+        fundingGoal: new FormControl<string>('', {validators: [Validators.required]}),
+        initialFundingGoal: new FormControl<string>('', {validators: [Validators.required]}),
+        tamMarket: new FormControl<string>('', {validators: [Validators.required]}),
+        samMarket: new FormControl<string>('', {validators: [Validators.required]}),
+        somMarket: new FormControl<string>('', {validators: [Validators.required]}),
         teamExperience: new FormControl<string>(''),
         // industry: new FormControl<string>("", ),
         revenuePerYear: new FormArray(
@@ -75,6 +75,10 @@ export class EditStartupComponent implements OnInit {
     });
 
     handleFormSubmission() {
+        if (this.startupEditFormGroup.invalid) {
+            markAllControlsAsTouched(this.startupEditFormGroup);
+            return;
+        }
         if (this.formType === FormType.CREATE) {
             this.createStartup();
         } else {
@@ -240,4 +244,5 @@ export class EditStartupComponent implements OnInit {
     }
 
     protected readonly FormType = FormType;
+    protected readonly showErrors = showErrors;
 }

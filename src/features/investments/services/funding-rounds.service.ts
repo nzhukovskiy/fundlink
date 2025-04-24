@@ -40,6 +40,10 @@ export class FundingRoundsService {
         if (startup.stage !== StartupStage.ACTIVE) {
             throw new BadRequestException("Cannot create funding round for a startup which have already exited");
         }
+        if (new Date(createFundingRoundDto.endDate).getTime() <= new Date(createFundingRoundDto.startDate).getTime()) {
+            throw new BadRequestException("Funding round end date must be bigger than start date");
+
+        }
         await this.ensureNoRoundsOverlap(createFundingRoundDto, startup.id);
         let fundingRound = await this.fundingRoundRepository.create(createFundingRoundDto);
         if (startup.fundingRounds.length == 0) {

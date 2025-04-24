@@ -20,7 +20,7 @@ export class Startup extends User {
     @Column({type: "decimal"})
     fundingGoal: string;
 
-    @Column()
+    @Column({nullable: true})
     teamExperience: number;
 
     @Column({type: "decimal"})

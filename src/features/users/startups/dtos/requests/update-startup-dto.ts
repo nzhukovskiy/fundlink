@@ -33,6 +33,7 @@ export class UpdateStartupDto {
 
     @ApiProperty()
     @IsNumber()
+    @IsOptional()
     teamExperience: number;
 
     @ApiProperty()

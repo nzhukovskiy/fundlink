@@ -76,6 +76,7 @@ export class EditStartupComponent implements OnInit {
 
     handleFormSubmission() {
         if (this.startupEditFormGroup.invalid) {
+            console.log(this.getAllErrors(this.startupEditFormGroup))
             markAllControlsAsTouched(this.startupEditFormGroup);
             return;
         }
@@ -144,6 +145,12 @@ export class EditStartupComponent implements OnInit {
             let user = this.localStorageService.getUser();
             this.startupService.getOne(user!.id).subscribe(startup => {
                 console.log(startup);
+                this.startupEditFormGroup.controls.email.clearValidators();
+                this.startupEditFormGroup.controls.email.updateValueAndValidity();
+                this.startupEditFormGroup.controls.password.clearValidators();
+                this.startupEditFormGroup.controls.password.updateValueAndValidity();
+                this.startupEditFormGroup.controls.initialFundingGoal.clearValidators();
+                this.startupEditFormGroup.controls.initialFundingGoal.updateValueAndValidity();
                 if (!startup.logoPath) {
                     this.startupEditFormGroup.setValue({
                         email: null,
@@ -245,4 +252,25 @@ export class EditStartupComponent implements OnInit {
 
     protected readonly FormType = FormType;
     protected readonly showErrors = showErrors;
+
+
+    getAllErrors(formGroup: FormGroup): { [key: string]: any } {
+        const errors: { [key: string]: any } = {};
+
+        Object.keys(formGroup.controls).forEach(key => {
+            const control = formGroup.get(key);
+
+            if (control instanceof FormGroup) {
+                // Recursively get errors from nested FormGroup
+                const groupErrors = this.getAllErrors(control);
+                if (Object.keys(groupErrors).length > 0) {
+                    errors[key] = groupErrors;
+                }
+            } else if (control && control.errors) {
+                errors[key] = control.errors;
+            }
+        });
+
+        return errors;
+    }
 }

@@ -15,8 +15,10 @@ import { Roles } from "../../../users/constants/roles"
 import { ChatsService } from "../../services/chats/chats.service"
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 import { ChatBetweenUsersDto } from "../../dtos/chat-between-users-dto/chat-between-users-dto"
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("chats")
+@ApiTags('chats')
 export class ChatsController {
     constructor(private readonly chatsService: ChatsService) {}
     @UseGuards(AuthGuard)

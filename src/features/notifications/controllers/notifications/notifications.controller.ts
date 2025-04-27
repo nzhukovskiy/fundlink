@@ -2,8 +2,10 @@ import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common"
 import { NotificationsService } from "../../services/notifications/notifications.service"
 import { AuthGuard } from "../../../auth/guards/auth.guard"
 import { Paginate, PaginateQuery } from "nestjs-paginate"
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("notifications")
+@ApiTags('notifications')
 export class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 

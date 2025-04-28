@@ -59,7 +59,7 @@ export class ChatsGateway extends BaseGateway {
         if (createMessageDto.receiverId) {
             this.server
                 .to(
-                    `${client.data.user.role === Roles.STARTUP ? "investor" : "startup"}-${createMessageDto.receiverId}`
+                    `${client.data.user.role === Roles.STARTUP ? Roles.INVESTOR : Roles.STARTUP}-${createMessageDto.receiverId}`
                 )
                 .emit("messageArrived", chat)
 
@@ -77,7 +77,7 @@ export class ChatsGateway extends BaseGateway {
             console.log(chat)
             if (client.data.user.role === Roles.STARTUP) {
                 this.server
-                    .to(`investor-${chat.investor.id}`)
+                    .to(`${Roles.INVESTOR}-${chat.investor.id}`)
                     .emit("messageArrived", chat)
                 this.eventEmitter.emit("notification", {
                     userId: chat.investor.id,
@@ -88,7 +88,7 @@ export class ChatsGateway extends BaseGateway {
                 } as CreateNotificationDto)
             } else {
                 this.server
-                    .to(`startup-${chat.startup.id}`)
+                    .to(`${Roles.STARTUP}-${chat.startup.id}`)
                     .emit("messageArrived", chat)
 
                 this.eventEmitter.emit("notification", {

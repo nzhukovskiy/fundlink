@@ -77,6 +77,7 @@ export class StartupsService {
             });
         }
         if (isInteresting) {
+            console.log(investorId)
             startupsQuery
               .andWhere(
                 `

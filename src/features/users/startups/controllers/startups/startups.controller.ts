@@ -28,6 +28,7 @@ import { AssignTagDto } from "../../dtos/requests/assign-tag-dto";
 import { logoFileFilter } from "../../storage/logos/logo-file-filter";
 import { OptionalAuthGuard } from "../../../../auth/guards/optional-auth/optional-auth.guard"
 import { ExitStartupDto } from "../../dtos/requests/exit-startup.dto";
+import { Roles as RolesEnum } from "../../../constants/roles"
 
 
 @Controller('startups')
@@ -49,7 +50,7 @@ export class StartupsController {
         @Query("includeExited") includeExited: boolean,
         @Req() req
     ) {
-        return this.startupsService.getAll(query, title, tag, isInteresting, onlyActive, includeExited, isInteresting && req.token && req.token.payload.role === "investor" ? req.token.payload.id : undefined);
+        return this.startupsService.getAll(query, title, tag, isInteresting, onlyActive, includeExited, isInteresting && req.token && req.token.payload.role === RolesEnum.INVESTOR ? req.token.payload.id : undefined);
     }
 
     @ApiBearerAuth()

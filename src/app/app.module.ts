@@ -93,6 +93,7 @@ import { ExitNotificationComponent } from './components/notifications/exit-notif
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {MatMenuModule} from "@angular/material/menu";
+import { ShortenNumberPipe } from './pipes/shorten-number.pipe';
 
 
 const socketIoConfig: SocketIoConfig = { url: 'http://localhost:3001'};
@@ -155,6 +156,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         MainStatsComponent,
         ExitStartupComponent,
         ExitNotificationComponent,
+        ShortenNumberPipe,
     ],
     imports: [
         BrowserModule,

@@ -16,13 +16,13 @@
         </div>
 
         <app-tags-list [tags]="startup!.tags"></app-tags-list>
-        <div>Общая цель: {{startup?.fundingGoal}} руб.
+        <div>Общая цель: {{startup?.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
             <app-input-help-tooltip tooltipMessage="Долгосрочная цель"></app-input-help-tooltip>
         </div>
-        <div class="funding-goal">Текущая цель: {{getTotalFundingGoalByRounds()}} руб.
+        <div class="funding-goal">Текущая цель: {{getTotalFundingGoalByRounds().toNumber() | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
             <app-input-help-tooltip tooltipMessage="Сумма целей всех раундов финансирования"></app-input-help-tooltip>
         </div>
-        <div>Всего собрано: {{getCurrentFundingByRounds()}} руб.</div>
+        <div>Всего собрано: {{getCurrentFundingByRounds().toNumber() | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
         <app-progress-bar [fillPercent]="getOverallFundingProgress().toNumber()" [fillColor]="'#27ae60'"></app-progress-bar>
     </div>
 </div>
@@ -38,23 +38,23 @@
     <p class="exit-value" *ngIf="startup!.exit.value"><mat-icon>attach_money</mat-icon>Итоговая стоимость: {{startup!.exit.value | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</p>
 </div>
 <div class="stats-container">
-    <div *ngIf="startup?.dcf && startup?.dcf?.totalDcfValue != 0" class="stat-card">
+    <div *ngIf="startup && startup.dcf && startup.dcf.totalDcfValue != 0" class="stat-card">
         <div class="stat-label">Оценка по методу DCF</div>
-        <div class="stat-value">{{startup?.dcf?.totalDcfValue | number:'1.2-2'}} млн руб.
+        <div class="stat-value">{{startup.dcf.totalDcfValue.toString() | shortenNumber}}
             <mat-icon *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role === Roles.INVESTOR" (click)="openDetailedFinancialStats()" matTooltip="Подробная информация" class="open-financial-stats-icon">open_in_new</mat-icon>
         </div>
     </div>
     <div class="stat-card">
         <div class="stat-label">TAM</div>
-        <div class="stat-value">{{startup?.tamMarket}} млн руб.</div>
+        <div class="stat-value">{{startup!.tamMarket | shortenNumber}}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">SAM</div>
-        <div class="stat-value">{{startup?.samMarket}} млн руб.</div>
+        <div class="stat-value">{{startup!.samMarket | shortenNumber}}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">SOM</div>
-        <div class="stat-value">{{startup?.somMarket}} млн руб.</div>
+        <div class="stat-value">{{startup!.somMarket | shortenNumber}}</div>
     </div>
 </div>
 <!--<div class="markets-chart-container" *ngIf="startup">-->

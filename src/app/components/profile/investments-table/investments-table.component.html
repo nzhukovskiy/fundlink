@@ -40,7 +40,7 @@
         </td>
         <td>
             <a *ngIf="investmentsFor === Roles.INVESTOR" [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>
-            <a *ngIf="investmentsFor === Roles.STARTUP">{{ investment.investor.name }} {{ investment.investor.surname }}</a>
+            <a *ngIf="investmentsFor === Roles.STARTUP" [routerLink]="['/investors', investment.investor.id]">{{ investment.investor.name }} {{ investment.investor.surname }}</a>
         </td>
     </tr>
     </tbody>

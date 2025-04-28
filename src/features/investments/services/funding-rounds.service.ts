@@ -245,11 +245,28 @@ export class FundingRoundsService {
         if (new Decimal(fundingRoundDto.fundingGoal).lessThan(new Decimal(fundingRound.fundingGoal))) {
             throw new BadRequestException("Cannot decrease funding goal of round with existing investments")
         }
-        if (new Date(fundingRoundDto.startDate).getTime() !== (new Date(fundingRound.startDate)).getTime()) {
+        if (!this.isSameDay(new Date(fundingRoundDto.startDate), new Date(fundingRound.startDate))) {
             throw new BadRequestException("Cannot change start date of round with existing investments")
         }
-        if (new Date(fundingRoundDto.endDate).getTime() < (new Date(fundingRound.endDate)).getTime()) {
+        if (this.compareDates(new Date(fundingRoundDto.endDate),new Date(fundingRound.endDate) ) < 0) {
             throw new BadRequestException("Cannot shorten round with existing investments")
         }
     }
+
+    private isSameDay(d1: Date, d2: Date) {
+        return d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate();
+    }
+
+    private compareDates(d1: Date, d2: Date) {
+        if (d1.getFullYear() !== d2.getFullYear()) {
+            return d1.getFullYear() - d2.getFullYear();
+        }
+        if (d1.getMonth() !== d2.getMonth()) {
+            return d1.getMonth() - d2.getMonth();
+        }
+        return d1.getDate() - d2.getDate();
+    }
+
 }

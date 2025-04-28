@@ -50,7 +50,7 @@ export class ChatsGateway extends BaseGateway {
                 (room) => room === `chat-${message.chat.id}`
             )
         ) {
-            this.chatsService.joinChat(message.chat.id, client).then()
+            await this.chatsService.joinChat(message.chat.id, client)
         }
         this.server.to(`chat-${message.chat.id}`).emit("message", message)
         const chat = await this.chatsService.getChatAndLastMessage(

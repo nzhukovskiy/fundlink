@@ -16,9 +16,9 @@
                 <h4>Общая цель: {{ startup.fundingGoal! }} руб.</h4>
                 <p>Статус: {{startup.stage}}</p>
                 <p style="white-space: pre-line;">{{ startup.description }}</p>
-                <div>Объем рынка TAM {{ startup.tamMarket }} млн руб.</div>
-                <div>Объем рынка SAM {{ startup.samMarket }} млн руб.</div>
-                <div>Объем рынка SOM {{ startup.somMarket }} млн руб.</div>
+                <div>Объем рынка TAM {{ startup.tamMarket }} руб.</div>
+                <div>Объем рынка SAM {{ startup.samMarket }} руб.</div>
+                <div>Объем рынка SOM {{ startup.somMarket }} руб.</div>
                 <a *ngIf="startup.presentationPath"
                    [href]="'http://localhost:3000/uploads/presentations/' + startup.presentationPath">Презентация</a>
                 <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div *ngIf="startup.dcf.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
-                    DCF: {{ startup.dcf.totalDcfValue | number:'1.2-2' }} млн руб.
+                    DCF: {{ startup.dcf.totalDcfValue | number:'1.2-2' }} руб.
                 </div>
                 <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3 button-group">
                     <a type="submit" (click)="openStartupExitDialog()" class="btn btn-dark mb-3 action-btn exit-button"><mat-icon>close</mat-icon>Экзит стартапа</a>

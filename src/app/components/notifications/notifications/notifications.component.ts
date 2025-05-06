@@ -49,7 +49,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.totalNotificationsNumber = res.meta.totalItems;
             });
         })
-        this.notificationsService.getNotifications().subscribe((notifications) => {
+        this.notificationsService.getNotifications(this.pageIndex, this.pageSize).subscribe((notifications) => {
             this.notifications = notifications.data;
             this.totalNotificationsNumber = notifications.meta.totalItems;
         })

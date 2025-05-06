@@ -13,6 +13,4 @@ export class HeaderComponent {
                 protected readonly userService: UserService) {}
 
     protected readonly Roles = Roles;
-    protected readonly navigator = navigator;
-    protected readonly matchMedia = matchMedia;
 }

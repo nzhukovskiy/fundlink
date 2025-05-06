@@ -18,8 +18,6 @@ import { User } from "../../user/user"
 import { Tag } from "../../../tags/entities/tag/tag"
 import Decimal from "decimal.js"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
-import { DcfDetailedDto } from "../dtos/responses/dcf-detailed.dto/dcf-detailed.dto"
-import { WaccDetailsDto } from "../dtos/responses/wacc-details.dto/wacc-details.dto"
 import { FundingRound } from "../../../investments/entities/funding-round/funding-round"
 import { ExitStartupDto } from "../dtos/requests/exit-startup.dto"
 import { Exit } from "../entities/exit"
@@ -29,7 +27,6 @@ import { NotificationTypes } from "../../../notifications/constants/notification
 import { ExitType } from "../../constants/exit-type"
 import { StartupStage } from "../../constants/startup-stage"
 import { ErrorCode } from "../../../../constants/error-code"
-import { DcfValuationService } from "./valuation/dcf-valuation.service"
 import { ValuationService } from "./valuation/valuation.service"
 
 @Injectable()
@@ -79,7 +76,6 @@ export class StartupsService {
             })
         }
         if (isInteresting) {
-            console.log(investorId)
             startupsQuery
                 .andWhere(
                     `
@@ -383,7 +379,7 @@ export class StartupsService {
             .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
             .addSelect(`(${uniqueInvestorsSubQuery})`, "uniqueInvestors")
             .addSelect(`(${interestingCountSubQuery})`, "interestingCount")
-            .take(5)
+            .andWhere("startup.stage = 'ACTIVE'")
             .getRawAndEntities()
 
         const rawMap = new Map<number, any>()
@@ -400,60 +396,46 @@ export class StartupsService {
                 ),
                 uniqueInvestors: parseInt(raw?.uniqueInvestors || 0, 10),
                 interestingCount: parseInt(raw?.interestingCount || 0, 10),
+                getRole: () => Roles.STARTUP
             }
         })
         const startupResults = Map<number, number>
-        const minTotalInvestment = Math.min(
-            ...mappedStartups.map((x) => x.investmentsTotal as number)
-        )
-        const maxTotalInvestment = Math.max(
-            ...mappedStartups.map((x) => x.investmentsTotal as number)
-        )
-        const minRecentInvestment = Math.min(
-            ...mappedStartups.map((x) => x.recentInvestmentsTotal as number)
-        )
-        const maxRecentInvestment = Math.max(
-            ...mappedStartups.map((x) => x.recentInvestmentsTotal as number)
-        )
-        const minUniqueInvestors = Math.min(
-            ...mappedStartups.map((x) => x.uniqueInvestors as number)
-        )
-        const maxUniqueInvestors = Math.max(
-            ...mappedStartups.map((x) => x.uniqueInvestors as number)
-        )
-        const minInterestingCount = Math.min(
-            ...mappedStartups.map((x) => x.interestingCount as number)
-        )
-        const maxInterestingCount = Math.max(
-            ...mappedStartups.map((x) => x.interestingCount as number)
-        )
+        const metrics = {
+            totalInvestments: this.getMinMaxMetric(mappedStartups, 'investmentsTotal'),
+            recentInvestments: this.getMinMaxMetric(mappedStartups, 'recentInvestmentsTotal'),
+            uniqueInvestors: this.getMinMaxMetric(mappedStartups, 'uniqueInvestors'),
+            interestingCount: this.getMinMaxMetric(mappedStartups, 'interestingCount'),
+        }
 
         for (const startup of mappedStartups) {
-            const recentScore =
-                ((startup.recentInvestmentsTotal - minRecentInvestment) /
-                    (maxRecentInvestment - minRecentInvestment)) *
-                100
-            const totalScore =
-                ((startup.investmentsTotal - minTotalInvestment) /
-                    (maxTotalInvestment - minTotalInvestment)) *
-                100
-            const investorsScore =
-                ((startup.uniqueInvestors - minUniqueInvestors) /
-                    (maxUniqueInvestors - minUniqueInvestors)) *
-                100
-            const interestingScore =
-                ((startup.interestingCount - minInterestingCount) /
-                    (maxInterestingCount - minInterestingCount)) *
-                100
+            const score = {
+                recentScore: this.calculateScore(startup.recentInvestmentsTotal, metrics.recentInvestments.min, metrics.recentInvestments.max),
+                totalScore: this.calculateScore(startup.investmentsTotal, metrics.totalInvestments.min, metrics.totalInvestments.max),
+                investorsScore: this.calculateScore(startup.uniqueInvestors, metrics.uniqueInvestors.min, metrics.uniqueInvestors.max),
+                interestingScore: this.calculateScore(startup.interestingCount, metrics.interestingCount.min, metrics.interestingCount.max),
+            }
             startupResults[startup.id] =
-                recentScore * 0.4 +
-                totalScore * 0.2 +
-                investorsScore * 0.25 +
-                interestingScore * 0.15
+                score.recentScore * 0.4 +
+                score.totalScore * 0.2 +
+                score.investorsScore * 0.25 +
+                score.interestingScore * 0.15
         }
+        console.log(startupResults)
         return mappedStartups.sort(
-            (a, b) => -(startupResults[a.id] - startupResults[b.id])
-        )
+            (a, b) => startupResults[b.id] - startupResults[a.id]
+        ).slice(0, 5)
+    }
+
+    private getMinMaxMetric(startups: Startup[], key: 'investmentsTotal' | 'uniqueInvestors' | 'recentInvestmentsTotal' | 'interestingCount') {
+        const values = startups.map((x) => x[key] as number)
+        return {
+            min: Math.min(...values),
+            max: Math.max(...values),
+        }
+    }
+
+    private calculateScore(currentScore: number, min: number, max: number) {
+        return ((currentScore - min) / (max - min)) * 100
     }
 
     async getMostFundedStartups() {
@@ -470,7 +452,7 @@ export class StartupsService {
             .createQueryBuilder("startup")
             .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
             .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
-            .take(5)
+            .andWhere("startup.stage = 'ACTIVE'")
             .getRawAndEntities()
 
         const aggregatedMap: Record<string, number> = {}
@@ -484,6 +466,7 @@ export class StartupsService {
                 investmentsTotal: aggregatedMap[startup.id] || 0,
             }))
             .sort((a, b) => b.investmentsTotal - a.investmentsTotal)
+            .slice(0, 5)
     }
 
     getStartupsNumber() {

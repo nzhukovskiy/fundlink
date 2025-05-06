@@ -1,94 +1,13 @@
-import {
-    Injectable,
-    NotFoundException,
-} from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import { ConfigService } from "@nestjs/config"
 import { DataSource } from "typeorm"
-import * as cluster from "node:cluster"
+import { InvestorGraphData } from "../../interfaces/investor-graph-data"
+import { StartupGraphData } from "../../interfaces/startup-graph-data"
+import { InvestmentQueryResult } from "../../interfaces/investment-query-result"
+import { FundingRoundDto } from "../../dtos/funding-round.dto"
+import { RecommendedStartupDto } from "../../dtos/recommended-startup.dto"
+import { RecommendationResponseDto } from "../../dtos/recommendation-response.dto"
 
-interface InvestmentDetail {
-    investment_amount: number
-    investment_date: Date
-}
-
-interface InvestorNodeData {
-    name: string
-    surname: string
-    investments: InvestmentDetail[]
-    weight?: number
-}
-
-interface StartupNodeData {
-    title: string
-    description: string
-    investments: InvestmentDetail[]
-    weight?: number
-}
-
-interface InvestorGraphData {
-    name: string
-    surname: string
-    startups: Map<number, StartupNodeData> // key: startupId
-}
-
-interface StartupGraphData {
-    title: string
-    description: string
-    investors: Map<number, InvestorNodeData> // key: investorId
-}
-
-// Interface for the database query result row
-interface InvestmentQueryResult {
-    investorId: number
-    name: string
-    surname: string
-    startupId: number
-    title: string
-    description: string
-    amount: string // Comes as string from DB sometimes, parse later
-    date: Date
-}
-
-// Interface for Funding Round data
-export interface FundingRoundDto {
-    id: number
-    startupId: number
-    stage: string
-    fundingGoal: string // Or number if appropriate
-    currentRaised: string // Or number if appropriate
-    startDate: Date
-    endDate: Date
-    isCurrent: boolean
-}
-
-// Interface for Recommended Startup data including funding round
-export interface RecommendedStartupDto {
-    id: number
-    title: string
-    description: string
-    // We might not need investors/investments in the final output
-    // investors: Map<number, InvestorNodeData>;
-    fundingRounds?: FundingRoundDto[] // Optional, as we add it later
-    // Include other startup fields if needed
-}
-
-// Interface for the final response
-export interface RecommendationResponseDto {
-    startupWeights: Record<number, number> // Convert Map to plain object for JSON
-    recommendedStartups: RecommendedStartupDto[]
-}
-
-// Interface for raw funding round query result
-interface RawFundingRound {
-    id: number
-    startupId: number
-    stage: string
-    fundingGoal: string
-    currentRaised: string
-    startDate: Date
-    endDate: Date
-    isCurrent: boolean
-}
 @Injectable()
 export class RecommendationService {
     constructor(
@@ -195,7 +114,7 @@ export class RecommendationService {
             ] of investorInfo.startups.entries()) {
                 let connectionSum = 0
                 for (const investment of startupInfo.investments) {
-                    connectionSum += investment.investment_amount
+                    connectionSum += investment.investmentAmount
                 }
                 const weight = connectionSum / totalInvestments
 
@@ -239,7 +158,7 @@ export class RecommendationService {
             .filter(
                 (startup) => !targetInvestorInvestedStartupIds.has(startup[0])
             )
-            .sort((a, b) => a[1] - b[1])
+            .sort((a, b) => b[1] - a[1])
             .slice(0, 20)
 
         const recommendedStartups: RecommendedStartupDto[] = []
@@ -249,7 +168,7 @@ export class RecommendationService {
                 continue
             }
 
-            const fundingRoundResult: RawFundingRound[] =
+            const fundingRoundResult: FundingRoundDto[] =
                 await queryRunner.query(
                     `SELECT * FROM funding_round WHERE "startupId" = $1 AND "isCurrent" = true LIMIT 1`,
                     [startupId]
@@ -278,6 +197,8 @@ export class RecommendationService {
             })
         }
 
+        console.log(startupWeights)
+
         const startupWeightsObject: Record<number, number> = {}
         startupWeights.forEach((weight, id) => {
             startupWeightsObject[id] = weight
@@ -288,7 +209,6 @@ export class RecommendationService {
         }
 
         return {
-            // startupWeights: startupWeights, // Return the final weights if needed
             startupWeights: startupWeightsObject,
             recommendedStartups: recommendedStartups,
         }
@@ -320,8 +240,8 @@ export class RecommendationService {
             childEntry.investments = []
         }
         childEntry.investments.push({
-            investment_amount: investmentAmount,
-            investment_date: investmentDate,
+            investmentAmount: investmentAmount,
+            investmentDate: investmentDate,
         })
     }
 
@@ -376,10 +296,10 @@ export class RecommendationService {
                 if (startup.investments) {
                     for (const investment of startup.investments) {
                         if (
-                            typeof investment.investment_amount === "number" &&
-                            !isNaN(investment.investment_amount)
+                            typeof investment.investmentAmount === "number" &&
+                            !isNaN(investment.investmentAmount)
                         ) {
-                            investmentsSum += investment.investment_amount
+                            investmentsSum += investment.investmentAmount
                         }
                     }
                 }

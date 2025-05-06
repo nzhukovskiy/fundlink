@@ -13,7 +13,7 @@ import { JwtTokenModule } from "../token/jwt-token.module"
 import { Investment } from "../investments/entities/investment/investment"
 import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
-import { RecommendationService } from './investors/services/recommendation/recommendation.service';
+import { RecommendationService } from './investors/recommendations/services/recommendation/recommendation.service';
 import { Exit } from "./startups/entities/exit";
 
 @Module({

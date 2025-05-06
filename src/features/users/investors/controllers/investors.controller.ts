@@ -7,7 +7,7 @@ import { UpdateInvestorDto } from "../dtos/update-investor-dto";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RolesGuard } from "../../../auth/guards/roles.guard";
 import { Roles } from "../../../auth/decorators/roles.decorator";
-import { RecommendationService } from "../services/recommendation/recommendation.service";
+import { RecommendationService } from "../recommendations/services/recommendation/recommendation.service";
 
 @Controller('investors')
 @ApiTags('investors')

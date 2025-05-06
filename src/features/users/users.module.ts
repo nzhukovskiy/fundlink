@@ -15,6 +15,8 @@ import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
 import { RecommendationService } from './investors/recommendations/services/recommendation/recommendation.service';
 import { Exit } from "./startups/entities/exit";
+import { DcfValuationService } from './startups/services/valuation/dcf-valuation.service';
+import { ValuationService } from "./startups/services/valuation/valuation.service"
 
 @Module({
     imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag, Exit]),
@@ -23,7 +25,11 @@ import { Exit } from "./startups/entities/exit";
         PaginateModule,
     ],
     controllers: [StartupsController, InvestorsController],
-    providers: [StartupsService, UsersService, InvestorsService, RecommendationService],
+    providers: [StartupsService, UsersService, InvestorsService, RecommendationService,
+        {
+            provide: ValuationService,
+            useClass: DcfValuationService,
+        }],
     exports: [StartupsService, UsersService, InvestorsService],
 })
 export class UsersModule {

@@ -102,9 +102,7 @@ export class DcfValuationService extends ValuationService {
 
         const tvDenominator = discountRate.minus(g)
         if (tvDenominator.isZero() || tvDenominator.isNegative()) {
-            console.error(
-                `WACC (${discountRate}) minus Growth Rate (${g}) is non-positive (${tvDenominator}). Cannot calculate Terminal Value.`
-            )
+
             return null
         }
         const terminalValue = fcfNPlus1.div(tvDenominator)
@@ -114,9 +112,6 @@ export class DcfValuationService extends ValuationService {
             .pow(startup.deprecationAndAmortization.length)
 
         if (tvDiscountFactor.isZero()) {
-            console.error(
-                `Terminal Value discount factor is zero. Cannot calculate PV(TV).`
-            )
             return null
         }
         const pvTerminalValue = terminalValue.div(tvDiscountFactor)

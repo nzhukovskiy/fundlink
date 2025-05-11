@@ -13,24 +13,45 @@ import { JwtTokenModule } from "../token/jwt-token.module"
 import { Investment } from "../investments/entities/investment/investment"
 import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
-import { RecommendationService } from './investors/recommendations/services/recommendation/recommendation.service';
-import { Exit } from "./startups/entities/exit";
-import { DcfValuationService } from './startups/services/valuation/dcf-valuation.service';
+import { RecommendationService } from "./investors/recommendations/services/recommendation/recommendation.service"
+import { Exit } from "./startups/entities/exit"
+import { DcfValuationService } from "./startups/services/valuation/dcf-valuation.service"
 import { ValuationService } from "./startups/services/valuation/valuation.service"
+import { StartupsStatsService } from "./startups/services/startups-stats/startups-stats.service"
+import { StartupsRepository } from "./startups/repositories/startups/startups.repository"
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Startup, Investor, FundingRound, Investment, Tag, Exit]),
+    imports: [
+        TypeOrmModule.forFeature([
+            Startup,
+            Investor,
+            FundingRound,
+            Investment,
+            Tag,
+            Exit,
+        ]),
         InvestmentModule,
         JwtTokenModule,
         PaginateModule,
     ],
     controllers: [StartupsController, InvestorsController],
-    providers: [StartupsService, UsersService, InvestorsService, RecommendationService,
+    providers: [
+        StartupsService,
+        UsersService,
+        InvestorsService,
+        RecommendationService,
         {
             provide: ValuationService,
             useClass: DcfValuationService,
-        }],
-    exports: [StartupsService, UsersService, InvestorsService],
+        },
+        StartupsStatsService,
+        StartupsRepository
+    ],
+    exports: [
+        StartupsService,
+        UsersService,
+        InvestorsService,
+        StartupsStatsService,
+    ],
 })
-export class UsersModule {
-}
+export class UsersModule {}

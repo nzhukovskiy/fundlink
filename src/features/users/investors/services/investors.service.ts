@@ -18,7 +18,7 @@ import { Investment } from "../../../investments/entities/investment/investment"
 import { plainToInstance } from "class-transformer"
 import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
-import { InvestorStatisticsDto } from "../dtos/investor-statistics.dto/investor-statistics.dto";
+import { InvestorStatisticsDto } from "../dtos/investor-statistics.dto/investor-statistics.dto"
 
 @Injectable()
 export class InvestorsService {
@@ -142,35 +142,43 @@ export class InvestorsService {
     }
 
     async getStats(investorId: number) {
-        const averageInvestmentAmount = (await this.investorRepository
-          .createQueryBuilder("investor")
-          .leftJoinAndSelect("investor.investments", "investment")
-          .select("AVG(investment.amount) as avg")
-          .where("investor.id = :id", {id: investorId})
-          .getRawOne()).avg
+        const averageInvestmentAmount = (
+            await this.investorRepository
+                .createQueryBuilder("investor")
+                .leftJoinAndSelect("investor.investments", "investment")
+                .select("AVG(investment.amount) as avg")
+                .where("investor.id = :id", { id: investorId })
+                .andWhere("investment.stage = 'COMPLETED'")
+                .getRawOne()
+        ).avg
 
         if (averageInvestmentAmount == null) {
             return {}
         }
 
         const startupsCount = await this.startupRepository
-          .createQueryBuilder("startup")
-          .leftJoin("startup.fundingRounds", "fundingRound")
-          .leftJoin("fundingRound.investments", "investment")
-          .leftJoinAndSelect("investment.investor", "investor")
-          .where("investor.id = :id", {id: investorId})
-          .getCount()
+            .createQueryBuilder("startup")
+            .leftJoin("startup.fundingRounds", "fundingRound")
+            .leftJoin("fundingRound.investments", "investment")
+            .leftJoinAndSelect("investment.investor", "investor")
+            .where("investor.id = :id", { id: investorId })
+            .andWhere("investment.stage = 'COMPLETED'")
+            .getCount()
 
-        const lastInvestmentDate = (await this.investmentRepository
-          .createQueryBuilder("investment")
-          .leftJoin("investment.investor", "investor")
-          .where("investor.id = :id", { id: investorId })
-          .take(1)
-          .orderBy("investment.date", "DESC")
-          .getOne()).date
+        const lastInvestmentDate = (
+            await this.investmentRepository
+                .createQueryBuilder("investment")
+                .leftJoin("investment.investor", "investor")
+                .where("investor.id = :id", { id: investorId })
+                .andWhere("investment.stage = 'COMPLETED'")
+                .take(1)
+                .orderBy("investment.date", "DESC")
+                .getOne()
+        ).date
         return {
             averageInvestmentAmount,
             startupsCount,
-            lastInvestmentDate} as InvestorStatisticsDto
+            lastInvestmentDate,
+        } as InvestorStatisticsDto
     }
 }

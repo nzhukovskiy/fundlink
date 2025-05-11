@@ -28,6 +28,7 @@ import { ExitType } from "../../constants/exit-type"
 import { StartupStage } from "../../constants/startup-stage"
 import { ErrorCode } from "../../../../constants/error-code"
 import { ValuationService } from "./valuation/valuation.service"
+import { StartupsRepository } from "../repositories/startups/startups.repository"
 
 @Injectable()
 export class StartupsService {
@@ -48,7 +49,8 @@ export class StartupsService {
         @InjectDataSource()
         private dataSource: DataSource,
         private readonly eventEmitter2: EventEmitter2,
-        private readonly valuationService: ValuationService
+        private readonly valuationService: ValuationService,
+        private readonly startupsRepository: StartupsRepository
     ) {}
 
     async getAll(
@@ -61,122 +63,23 @@ export class StartupsService {
         investorId = -1,
         params = {}
     ) {
-        const startupsQuery = this.startupRepository
-            .createQueryBuilder("startup")
-            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-
-        if (tag) {
-            startupsQuery
-                .leftJoin("startup.tags", "tag")
-                .where("tag.title = :tagTitle", { tagTitle: tag })
-        }
-        if (title) {
-            startupsQuery.andWhere("startup.title ILIKE :title", {
-                title: `%${title}%`,
-            })
-        }
-        if (isInteresting) {
-            startupsQuery
-                .andWhere(
-                    `
-            EXISTS (
-                SELECT 1 
-                FROM investor_interesting_startups_startup iiss  
-                WHERE iiss."startupId"  = startup.id and iiss."investorId" = :investorId
-            )`
-                )
-                .setParameter("investorId", investorId)
-        }
-        if (onlyActive) {
-            startupsQuery.andWhere(
-                `
-            EXISTS (
-                SELECT 1 
-                FROM funding_round fr
-                WHERE fr."startupId" = startup.id and fr."isCurrent" = true
-            )`
-            )
-        }
-
-        if (!includeExited) {
-            startupsQuery.andWhere("startup.stage = 'ACTIVE'")
-        }
-
-        return this.paginateService.paginate(query, startupsQuery, {
-            ...params,
-            // relations: ["fundingRounds"],
-        })
+        return this.startupsRepository.getAll(
+            query,
+            title,
+            tag,
+            isInteresting,
+            onlyActive,
+            includeExited,
+            investorId,
+            params
+        )
     }
 
     async getOne(id: number, includeInvestments = false, investorId?: number) {
-        let startupQuery = this.startupRepository
-            .createQueryBuilder("startup")
-            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-        if (includeInvestments) {
-            startupQuery = startupQuery
-                .leftJoinAndSelect("fundingRound.investments", "investment")
-                .addSelect(
-                    `
-            EXISTS (
-                SELECT 1 
-                FROM funding_round_change_proposal frcp  
-                WHERE frcp."fundingRoundId"  = "fundingRound".id and frcp.status = 'PENDING_REVIEW'
-            )`,
-                    "isUpdating"
-                )
-                .leftJoinAndSelect("investment.investor", "investor")
-        }
-        if (investorId) {
-            startupQuery = startupQuery
-                .addSelect(
-                    `
-            EXISTS (
-                SELECT 1 
-                FROM investor_interesting_startups_startup iiss  
-                WHERE iiss."startupId"  = startup.id and iiss."investorId" = :investorId
-            )`,
-                    "isInteresting"
-                )
-                .setParameter("investorId", investorId)
-        }
-        const startup = await startupQuery
-            .where("startup.id = :id", { id })
-            .orderBy("fundingRound.startDate", "ASC")
-            .leftJoinAndSelect("startup.tags", "tag")
-            .leftJoinAndSelect("startup.exit", "exit")
-            .where("startup.id = :id", { id })
-            .getRawAndEntities()
-
-        if (!startup.raw.length) {
-            throw new NotFoundException({
-                errorCode: ErrorCode.STARTUP_WITH_ID_DOES_NOT_EXISTS,
-                data: { id },
-                message: `Startup with an id ${id} does not exist`,
-            })
-        }
-        const startupEntity = startup.entities[0]
-
-        const rawMap = startup.raw.map((raw) => ({
-            startupId: raw["startup_id"],
-            fundingRoundId: raw["fundingRound_id"],
-            isUpdating: raw["isUpdating"],
-        }))
-
-        for (const fundingRound of startupEntity.fundingRounds) {
-            const match = rawMap.find(
-                (r) =>
-                    r.startupId === startupEntity.id &&
-                    r.fundingRoundId === fundingRound.id
-            )
-            if (match) {
-                ;(fundingRound as any).isUpdating = match.isUpdating
-            }
-        }
-
+        const startup = await this.startupsRepository.getOne(id, includeInvestments, investorId);
         return {
-            ...startupEntity,
-            isInteresting: startup.raw[0].isInteresting,
-            dcf: this.calculateDcf(startup.entities[0]),
+            ...startup,
+            dcf: this.calculateDcf({...startup, getRole: () => Roles.STARTUP})
         }
     }
 
@@ -331,153 +234,6 @@ export class StartupsService {
             (x) => x.id !== startupId
         )
         return this.investorRepository.save(investor)
-    }
-
-    async getMostPopularStartups() {
-        const recentInvestmentsSubQuery = this.fundingRoundRepository
-            .createQueryBuilder("fundingRound")
-            .select(`SUM(i.amount) as investments_amount`)
-            .leftJoin("fundingRound.investments", "i")
-            .where(
-                '"fundingRound"."startupId" = startup.id and "i".stage=\'COMPLETED\' and "i"."date" >  CURRENT_DATE - interval \'30 days\''
-            )
-            .getQuery()
-
-        const totalInvestmentsSubQuery = this.fundingRoundRepository
-            .createQueryBuilder("fundingRound")
-            .select(`SUM(i.amount) as total_investments`)
-            .leftJoin("fundingRound.investments", "i")
-            .where(
-                '"fundingRound"."startupId" = startup.id and "i".stage=\'COMPLETED\''
-            )
-            .getQuery()
-
-        const uniqueInvestorsSubQuery = this.fundingRoundRepository
-            .createQueryBuilder("fundingRound")
-            .select(`COUNT(DISTINCT(investor.id)) as investors_count`)
-            .leftJoin("fundingRound.investments", "investment")
-            .leftJoin("investment.investor", "investor")
-            .where(
-                '"fundingRound"."startupId" = startup.id and "investment".stage=\'COMPLETED\''
-            )
-            .getQuery()
-
-        const interestingCountSubQuery = this.dataSource
-            .createQueryBuilder()
-            .select(`COUNT(DISTINCT(iiss."investorId")) as investors_count`)
-            .from("investor_interesting_startups_startup", "iiss")
-            .where('iiss."startupId" = startup.id')
-            .getQuery()
-
-        const startups = await this.startupRepository
-            .createQueryBuilder("startup")
-            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-            .addSelect(
-                `(${recentInvestmentsSubQuery})`,
-                "recentInvestmentsTotal"
-            )
-            .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
-            .addSelect(`(${uniqueInvestorsSubQuery})`, "uniqueInvestors")
-            .addSelect(`(${interestingCountSubQuery})`, "interestingCount")
-            .andWhere("startup.stage = 'ACTIVE'")
-            .getRawAndEntities()
-
-        const rawMap = new Map<number, any>()
-        startups.raw.forEach((row) => {
-            rawMap.set(row.startup_id, row)
-        })
-        const mappedStartups = startups.entities.map((x, i) => {
-            const raw = rawMap.get(x.id)
-            return {
-                ...x,
-                investmentsTotal: parseFloat(raw?.investmentsTotal || 0),
-                recentInvestmentsTotal: parseFloat(
-                    raw?.recentInvestmentsTotal || 0
-                ),
-                uniqueInvestors: parseInt(raw?.uniqueInvestors || 0, 10),
-                interestingCount: parseInt(raw?.interestingCount || 0, 10),
-                getRole: () => Roles.STARTUP
-            }
-        })
-        const startupResults = Map<number, number>
-        const metrics = {
-            totalInvestments: this.getMinMaxMetric(mappedStartups, 'investmentsTotal'),
-            recentInvestments: this.getMinMaxMetric(mappedStartups, 'recentInvestmentsTotal'),
-            uniqueInvestors: this.getMinMaxMetric(mappedStartups, 'uniqueInvestors'),
-            interestingCount: this.getMinMaxMetric(mappedStartups, 'interestingCount'),
-        }
-
-        for (const startup of mappedStartups) {
-            const score = {
-                recentScore: this.calculateScore(startup.recentInvestmentsTotal, metrics.recentInvestments.min, metrics.recentInvestments.max),
-                totalScore: this.calculateScore(startup.investmentsTotal, metrics.totalInvestments.min, metrics.totalInvestments.max),
-                investorsScore: this.calculateScore(startup.uniqueInvestors, metrics.uniqueInvestors.min, metrics.uniqueInvestors.max),
-                interestingScore: this.calculateScore(startup.interestingCount, metrics.interestingCount.min, metrics.interestingCount.max),
-            }
-            startupResults[startup.id] =
-                score.recentScore * 0.4 +
-                score.totalScore * 0.2 +
-                score.investorsScore * 0.25 +
-                score.interestingScore * 0.15
-        }
-        console.log(startupResults)
-        return mappedStartups.sort(
-            (a, b) => startupResults[b.id] - startupResults[a.id]
-        ).slice(0, 5)
-    }
-
-    private getMinMaxMetric(startups: Startup[], key: 'investmentsTotal' | 'uniqueInvestors' | 'recentInvestmentsTotal' | 'interestingCount') {
-        const values = startups.map((x) => x[key] as number)
-        return {
-            min: Math.min(...values),
-            max: Math.max(...values),
-        }
-    }
-
-    private calculateScore(currentScore: number, min: number, max: number) {
-        return ((currentScore - min) / (max - min)) * 100
-    }
-
-    async getMostFundedStartups() {
-        const totalInvestmentsSubQuery = this.fundingRoundRepository
-            .createQueryBuilder("fundingRound")
-            .select(`COALESCE(SUM(i.amount), 0) as total_investments`)
-            .leftJoin("fundingRound.investments", "i")
-            .where(
-                '"fundingRound"."startupId" = startup.id and "i".stage=\'COMPLETED\''
-            )
-            .getQuery()
-
-        const startupsRawAndEntities = await this.startupRepository
-            .createQueryBuilder("startup")
-            .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
-            .addSelect(`(${totalInvestmentsSubQuery})`, "investmentsTotal")
-            .andWhere("startup.stage = 'ACTIVE'")
-            .getRawAndEntities()
-
-        const aggregatedMap: Record<string, number> = {}
-        startupsRawAndEntities.raw.forEach((raw) => {
-            aggregatedMap[raw.startup_id] = Number(raw.investmentsTotal)
-        })
-
-        return startupsRawAndEntities.entities
-            .map((startup) => ({
-                ...startup,
-                investmentsTotal: aggregatedMap[startup.id] || 0,
-            }))
-            .sort((a, b) => b.investmentsTotal - a.investmentsTotal)
-            .slice(0, 5)
-    }
-
-    getStartupsNumber() {
-        return this.startupRepository.createQueryBuilder("startup").getCount()
-    }
-
-    getRecentlyJoinedNumber() {
-        return this.startupRepository
-            .createQueryBuilder("startup")
-            .where(`startup."joinedAt" >  CURRENT_DATE - interval '30 days'`)
-            .getCount()
     }
 
     async exitStartup(startupId: number, exitStartupDto: ExitStartupDto) {

@@ -38,13 +38,6 @@
                     </h2>
                     <div id="collapse{{i}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <!--                <div>-->
-                            <!--                    <p>Всего инвестировано: {{startup.totalInvestment}}</p>-->
-                            <!--                    <p>Моя доля: {{startup.sharePercentage | number}} %</p>-->
-                            <!--                    <ng-template #noInvestmentsYet>-->
-                            <!--                        Здесь пока пусто-->
-                            <!--                    </ng-template>-->
-                            <!--                </div>-->
                             <div class="startup-info-card">
                                 <div class="startup-header">
                                     <h3><a class="startup-link" [routerLink]="['/startups', startup.id]">{{ startup.title }}</a>
@@ -53,7 +46,7 @@
                                 <div class="startup-details">
                                     <div class="investment-info">
                                         <span class="label">Всего инвестировано Вами:</span>
-                                        <span class="value">{{ startup.totalInvestment | number }}</span>
+                                        <span class="value">{{ startup.totalInvestment | number | currency:'RUB':'symbol':'1.0-0':'ru-RU' }}</span>
                                     </div>
                                     <div class="share-info">
                                         <span class="label">Ваша доля:</span>

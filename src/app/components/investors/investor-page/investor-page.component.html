@@ -10,6 +10,11 @@
         </div>
 
 
+        <div *ngIf="investor?.title" class="location">
+            <mat-icon>business_center</mat-icon>
+            <span>{{investor?.title}}</span>
+        </div>
+
         <div *ngIf="investor?.location" class="location">
             <mat-icon>location_on</mat-icon>
             <span>{{investor?.location}}</span>

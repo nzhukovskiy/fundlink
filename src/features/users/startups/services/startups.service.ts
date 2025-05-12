@@ -29,6 +29,7 @@ import { StartupStage } from "../../constants/startup-stage"
 import { ErrorCode } from "../../../../constants/error-code"
 import { ValuationService } from "./valuation/valuation.service"
 import { StartupsRepository } from "../repositories/startups/startups.repository"
+import { InvestorsRepository } from "../../investors/repositories/investors/investors.repository";
 
 @Injectable()
 export class StartupsService {
@@ -38,19 +39,16 @@ export class StartupsService {
         @InjectRepository(Investor)
         private readonly investorRepository: Repository<Investor>,
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
-        @InjectRepository(FundingRound)
-        private readonly fundingRoundRepository: Repository<FundingRound>,
         @InjectRepository(Exit)
         private readonly exitRepository: Repository<Exit>,
         private readonly usersService: UsersService,
         private readonly jwtTokenService: JwtTokenService,
         private readonly paginateService: PaginateService,
         private readonly fundingRoundsService: FundingRoundsService,
-        @InjectDataSource()
-        private dataSource: DataSource,
         private readonly eventEmitter2: EventEmitter2,
         private readonly valuationService: ValuationService,
-        private readonly startupsRepository: StartupsRepository
+        private readonly startupsRepository: StartupsRepository,
+        private readonly investorsRepository: InvestorsRepository
     ) {}
 
     async getAll(
@@ -77,9 +75,36 @@ export class StartupsService {
 
     async getOne(id: number, includeInvestments = false, investorId?: number) {
         const startup = await this.startupsRepository.getOne(id, includeInvestments, investorId);
+        if (!startup.raw.length) {
+            throw new NotFoundException({
+                errorCode: ErrorCode.STARTUP_WITH_ID_DOES_NOT_EXISTS,
+                data: { id },
+                message: `Startup with an id ${id} does not exist`,
+            })
+        }
+        const startupEntity = startup.entities[0]
+
+        const rawMap = startup.raw.map((raw) => ({
+            startupId: raw["startup_id"],
+            fundingRoundId: raw["fundingRound_id"],
+            isUpdating: raw["isUpdating"],
+        }))
+
+        for (const fundingRound of startupEntity.fundingRounds) {
+            const match = rawMap.find(
+              (r) =>
+                r.startupId === startupEntity.id &&
+                r.fundingRoundId === fundingRound.id
+            )
+            if (match) {
+                (fundingRound as any).isUpdating = match.isUpdating
+            }
+        }
+
         return {
-            ...startup,
-            dcf: this.calculateDcf({...startup, getRole: () => Roles.STARTUP})
+            ...startupEntity,
+            isInteresting: startup.raw[0].isInteresting,
+            dcf: this.calculateDcf(startupEntity)
         }
     }
 
@@ -91,7 +116,11 @@ export class StartupsService {
         const startupDto = createStartupDto
         if (await this.usersService.findByEmail(startupDto.email)) {
             throw new BadRequestException(
-                `User with email ${startupDto.email} already exists`
+              {
+                  errorCode: ErrorCode.USER_EMAIL_DUPLICATE,
+                  data: {email: startupDto.email},
+                  message: `User with email ${startupDto.email} already exists`
+              }
             )
         }
         startupDto.password = await bcrypt.hash(startupDto.password, 10)
@@ -123,7 +152,11 @@ export class StartupsService {
             )
         }
         if (startup.stage !== StartupStage.ACTIVE) {
-            throw new BadRequestException("Cannot update the exited startup")
+            throw new BadRequestException({
+                errorCode: ErrorCode.CANNOT_UPDATE_EXITED_STARTUP,
+                data: {id},
+                message: "Cannot update the exited startup"
+            })
         }
         Object.assign(startup, updateStartupDto)
         if (!updateStartupDto.logoPath) {
@@ -133,31 +166,7 @@ export class StartupsService {
     }
 
     async getInvestors(id: number, fundingRoundId?: number) {
-        let whereClause: string
-        if (fundingRoundId) {
-            whereClause =
-                "startup.id = :id and fundingRound.id = :fundingRoundId"
-        } else {
-            whereClause = "startup.id = :id"
-        }
-        return this.investorRepository
-            .createQueryBuilder("investor")
-            .innerJoin("investor.investments", "investment")
-            .innerJoin("investment.fundingRound", "fundingRound")
-            .innerJoin("fundingRound.startup", "startup")
-            .where(whereClause, { id, fundingRoundId })
-            .andWhere("investment.stage = 'COMPLETED'")
-            .select([
-                "investor.id as id",
-                "investor.name as name",
-                "investor.surname as surname",
-                "investor.email as email",
-                'SUM(investment.amount) AS "totalInvestment"',
-            ])
-            .groupBy("investor.id")
-            .addGroupBy("investor.name")
-            .distinct(true)
-            .getRawMany()
+        return this.investorsRepository.getInvestorsForStartup(id, fundingRoundId);
     }
 
     async uploadPresentation(startupId: number, fileName: string) {
@@ -168,7 +177,11 @@ export class StartupsService {
             throw new NotFoundException("Startup with this id not found")
         }
         if (startup.stage !== StartupStage.ACTIVE) {
-            throw new BadRequestException("Cannot update the exited startup")
+            throw new BadRequestException({
+                errorCode: ErrorCode.CANNOT_UPDATE_EXITED_STARTUP,
+                data: {id: startupId},
+                message: "Cannot update the exited startup"
+            })
         }
         startup.presentationPath = fileName
         return this.startupRepository.save(startup)
@@ -181,7 +194,11 @@ export class StartupsService {
             throw new NotFoundException(`Tag with id ${tagId} not found`)
         }
         if (startup.stage !== StartupStage.ACTIVE) {
-            throw new BadRequestException("Cannot update the exited startup")
+            throw new BadRequestException({
+                errorCode: ErrorCode.CANNOT_UPDATE_EXITED_STARTUP,
+                data: {id: startupId},
+                message: "Cannot update the exited startup"
+            })
         }
         if (!startup.tags.some((x) => x.id === tagId)) {
             startup.tags.push(tag)
@@ -192,7 +209,11 @@ export class StartupsService {
     async removeTag(tagId: number, startupId: number) {
         const startup = await this.getOne(startupId)
         if (startup.stage !== StartupStage.ACTIVE) {
-            throw new BadRequestException("Cannot update the exited startup")
+            throw new BadRequestException({
+                errorCode: ErrorCode.CANNOT_UPDATE_EXITED_STARTUP,
+                data: {id: startupId},
+                message: "Cannot update the exited startup"
+            })
         }
         startup.tags = startup.tags.filter((tag) => tag.id !== tagId)
         return this.startupRepository.save(startup)
@@ -271,36 +292,10 @@ export class StartupsService {
         return this.getOne(startupId, true)
     }
 
-    private async calculateInvestorShareForStartup(
+    private calculateInvestorShareForStartup(
         investorId: number,
         startupId: number
     ) {
-        return await this.startupRepository
-            .createQueryBuilder("startup")
-            .select(["startup.*"])
-            .addSelect('SUM(investment.amount) AS "totalInvestment"')
-            .addSelect(
-                `(SUM(investment.amount) * 100.0) / (
-            SELECT SUM(investment_sub.amount)
-            FROM investment investment_sub
-            INNER JOIN funding_round funding_round_sub
-            ON investment_sub."fundingRoundId" = funding_round_sub.id
-            WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
-            )
-            .addSelect(
-                `(SELECT SUM(investment_sub.amount)
-            FROM investment investment_sub
-            INNER JOIN funding_round funding_round_sub
-            ON investment_sub."fundingRoundId" = funding_round_sub.id
-            WHERE funding_round_sub."startupId" = startup.id) AS "totalInvestmentsForStartup"`
-            )
-            .innerJoin("startup.fundingRounds", "fundingRound")
-            .innerJoin("fundingRound.investments", "investment")
-            .innerJoin("investment.investor", "investor")
-            .where("investor.id = :investorId", { investorId })
-            .andWhere("startup.id = :startupId", { startupId })
-            .andWhere("investment.stage = 'COMPLETED'")
-            .groupBy("startup.id")
-            .getRawOne()
+        return this.startupsRepository.calculateInvestorShareForStartup(investorId, startupId)
     }
 }

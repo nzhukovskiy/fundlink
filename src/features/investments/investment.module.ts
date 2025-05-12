@@ -14,12 +14,15 @@ import { FundingRoundChangeProposal } from "./entities/funding-round-change-prop
 import { InvestorVote } from "./entities/investor-vote/investor-vote";
 import { InvestorVoteService } from './services/investor-vote-service/investor-vote.service';
 import { ProposalsController } from './controllers/proposal/proposals.controller';
+import { InvestmentsRepository } from "./repositories/investments/investments.repository";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor, FundingRoundChangeProposal, InvestorVote]),
-    JwtTokenModule],
+    imports: [
+        TypeOrmModule.forFeature([FundingRound, Startup, Investment, Investor, FundingRoundChangeProposal, InvestorVote]),
+        JwtTokenModule
+    ],
     controllers: [FundingRoundsController, InvestmentsController, ProposalsController],
-    providers: [FundingRoundsService, InvestmentService, ChangeProposalService, InvestorVoteService],
-    exports: [FundingRoundsService, InvestmentService]
+    providers: [FundingRoundsService, InvestmentService, ChangeProposalService, InvestorVoteService, InvestmentsRepository],
+    exports: [FundingRoundsService, InvestmentService, InvestmentsRepository]
 })
 export class InvestmentModule {}

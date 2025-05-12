@@ -19,6 +19,7 @@ import { DcfValuationService } from "./startups/services/valuation/dcf-valuation
 import { ValuationService } from "./startups/services/valuation/valuation.service"
 import { StartupsStatsService } from "./startups/services/startups-stats/startups-stats.service"
 import { StartupsRepository } from "./startups/repositories/startups/startups.repository"
+import { InvestorsRepository } from "./investors/repositories/investors/investors.repository";
 
 @Module({
     imports: [
@@ -45,7 +46,8 @@ import { StartupsRepository } from "./startups/repositories/startups/startups.re
             useClass: DcfValuationService,
         },
         StartupsStatsService,
-        StartupsRepository
+        StartupsRepository,
+        InvestorsRepository
     ],
     exports: [
         StartupsService,

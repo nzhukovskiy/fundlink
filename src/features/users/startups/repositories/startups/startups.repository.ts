@@ -1,19 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { PaginateQuery } from "nestjs-paginate"
-import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
+import { InjectRepository } from "@nestjs/typeorm"
 import { Startup } from "../../entities/startup"
-import { DataSource, Repository } from "typeorm"
-import { Investor } from "../../../investors/entities/investor"
-import { Tag } from "../../../../tags/entities/tag/tag"
-import { FundingRound } from "../../../../investments/entities/funding-round/funding-round"
-import { Exit } from "../../entities/exit"
-import { UsersService } from "../../../services/users.service"
-import { JwtTokenService } from "../../../../token/services/jwt-token.service"
+import { Repository } from "typeorm"
 import { PaginateService } from "../../../../../common/paginate/services/paginate/paginate.service"
-import { FundingRoundsService } from "../../../../investments/services/funding-rounds.service"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { ValuationService } from "../../services/valuation/valuation.service"
-import { ErrorCode } from "../../../../../constants/error-code"
 
 @Injectable()
 export class StartupsRepository {
@@ -21,21 +11,7 @@ export class StartupsRepository {
     constructor(
         @InjectRepository(Startup)
         private readonly startupRepository: Repository<Startup>,
-        @InjectRepository(Investor)
-        private readonly investorRepository: Repository<Investor>,
-        @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
-        @InjectRepository(FundingRound)
-        private readonly fundingRoundRepository: Repository<FundingRound>,
-        @InjectRepository(Exit)
-        private readonly exitRepository: Repository<Exit>,
-        private readonly usersService: UsersService,
-        private readonly jwtTokenService: JwtTokenService,
         private readonly paginateService: PaginateService,
-        private readonly fundingRoundsService: FundingRoundsService,
-        @InjectDataSource()
-        private dataSource: DataSource,
-        private readonly eventEmitter2: EventEmitter2,
-        private readonly valuationService: ValuationService
     ) {
     }
 
@@ -127,43 +103,86 @@ export class StartupsRepository {
                 )
                 .setParameter("investorId", investorId)
         }
-        const startup = await startupQuery
+        return startupQuery
             .where("startup.id = :id", { id })
             .orderBy("fundingRound.startDate", "ASC")
             .leftJoinAndSelect("startup.tags", "tag")
             .leftJoinAndSelect("startup.exit", "exit")
             .where("startup.id = :id", { id })
             .getRawAndEntities()
+    }
 
-        if (!startup.raw.length) {
-            throw new NotFoundException({
-                errorCode: ErrorCode.STARTUP_WITH_ID_DOES_NOT_EXISTS,
-                data: { id },
-                message: `Startup with an id ${id} does not exist`,
-            })
-        }
-        const startupEntity = startup.entities[0]
 
-        const rawMap = startup.raw.map((raw) => ({
-            startupId: raw["startup_id"],
-            fundingRoundId: raw["fundingRound_id"],
-            isUpdating: raw["isUpdating"],
-        }))
+    getStartupsForInvestor(investorId: number) {
+       return this.startupRepository
+          .createQueryBuilder("startup")
+          .select(["startup.*"])
+          .addSelect('SUM(investment.amount) AS "totalInvestment"')
+          .addSelect(
+            `(SUM(investment.amount) * 100.0) / (
+            SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id and investment_sub.stage = 'COMPLETED') AS "sharePercentage"`
+          )
+          .addSelect(
+            `(SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id and investment_sub.stage = 'COMPLETED') AS "totalInvestmentsForStartup"`
+          )
+          .innerJoin("startup.fundingRounds", "fundingRound")
+          .innerJoin("fundingRound.investments", "investment")
+          .innerJoin("investment.investor", "investor")
+          .where("investor.id = :id", { id: investorId })
+          .andWhere("investment.stage = 'COMPLETED'")
+          .groupBy("startup.id")
+          .getRawMany()
+    }
 
-        for (const fundingRound of startupEntity.fundingRounds) {
-            const match = rawMap.find(
-                (r) =>
-                    r.startupId === startupEntity.id &&
-                    r.fundingRoundId === fundingRound.id
-            )
-            if (match) {
-                (fundingRound as any).isUpdating = match.isUpdating
-            }
-        }
+    getStartupsCountForInvestor(investorId: number) {
+        return this.startupRepository
+          .createQueryBuilder("startup")
+          .leftJoin("startup.fundingRounds", "fundingRound")
+          .leftJoin("fundingRound.investments", "investment")
+          .leftJoinAndSelect("investment.investor", "investor")
+          .where("investor.id = :id", { id: investorId })
+          .andWhere("investment.stage = 'COMPLETED'")
+          .getCount()
+    }
 
-        return {
-            ...startupEntity,
-            isInteresting: startup.raw[0].isInteresting,
-        }
+    calculateInvestorShareForStartup(
+      investorId: number,
+      startupId: number
+    ) {
+        return this.startupRepository
+          .createQueryBuilder("startup")
+          .select(["startup.*"])
+          .addSelect('SUM(investment.amount) AS "totalInvestment"')
+          .addSelect(
+            `(SUM(investment.amount) * 100.0) / (
+            SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "sharePercentage"`
+          )
+          .addSelect(
+            `(SELECT SUM(investment_sub.amount)
+            FROM investment investment_sub
+            INNER JOIN funding_round funding_round_sub
+            ON investment_sub."fundingRoundId" = funding_round_sub.id
+            WHERE funding_round_sub."startupId" = startup.id) AS "totalInvestmentsForStartup"`
+          )
+          .innerJoin("startup.fundingRounds", "fundingRound")
+          .innerJoin("fundingRound.investments", "investment")
+          .innerJoin("investment.investor", "investor")
+          .where("investor.id = :investorId", { investorId })
+          .andWhere("startup.id = :startupId", { startupId })
+          .andWhere("investment.stage = 'COMPLETED'")
+          .groupBy("startup.id")
+          .getRawOne()
     }
 }

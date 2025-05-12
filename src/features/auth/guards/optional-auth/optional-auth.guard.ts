@@ -19,7 +19,7 @@ export class OptionalAuthGuard implements CanActivate {
             return true
         }
         try {
-            request["token"] = await this.jwtTokenService.verifyToken(token)
+            request["token"] = await this.jwtTokenService.verifyAccessToken(token)
         } catch {
             throw new UnauthorizedException()
         }

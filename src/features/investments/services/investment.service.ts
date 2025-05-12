@@ -33,7 +33,7 @@ export class InvestmentService {
             throw new BadRequestException("Cannot invest in rounds that are not current");
         }
         if (fundingRound.startup.stage !== StartupStage.ACTIVE) {
-            throw new BadRequestException("Cannot create funding round for a startup which have already exited");
+            throw new BadRequestException("Cannot invest in a startup which has already exited");
         }
         let investor = await this.investorRepository.findOneBy({id: investorData.id});
         const stage = fundingRound.startup.autoApproveInvestments ? InvestmentStage.COMPLETED : InvestmentStage.PENDING_REVIEW;

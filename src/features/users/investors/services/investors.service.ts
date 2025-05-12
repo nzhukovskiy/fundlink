@@ -75,7 +75,7 @@ export class InvestorsService {
         delete investor.password
         investor["role"] = investor.getRole()
         return {
-            accessToken: await this.jwtTokenService.generateToken(investor),
+            accessToken: await this.jwtTokenService.generateAccessToken(investor),
         }
     }
 

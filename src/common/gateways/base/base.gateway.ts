@@ -18,7 +18,7 @@ export abstract class BaseGateway
                 throw new Error("Authentication token missing")
             }
 
-            const tokenData = await this.jwtTokenService.verifyToken(token)
+            const tokenData = await this.jwtTokenService.verifyAccessToken(token)
 
             client.data.user = tokenData.payload
             console.log(

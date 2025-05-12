@@ -138,7 +138,7 @@ export class StartupsService {
         delete startup.password
         startup["role"] = startup.getRole()
         return {
-            accessToken: await this.jwtTokenService.generateToken(startup),
+            accessToken: await this.jwtTokenService.generateAccessToken(startup),
         }
     }
 

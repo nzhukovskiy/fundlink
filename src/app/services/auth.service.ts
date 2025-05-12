@@ -21,27 +21,27 @@ export class AuthService {
     }
 
     login(userLoginDto: LoginUserDto) {
-        return this.appHttpService.post<{ accessToken: { access_token: string } }>(`auth/login`, userLoginDto).pipe(
+        return this.appHttpService.post<{ accessToken: string }>(`auth/login`, userLoginDto).pipe(
             tap(x => {
                 this.userService.setUser(
-                    jwtDecode<{ payload: UserJwtInfo }>(x.accessToken.access_token).payload, x.accessToken.access_token);
+                    jwtDecode<{ payload: UserJwtInfo }>(x.accessToken).payload, x.accessToken);
             }),
         );
     }
 
     registerStartup(createStartupDto: CreateStartupDto) {
         const payload = instanceToPlain(createStartupDto);
-        return this.appHttpService.post<{ accessToken: { access_token: string } }>(`startups`, payload).pipe(
+        return this.appHttpService.post<{ accessToken: string }>(`startups`, payload).pipe(
             tap(x => this.userService.setUser(
-                jwtDecode<{ payload: UserJwtInfo }>(x.accessToken.access_token).payload, x.accessToken.access_token),
+                jwtDecode<{ payload: UserJwtInfo }>(x.accessToken).payload, x.accessToken),
             ),
         );
     }
 
     registerInvestor(createInvestorDto: CreateInvestorDto) {
-        return this.appHttpService.post<{ accessToken: { access_token: string } }>(`investors`, createInvestorDto).pipe(
+        return this.appHttpService.post<{ accessToken: string }>(`investors`, createInvestorDto).pipe(
             tap(x => this.userService.setUser(
-                jwtDecode<{ payload: UserJwtInfo }>(x.accessToken.access_token).payload, x.accessToken.access_token),
+                jwtDecode<{ payload: UserJwtInfo }>(x.accessToken).payload, x.accessToken),
             ),
         );
     }

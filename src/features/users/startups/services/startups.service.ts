@@ -135,11 +135,7 @@ export class StartupsService {
         const startup = await this.startupRepository.findOneBy({
             id: savedStartup.id,
         })
-        delete startup.password
-        startup["role"] = startup.getRole()
-        return {
-            accessToken: await this.jwtTokenService.generateAccessToken(startup),
-        }
+        return this.jwtTokenService.generateTokens(startup)
     }
 
     async update(id: number, updateStartupDto: UpdateStartupDto) {

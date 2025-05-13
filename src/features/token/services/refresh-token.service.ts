@@ -14,4 +14,13 @@ export class RefreshTokenService {
         const token = this.refreshTokenRepository.create(createRefreshTokenDto);
         return this.refreshTokenRepository.save(token);
     }
+
+    findToken(token: string) {
+        return this.refreshTokenRepository.findOne({where: {token: token}})
+    }
+
+    async revokeToken(token: RefreshToken) {
+        token.revoked = true
+        return this.refreshTokenRepository.save(token)
+    }
 }

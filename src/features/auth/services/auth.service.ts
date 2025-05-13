@@ -16,12 +16,7 @@ export class AuthService {
     async login(loginUserDto: LoginUserDto) {
         let user = await this.usersService.findByEmail(loginUserDto.email);
         if (user && await bcrypt.compare(loginUserDto.password, user.password)) {
-            delete user.password
-            user["role"] = user.getRole()
-            const tokens = {
-                accessToken: await this.jwtTokenService.generateAccessToken(user),
-                refreshToken: await this.jwtTokenService.generateRefreshToken(user)
-            };
+            const tokens = await this.jwtTokenService.generateTokens(user)
             const decoded = await this.jwtTokenService.decode(tokens.refreshToken);
             await this.refreshTokenService.create({
                 userId: user.id,
@@ -35,6 +30,42 @@ export class AuthService {
             errorCode: ErrorCode.UNAUTHORIZED,
             message: "Wrong login or password"
         });
+    }
+
+    async refreshTokens(refreshToken: string) {
+        const payload = await this.jwtTokenService.verifyRefreshToken(refreshToken)
+        if (!payload) {
+            throw new UnauthorizedException({
+                errorCode: ErrorCode.INVALID_REFRESH_TOKEN,
+                message: "Invalid refresh token"
+            })
+        }
+
+        const token = await this.refreshTokenService.findToken(refreshToken)
+        if (!token || token.revoked || token.expiresAt < new Date()) {
+            throw new UnauthorizedException({
+                errorCode: ErrorCode.INVALID_REFRESH_TOKEN,
+                message: "Invalid refresh token"
+            })
+        }
+
+        const oldRefreshToken = await this.refreshTokenService.findToken(refreshToken)
+        await this.refreshTokenService.revokeToken(oldRefreshToken)
+
+        const newTokens = await this.jwtTokenService.generateTokens(payload.payload)
+        // const newAccessToken = await this.jwtTokenService.generateAccessToken(payload.payload)
+        // const newRefreshToken = await this.jwtTokenService.generateRefreshToken(payload.payload)
+
+        await this.refreshTokenService.create({
+            userId: payload.payload.id,
+            userType: payload.payload.role,
+            token: newTokens.refreshToken,
+            expiresAt: new Date((await this.jwtTokenService.decode(newTokens.refreshToken)).exp * 1000),
+        })
+        return {
+            accessToken: newTokens.accessToken,
+            refreshToken: newTokens.refreshToken
+        }
     }
 
 }

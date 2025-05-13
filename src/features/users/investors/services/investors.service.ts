@@ -72,11 +72,7 @@ export class InvestorsService {
         const investor = await this.investorRepository.findOneBy({
             id: savedInvestor.id,
         })
-        delete investor.password
-        investor["role"] = investor.getRole()
-        return {
-            accessToken: await this.jwtTokenService.generateAccessToken(investor),
-        }
+        return this.jwtTokenService.generateTokens(investor)
     }
 
     async update(updateInvestorDto: UpdateInvestorDto, investorData: User) {

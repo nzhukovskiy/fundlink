@@ -28,7 +28,6 @@ export class ProfileComponent implements OnInit {
     protected readonly Roles = Roles;
 
     logout() {
-        this.userService.clearUser();
-        this.router.navigate(['/login']).then();
+        this.userService.logout();
     }
 }

@@ -5,6 +5,9 @@ import * as bcrypt from "bcrypt";
 import { JwtTokenService } from "../../token/services/jwt-token.service";
 import { ErrorCode } from "../../../constants/error-code";
 import { RefreshTokenService } from "../../token/services/refresh-token.service";
+import { Roles } from "../../users/constants/roles";
+import { Startup } from "../../users/startups/entities/startup";
+import { Investor } from "../../users/investors/entities/investor";
 
 @Injectable()
 export class AuthService {
@@ -52,7 +55,9 @@ export class AuthService {
         const oldRefreshToken = await this.refreshTokenService.findToken(refreshToken)
         await this.refreshTokenService.revokeToken(oldRefreshToken)
 
-        const newTokens = await this.jwtTokenService.generateTokens(payload.payload)
+        const newTokens = await this.jwtTokenService.generateTokens(
+          payload.payload
+        )
         // const newAccessToken = await this.jwtTokenService.generateAccessToken(payload.payload)
         // const newRefreshToken = await this.jwtTokenService.generateRefreshToken(payload.payload)
 

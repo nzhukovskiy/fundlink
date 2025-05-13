@@ -13,7 +13,10 @@ export class JwtTokenService {
 
     async generateTokens(user: Investor | Startup) {
         delete user.password
-        user["role"] = user.getRole()
+        if (!user["role"]) {
+            user["role"] = user.getRole()
+        }
+
         return {
             accessToken: await this.generateAccessToken(user),
             refreshToken: await this.generateRefreshToken(user)
@@ -23,7 +26,7 @@ export class JwtTokenService {
     private async generateAccessToken(payload: any) {
         return this.jwtService.signAsync({payload},
           {
-              expiresIn: '10m',
+              expiresIn: '15m',
               secret: this.configService.get("JWT_ACCESS_SECRET")
           })
     }

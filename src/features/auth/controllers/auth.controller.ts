@@ -18,7 +18,6 @@ export class AuthController {
         return this.authService.login(loginUserDto);
     }
 
-    @UseGuards(AuthGuard)
     @Post('refresh')
     refreshTokens(@Body() body: { refreshToken: string }) {
         return this.authService.refreshTokens(body.refreshToken);

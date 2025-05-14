@@ -261,7 +261,6 @@ export class EditStartupComponent implements OnInit {
             const control = formGroup.get(key);
 
             if (control instanceof FormGroup) {
-                // Recursively get errors from nested FormGroup
                 const groupErrors = this.getAllErrors(control);
                 if (Object.keys(groupErrors).length > 0) {
                     errors[key] = groupErrors;

@@ -12,7 +12,7 @@ export class DcfVisualizationComponent {
 
     formatNumber(value: number | undefined | null, decimals: number = 2): string {
         if (value === undefined || value === null || isNaN(value)) {
-            return 'N/A'; // Or handle as needed
+            return 'N/A';
         }
         return value.toFixed(decimals);
     }

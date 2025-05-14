@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ChatService } from '../../../services/chat.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import {markAllControlsAsTouched, showErrors} from "../../../utils/validate-form-utils";
+import {investorResolver} from "../../../resolvers/investor.resolver";
 
 @Component({
   selector: 'app-edit-investor',
@@ -26,6 +27,10 @@ export class EditInvestorComponent implements OnInit {
 
     ngOnInit (): void {
         if (this.formType === FormType.UPDATE) {
+            this.investorFormGroup.controls.email.clearValidators();
+            this.investorFormGroup.controls.email.updateValueAndValidity();
+            this.investorFormGroup.controls.password.clearValidators();
+            this.investorFormGroup.controls.password.updateValueAndValidity();
             let user = this.localStorageService.getUser();
             this.investorsService.getOne(user!.id).subscribe(res => {
                 this.investorFormGroup.setValue({

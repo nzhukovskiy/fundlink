@@ -51,16 +51,13 @@ export class InvestmentsTableComponent {
     }
 
     onSort({ column, direction }: SortEvent) {
-        // resetting other headers
         for (const header of this.headers!) {
             if (header.sortable !== column) {
                 header.direction = '';
             }
         }
 
-        // sorting countries
         if (direction === '' || column === '') {
-            // this.investments = this.investments;
         } else {
             this.investments = [...this.investments].sort((a, b) => {
                 const res = this.compareValues(a[column], b[column]);

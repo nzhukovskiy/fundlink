@@ -12,14 +12,12 @@ export class KatexDirective implements OnChanges {
 
     ngOnChanges() {
         if (this.appKatex) {
-            // Clear the existing content
             this.el.nativeElement.innerHTML = '';
 
-            // Render the LaTeX
             katex.render(this.appKatex, this.el.nativeElement, {
                 throwOnError: false,
                 displayMode: true,
-                output: "mathml" // This forces only MathML output
+                output: "mathml"
             });
         }
     }

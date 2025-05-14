@@ -12,7 +12,7 @@ export abstract class AppSocketService extends Socket {
             url: `http://localhost:3001/${namespace}`,
             options: {
                 auth: {
-                    token: localStorageService.getToken() || '',
+                    token: localStorageService.getToken()?.accessToken || '',
                 },
             },
         });

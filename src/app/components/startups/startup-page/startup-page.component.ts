@@ -52,7 +52,6 @@ export class StartupPageComponent implements OnInit {
             this.chartOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
-                 // aspectRatio: 1, // Ensures circles aren't distorted
                 scales: {
                     x: {
                         display: false,
@@ -71,10 +70,9 @@ export class StartupPageComponent implements OnInit {
                 },
                 plugins: {
                     legend: {display: true, position: "top"},
-                    // tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${VALUE}` } }
                 },
                 layout: {
-                    padding: 0 // Remove internal padding
+                    padding: 0
                 },
 
             };
@@ -83,19 +81,19 @@ export class StartupPageComponent implements OnInit {
                     {
                         label: 'TAM',
                         data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.tamMarket)) * SCALING_FACTOR}],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Light red with transparency
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                     },
                     {
                         label: 'SAM',
                         data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.samMarket)) * SCALING_FACTOR}],
-                        backgroundColor: 'rgba(8,125,199,0.2)', // Light blue
+                        backgroundColor: 'rgba(8,125,199,0.2)',
                         borderColor: 'rgb(15,116,187)',
                     },
                     {
                         label: 'SOM',
                         data: [{x: 0, y: 0, r: Math.sqrt(parseInt(this.startup!.somMarket)) * SCALING_FACTOR}],
-                        backgroundColor: 'rgb(147,255,66)', // Light green
+                        backgroundColor: 'rgb(147,255,66)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                     }
                 ]

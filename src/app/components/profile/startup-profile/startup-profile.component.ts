@@ -16,6 +16,8 @@ import { Roles } from '../../../constants/roles';
 import {StartupStage} from "../../../constants/startup-stage";
 import {ExitStartupComponent} from "../exit-startup/exit-startup.component";
 import {TextDialogComponent} from "../../dialogs/text-dialog/text-dialog.component";
+import {InvestmentFullDto} from "../../../data/dtos/responses/investment-full.dto";
+import {FundingRound} from "../../../data/models/funding-round";
 
 @Component({
     selector: 'app-startup-profile',
@@ -46,7 +48,6 @@ export class StartupProfileComponent implements OnInit {
                         const chart = context.chart;
                         const dataset = context.dataset;
 
-                        // Calculate total using official visibility API
                         const total = dataset.data.reduce((acc, value, index) => {
                             return chart.getDataVisibility(index) ? acc + value : acc;
                         }, 0);
@@ -214,6 +215,11 @@ export class StartupProfileComponent implements OnInit {
         });
     }
 
+    getInvestments(fundingRound: FundingRound) {
+        return fundingRound.investments as InvestmentFullDto[]
+    }
+
     protected readonly Roles = Roles;
     protected readonly StartupStage = StartupStage;
+    protected readonly InvestmentFullDto = InvestmentFullDto;
 }

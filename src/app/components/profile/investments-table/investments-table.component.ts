@@ -6,6 +6,7 @@ import { Roles } from '../../../constants/roles';
 import { NgbdSortableHeaderDirective } from '../../../directives/ngbd-sortable-header.directive';
 import { SortEvent } from '../../../types/sort-event';
 import Decimal from 'decimal.js';
+import {InvestmentFullDto} from "../../../data/dtos/responses/investment-full.dto";
 
 @Component({
   selector: 'app-investments-table',
@@ -15,7 +16,7 @@ import Decimal from 'decimal.js';
 export class InvestmentsTableComponent {
 
     @Input() investmentsFor?: Roles;
-    @Input() investments: Investment[] = [];
+    @Input() investments: InvestmentFullDto[] = [];
     @Output() approveInvestmentDialogClick = new EventEmitter<number>()
 
     @ViewChildren(NgbdSortableHeaderDirective) headers?: QueryList<NgbdSortableHeaderDirective>;

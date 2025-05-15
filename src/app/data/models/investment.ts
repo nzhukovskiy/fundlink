@@ -19,29 +19,13 @@ export class Investment {
 
     approvalType: InvestmentApprovalType;
 
-    startup_id: number;
-
-    startup_title: string;
-
-    constructor(
-        id: number,
-        amount: Decimal,
-        date: Date,
-        investor: Investor,
-        fundingRound: FundingRound,
-        investmentStage: InvestmentStage,
-        approvalType: InvestmentApprovalType,
-        startup_id: number,
-        startup_title: string
-    ) {
+    constructor(id: number, amount: Decimal, date: Date, investor: Investor, fundingRound: FundingRound, stage: InvestmentStage, approvalType: InvestmentApprovalType) {
         this.id = id;
         this.amount = amount;
         this.date = date;
         this.investor = investor;
         this.fundingRound = fundingRound;
-        this.stage = investmentStage;
+        this.stage = stage;
         this.approvalType = approvalType;
-        this.startup_id = startup_id;
-        this.startup_title = startup_title;
     }
 }

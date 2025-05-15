@@ -7,6 +7,7 @@ import { Startup } from '../data/models/startup';
 import { StartupFullDto } from '../data/dtos/responses/startup-full.dto';
 import {InvestorStatsDto} from "../data/dtos/responses/investor-stats.dto";
 import {forkJoin} from "rxjs";
+import {InvestmentFullDto} from "../data/dtos/responses/investment-full.dto";
 
 @Injectable({
     providedIn: 'root',
@@ -29,7 +30,7 @@ export class InvestorsService {
     }
 
     getFullInvestmentsInfo() {
-        return this.appHttpService.get<Investment[]>(`investors/investments`);
+        return this.appHttpService.get<InvestmentFullDto[]>(`investors/investments`);
     }
 
     update(updateInvestorDto: UpdateInvestorDto) {

@@ -5,6 +5,7 @@
         <th scope="col" sortable="amount" (sort)="onSort($event)">Размер</th>
         <th scope="col" sortable="stage" (sort)="onSort($event)">Статус</th>
         <th scope="col" sortable="approvalType" (sort)="onSort($event)">Тип принятия</th>
+        <th scope="col" *ngIf="investmentsFor === Roles.INVESTOR" sortable="fundingRoundStage" (sort)="onSort($event)">Раунд финансирования</th>
         <th scope="col">{{investmentsFor === Roles.STARTUP ? "Инвестор" : "Стартап"}}</th>
     </tr>
     </thead>
@@ -37,6 +38,9 @@
                 <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE">settings</mat-icon>
                 {{"investment.type." + investment.approvalType | translate}}
             </div>
+        </td>
+        <td *ngIf="investmentsFor === Roles.INVESTOR">
+            {{investment.fundingRoundStage}}
         </td>
         <td>
             <a *ngIf="investmentsFor === Roles.INVESTOR" [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>

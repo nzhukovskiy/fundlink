@@ -11,6 +11,7 @@ import {StartupFullDto} from "../../../data/dtos/responses/startup-full.dto";
 import { InvestmentApprovalType } from '../../../constants/investment-approval-type';
 import { Roles } from '../../../constants/roles';
 import {FormType} from "../../../constants/form-type";
+import {InvestmentFullDto} from "../../../data/dtos/responses/investment-full.dto";
 
 @Component({
     selector: 'app-investor-profile',
@@ -22,7 +23,7 @@ export class InvestorProfileComponent implements OnInit {
     }
 
     investor?: Investor;
-    investments: Investment[] = [];
+    investments: InvestmentFullDto[] = [];
     startups: StartupFullDto[] = [];
     public lineChartData?: ChartConfiguration<'pie'>['data'];
     public startupsShareData: ChartConfiguration<'doughnut'>['data'][] = [];
@@ -35,7 +36,6 @@ export class InvestorProfileComponent implements OnInit {
                         const chart = context.chart;
                         const dataset = context.dataset;
 
-                        // Calculate total using official visibility API
                         const total = dataset.data.reduce((acc, value, index) => {
                             return chart.getDataVisibility(index) ? acc + value : acc;
                         }, 0);

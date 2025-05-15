@@ -91,7 +91,7 @@
                                     <div class="accordion-body">
                                         <div>
                                             <app-investments-table
-                                                [investments]="fundingRound.investments"
+                                                [investments]="getInvestments(fundingRound)"
                                                 [investmentsFor]="Roles.STARTUP"
                                                 (approveInvestmentDialogClick)="openApproveInvestmentDialog($event)"></app-investments-table>
                                             <ng-template #noInvestmentsYet>

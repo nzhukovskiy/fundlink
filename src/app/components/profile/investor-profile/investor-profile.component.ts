@@ -26,6 +26,28 @@ export class InvestorProfileComponent implements OnInit {
     startups: StartupFullDto[] = [];
     public lineChartData?: ChartConfiguration<'pie'>['data'];
     public startupsShareData: ChartConfiguration<'doughnut'>['data'][] = [];
+    public startupChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: (context) => {
+                        const chart = context.chart;
+                        const dataset = context.dataset;
+
+                        // Calculate total using official visibility API
+                        const total = dataset.data.reduce((acc, value, index) => {
+                            return chart.getDataVisibility(index) ? acc + value : acc;
+                        }, 0);
+
+                        const currentValue = context.raw as number;
+                        const percentage = ((currentValue / total) * 100).toFixed(1) + '%';
+                        return `${context.label}: ${currentValue} (${percentage})`;
+                    }
+                }
+            }
+        }
+    };
 
     ngOnInit(): void {
         this.investorsService.getCurrentInvestor().subscribe(res => {
@@ -37,9 +59,13 @@ export class InvestorProfileComponent implements OnInit {
                 this.startups = startups;
                 this.startups.forEach(startup => {
                     this.startupsShareData.push({
-                        labels: ["Вы", "Остальные"],
+                        labels: ["Вы", "Остальные инвесторы", "Стартап"],
                         datasets: [{
-                            data: [new Decimal(startup.totalInvestment).toNumber(), (new Decimal(startup.totalInvestmentsForStartup).minus(new Decimal(startup.totalInvestment))).toNumber()]
+                            data: [
+                                new Decimal(startup.totalInvestment).toNumber(),
+                                (new Decimal(startup.totalInvestmentsForStartup).minus(new Decimal(startup.totalInvestment))).toNumber(),
+                                new Decimal(startup.preMoney).toNumber()
+                            ]
                         }]
                     })
                 })

@@ -55,7 +55,7 @@ export class StartupService {
         if (fundingRoundId !== undefined) {
             params = params.append('fundingRoundId', fundingRoundId);
         }
-        return this.appHttpService.get<Investor[]>(`startups/${id}/investors`, params);
+        return this.appHttpService.get<{investors: Investor[], startup: {id: number, preMoney: string}}>(`startups/${id}/investors`, params);
     }
 
     getCurrentStartup() {

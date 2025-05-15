@@ -11,6 +11,8 @@ export class FundingRound {
     @Expose({ name: 'funding_goal' })
     fundingGoal: string;
 
+    preMoney: string;
+
     @Expose({ name: 'current_raised' })
     currentRaised: string;
 
@@ -32,10 +34,11 @@ export class FundingRound {
     isUpdating: boolean;
 
 
-    constructor(id: number, stage: FundingStage, fundingGoal: string, currentRaised: string, startDate: Date, endDate: Date, isCurrent: boolean, startup: Startup, investments: Investment[], isUpdating: boolean) {
+    constructor(id: number, stage: FundingStage, fundingGoal: string, preMoney: string, currentRaised: string, startDate: Date, endDate: Date, isCurrent: boolean, startup: Startup, investments: Investment[], isUpdating: boolean) {
         this.id = id;
         this.stage = stage;
         this.fundingGoal = fundingGoal;
+        this.preMoney = preMoney;
         this.currentRaised = currentRaised;
         this.startDate = startDate;
         this.endDate = endDate;

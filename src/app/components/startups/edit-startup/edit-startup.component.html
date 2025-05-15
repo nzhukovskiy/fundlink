@@ -49,8 +49,8 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Описание стартапа<span class="text-danger">*</span></label>
-            <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1"
+            <label for="startupDescriptionField" class="form-label">Описание стартапа<span class="text-danger">*</span></label>
+            <textarea formControlName="description" class="form-control" id="startupDescriptionField"
                       rows="3"></textarea>
             <div *ngIf="startupEditFormGroup.controls.description.invalid && (startupEditFormGroup.controls.description.dirty || startupEditFormGroup.controls.description.touched)"
                  class="alert alert-danger">
@@ -70,7 +70,7 @@
             <img #startupLogoPreview class="startup-logo-preview" alt="" src="">
         </div>
         <div class="mb-3">
-            <label for="registerNameField" class="form-label">Необходимое финансирование, руб.<span class="text-danger">*</span>
+            <label for="fundingGoalField" class="form-label">Необходимое финансирование, руб.<span class="text-danger">*</span>
                 <app-input-help-tooltip tooltipMessage="Общее финансирование, которое предполагается получить в рамках стартапа; это значение может помочь инвесторам понять ваши долгосрочные планы"></app-input-help-tooltip>
             </label>
             <input type="text" formControlName="fundingGoal" class="form-control" id="fundingGoalField"
@@ -84,7 +84,7 @@
             </div>
         </div>
         <div *ngIf="formType === FormType.CREATE" class="mb-3">
-            <label for="registerNameField" class="form-label">Начальное финансирование, руб.<span class="text-danger">*</span>
+            <label for="initialFundingGoalField" class="form-label">Начальное финансирование, руб.<span class="text-danger">*</span>
                 <app-input-help-tooltip tooltipMessage="Начальное финансирование, которое вы планируете получить для запуска стартапа. Это значение будет использовано при создании первого раунда финансирования"></app-input-help-tooltip>
             </label>
             <input type="text" formControlName="initialFundingGoal" class="form-control" id="initialFundingGoalField"

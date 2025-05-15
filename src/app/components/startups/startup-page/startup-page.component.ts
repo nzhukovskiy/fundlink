@@ -100,7 +100,7 @@ export class StartupPageComponent implements OnInit {
             }
 
             this.startupService.getInvestors(this.startup!.id).subscribe(res => {
-                this.investors = res;
+                this.investors = res.investors;
             });
         });
     }
@@ -115,7 +115,7 @@ export class StartupPageComponent implements OnInit {
             }).add(() => {
             });
             this.startupService.getInvestors(parseInt(id!)).subscribe(res => {
-                this.investors = res;
+                this.investors = res.investors;
             });
         });
     }

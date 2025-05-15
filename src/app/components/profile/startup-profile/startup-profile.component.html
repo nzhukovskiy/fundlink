@@ -74,10 +74,11 @@
                                 </div>
                             </div>
                         </div>
-                        <p>Цель: {{ fundingRound.fundingGoal }} руб.</p>
-                        <p>Собрано: {{ fundingRound.currentRaised }} руб.</p>
+                        <p>Цель: {{ fundingRound.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</p>
+                        <p>Собрано: {{ fundingRound.currentRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</p>
                         <p>Начало: {{ fundingRound.startDate | date: "dd.MM.yy" }}</p>
                         <p>Окончание: {{ fundingRound.endDate | date: "dd.MM.yy" }}</p>
+                        <p>Pre money: {{ fundingRound.preMoney | currency:'RUB':'symbol':'1.0-0':'ru-RU' }}</p>
                         <div class="accordion investment-info-container" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -108,15 +109,19 @@
         <li ngbNavItem>
             <button ngbNavLink>Инвесторы</button>
             <ng-template ngbNavContent>
-                <h4>Инвесторы</h4>
+                <h4>Инвесторы
+                    <app-input-help-tooltip
+                        tooltipMessage="На данной странице отображаются доли инвесторов, а также ваша доля на основании введенных вами pre money">
+                    </app-input-help-tooltip>
+                </h4>
                 <app-clearable-select *ngIf="startup" [options]="selectOptions" [selectInitialValue]="''"
                                       (selectChanged)="loadInvestmentsData($event)" label="Раунд финансирования"></app-clearable-select>
                 <div class="investors-chart-container">
                     <canvas *ngIf="investors.length; else noInvestmentsData"
                             baseChart
-                            [data]="lineChartData"
+                            [data]="investorsChartData"
                             [type]="'pie'"
-                            [options]="lineChartOptions"
+                            [options]="investorsChartOptions"
                     ></canvas>
                     <ng-template #noInvestmentsData>
                         В рамках данного раунда пока не было совершено ни одной инвестиции

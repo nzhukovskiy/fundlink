@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import { Startup } from '../../../data/models/startup';
 import { StartupService } from '../../../services/startup.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,14 +10,12 @@ import { Investor } from '../../../data/models/investor';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TagService } from 'src/app/services/tag.service';
 import { Tag } from 'src/app/data/models/tag';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import {InvestmentsService} from "../../../services/investments.service";
-import {InvestmentStage} from "../../../constants/investment-stage";
-import { start } from '@popperjs/core';
 import { Roles } from '../../../constants/roles';
-import {FormType} from "../../../constants/form-type";
 import {StartupStage} from "../../../constants/startup-stage";
 import {ExitStartupComponent} from "../exit-startup/exit-startup.component";
+import {TextDialogComponent} from "../../dialogs/text-dialog/text-dialog.component";
 
 @Component({
     selector: 'app-startup-profile',
@@ -37,10 +35,29 @@ export class StartupProfileComponent implements OnInit {
     allTags: Tag[] = [];
     filteredTags: Tag[] = [];
 
-    public lineChartData?: ChartConfiguration<'pie'>['data'];
+    public investorsChartData?: ChartConfiguration<'pie'>['data'];
 
-    public lineChartOptions: ChartConfiguration<'pie'>['options'] = {
+    public investorsChartOptions: ChartConfiguration<'pie'>['options'] = {
         responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: (context) => {
+                        const chart = context.chart;
+                        const dataset = context.dataset;
+
+                        // Calculate total using official visibility API
+                        const total = dataset.data.reduce((acc, value, index) => {
+                            return chart.getDataVisibility(index) ? acc + value : acc;
+                        }, 0);
+
+                        const currentValue = context.raw as number;
+                        const percentage = ((currentValue / total) * 100).toFixed(1) + '%';
+                        return `${context.label}: ${currentValue} (${percentage})`;
+                    }
+                }
+            }
+        }
     };
 
     presentationFormGroup = new FormGroup({
@@ -78,13 +95,7 @@ export class StartupProfileComponent implements OnInit {
 
     getInvestorsForStartup() {
         this.startupService.getInvestors(this.startup!.id).subscribe(res => {
-            this.investors = res;
-            this.lineChartData = {
-                labels: this.investors.map(x => x.name + ' ' + x.surname),
-                datasets: [{
-                    data: this.investors.map(x => parseInt(x.totalInvestment)),
-                }],
-            };
+            this.initializeChartData(res)
             this.selectOptions = this.getSelectOptions();
         });
     }
@@ -134,17 +145,28 @@ export class StartupProfileComponent implements OnInit {
     }
 
     loadInvestmentsData(fundingRoundId: string) {
-        this.startupService.getInvestors(this.startup!.id, fundingRoundId ? fundingRoundId : undefined).subscribe(investors => {
-            this.investors = investors;
-            this.lineChartData = {
-                labels: this.investors.map(x => x.name + ' ' + x.surname),
-                datasets: [{
-                    data: this.investors.map(x => parseInt(x.totalInvestment)),
-                }],
-            };
+        this.startupService.getInvestors(this.startup!.id, fundingRoundId ? fundingRoundId : undefined).subscribe(res => {
+            this.initializeChartData(res)
         });
     }
 
+    openInfoDialog(template: TemplateRef<any>) {
+        this.dialog.open(TextDialogComponent, {
+            data: {template},
+        });
+    }
+
+    private initializeChartData(data: any) {
+        this.investors = data.investors;
+        this.investorsChartData = {
+            labels: this.investors.map(x => x.name + ' ' + x.surname),
+            datasets: [{
+                data: this.investors.map(x => parseInt(x.totalInvestment)),
+            }],
+        };
+        this.investorsChartData.labels?.push("Вы")
+        this.investorsChartData.datasets[0].data.push(parseInt(data.startup.preMoney))
+    }
     private approveInvestment(investmentId: number) {
         this.investmentsService.approveInvestment(investmentId).subscribe(investment => {
             this.getCurrentStartup();

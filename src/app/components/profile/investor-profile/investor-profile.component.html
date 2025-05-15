@@ -49,7 +49,7 @@
                                         <span class="value">{{ startup.totalInvestment | number | currency:'RUB':'symbol':'1.0-0':'ru-RU' }}</span>
                                     </div>
                                     <div class="share-info">
-                                        <span class="label">Ваша доля:</span>
+                                        <span class="label">Ваша доля среди инвесторов:</span>
                                         <span class="value">{{ startup.sharePercentage | number }} %</span>
                                     </div>
                                     <div class="investor-share-chart">
@@ -57,6 +57,7 @@
                                             baseChart
                                             [data]="startupsShareData[i]"
                                             [type]="'doughnut'"
+                                            [options]="startupChartOptions"
                                         ></canvas>
                                     </div>
                                 </div>

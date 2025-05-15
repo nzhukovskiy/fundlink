@@ -162,7 +162,25 @@ export class StartupsService {
     }
 
     async getInvestors(id: number, fundingRoundId?: number) {
-        return this.investorsRepository.getInvestorsForStartup(id, fundingRoundId);
+        const investors = await this.investorsRepository.getInvestorsForStartup(id, fundingRoundId);
+        let whereClause: string
+        if (fundingRoundId) {
+            whereClause =
+              "startup.id = :id and fundingRound.id = :fundingRoundId"
+        } else {
+            whereClause = "startup.id = :id"
+        }
+        const startup = await this.startupRepository.createQueryBuilder("startup")
+          .leftJoin("startup.fundingRounds", "fundingRound")
+          .where(whereClause, { id, fundingRoundId })
+          .select(['startup.id as id',
+              'SUM(fundingRound.preMoney) AS "preMoney"'])
+          .groupBy("startup.id")
+          .getRawOne()
+        return {
+            investors,
+            startup
+        }
     }
 
     async uploadPresentation(startupId: number, fileName: string) {
@@ -265,7 +283,7 @@ export class StartupsService {
         }
         startup.exit = this.exitRepository.create(exitStartupDto)
         startup.stage = StartupStage.EXITED
-        const investors = await this.getInvestors(startup.id)
+        const investors = (await this.getInvestors(startup.id)).investors
         const savedStartup = await this.startupRepository.save(startup)
 
         for (const investor of investors) {

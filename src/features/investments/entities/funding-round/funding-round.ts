@@ -19,6 +19,9 @@ export class FundingRound {
     @Column({type: "decimal"})
     fundingGoal: string;
 
+    @Column({type: "decimal"})
+    preMoney: string;
+
     @Column({ default: 0, type: "decimal" })
     currentRaised: string;
 

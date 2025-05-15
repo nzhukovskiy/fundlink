@@ -134,6 +134,11 @@ export class StartupsRepository {
             WHERE funding_round_sub."startupId" = startup.id and investment_sub.stage = 'COMPLETED') AS "totalInvestmentsForStartup"`
           )
           .innerJoin("startup.fundingRounds", "fundingRound")
+         .addSelect(
+           `(SELECT SUM(funding_round_sub."preMoney")
+            FROM funding_round funding_round_sub
+            WHERE funding_round_sub."startupId" = startup.id) AS "preMoney"`
+         )
           .innerJoin("fundingRound.investments", "investment")
           .innerJoin("investment.investor", "investor")
           .where("investor.id = :id", { id: investorId })

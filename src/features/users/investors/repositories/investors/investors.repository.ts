@@ -33,7 +33,7 @@ export class InvestorsRepository {
               'SUM(investment.amount) AS "totalInvestment"',
           ])
           .groupBy("investor.id")
-          .addGroupBy("investor.name")
+          // .addGroupBy("investor.name")
           .distinct(true)
           .getRawMany()
     }

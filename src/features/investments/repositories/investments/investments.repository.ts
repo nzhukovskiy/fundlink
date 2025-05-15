@@ -21,6 +21,7 @@ export class InvestmentsRepository {
               "investment.date as date",
               'investment.approvalType as "approvalType"',
               "investment.stage as stage",
+              'fundingRound.stage as "fundingRoundStage"',
               "startup.id",
               "startup.title",
           ])

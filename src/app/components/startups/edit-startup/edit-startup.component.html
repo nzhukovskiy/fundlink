@@ -84,6 +84,19 @@
             </div>
         </div>
         <div *ngIf="formType === FormType.CREATE" class="mb-3">
+            <label for="preMoneyField" class="form-label">Начальная оценка, руб.<span class="text-danger">*</span>
+                <app-input-help-tooltip tooltipMessage="Добавить нормальное описание"></app-input-help-tooltip>
+            </label>
+            <input type="text" formControlName="preMoney" class="form-control" id="preMoneyField"
+                   placeholder="50000">
+            <div *ngIf="showErrors(startupEditFormGroup.controls.preMoney)"
+                 class="alert alert-danger">
+                <div *ngIf="startupEditFormGroup.controls.preMoney.errors?.['required']">
+                    {{"form-validation-errors.INITIAL_PREMONEY_REQUIRED" | translate}}
+                </div>
+            </div>
+        </div>
+        <div *ngIf="formType === FormType.CREATE" class="mb-3">
             <label for="initialFundingGoalField" class="form-label">Начальное финансирование, руб.<span class="text-danger">*</span>
                 <app-input-help-tooltip tooltipMessage="Начальное финансирование, которое вы планируете получить для запуска стартапа. Это значение будет использовано при создании первого раунда финансирования"></app-input-help-tooltip>
             </label>

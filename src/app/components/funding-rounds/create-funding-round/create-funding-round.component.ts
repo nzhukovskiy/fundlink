@@ -31,13 +31,13 @@ export class CreateFundingRoundComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  createFundingRound() {
-    this.fundingRoundsService.create({
-      fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
-      startDate: ngbDateFormat(this.startDate!),
-      endDate: ngbDateFormat(this.endDate!),
-    }).subscribe(res => {
-      this.router.navigate(['/profile']).then();
-    })
-  }
+  // createFundingRound() {
+  //   this.fundingRoundsService.create({
+  //     fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+  //     startDate: ngbDateFormat(this.startDate!),
+  //     endDate: ngbDateFormat(this.endDate!),
+  //   }).subscribe(res => {
+  //     this.router.navigate(['/profile']).then();
+  //   })
+  // }
 }

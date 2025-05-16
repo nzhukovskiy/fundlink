@@ -20,13 +20,12 @@ export class EditFundingRoundComponent implements OnInit {
     }
 
     formType = FormType.UPDATE;
-    // startDate?: NgbDateStruct;
-    // endDate?: NgbDateStruct;
     minDate?: NgbDateStruct;
     id?: number;
 
     fundingRoundFormGroup = new FormGroup({
         fundingGoal: new FormControl("", {validators: [Validators.required]}),
+        preMoney: new FormControl("", {validators: [Validators.required]}),
         startDate: new FormControl<NgbDateStruct | undefined>(undefined, {validators: [Validators.required]}),
         endDate: new FormControl<NgbDateStruct | undefined>(undefined, {validators: [Validators.required]})
     })
@@ -53,6 +52,7 @@ export class EditFundingRoundComponent implements OnInit {
                 }
                 this.fundingRoundFormGroup.setValue({
                     fundingGoal: fundingRound.fundingGoal,
+                    preMoney: fundingRound.preMoney,
                     startDate: {
                         day: (new Date(fundingRound.startDate.toLocaleString())).getDate(),
                         month: (new Date(fundingRound.startDate.toLocaleString())).getMonth() + 1,
@@ -64,16 +64,6 @@ export class EditFundingRoundComponent implements OnInit {
                         year: (new Date(fundingRound.endDate)).getFullYear(),
                     }
                 })
-                // this.startDate = {
-                //     day: (new Date(fundingRound.startDate.toLocaleString())).getDate(),
-                //     month: (new Date(fundingRound.startDate.toLocaleString())).getMonth() + 1,
-                //     year: (new Date(fundingRound.startDate.toLocaleString())).getFullYear(),
-                // }
-                // this.endDate = {
-                //     day: (new Date(fundingRound.endDate)).getDate(),
-                //     month: (new Date(fundingRound.endDate)).getMonth() + 1,
-                //     year: (new Date(fundingRound.endDate)).getFullYear(),
-                // }
             })
         })
     }
@@ -97,6 +87,7 @@ export class EditFundingRoundComponent implements OnInit {
             console.log("Updating")
             this.fundingRoundsService.update(this.id!, {
                 fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+                preMoney: this.fundingRoundFormGroup.controls.preMoney.getRawValue()!,
                 startDate: ngbDateFormat(this.fundingRoundFormGroup.controls.startDate.getRawValue()!),
                 endDate: ngbDateFormat(this.fundingRoundFormGroup.controls.endDate.getRawValue()!),
             }).subscribe(res => {
@@ -109,6 +100,7 @@ export class EditFundingRoundComponent implements OnInit {
         console.log("creating")
         this.fundingRoundsService.create({
             fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
+            preMoney: this.fundingRoundFormGroup.controls.preMoney.getRawValue()!,
             startDate: ngbDateFormat(this.fundingRoundFormGroup.controls.startDate.getRawValue()!),
             endDate: ngbDateFormat(this.fundingRoundFormGroup.controls.endDate.getRawValue()!),
         }).subscribe(res => {

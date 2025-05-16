@@ -19,6 +19,19 @@
 
             </div>
         </div>
+        <div class="mb-3">
+            <label for="preMoneyInput" class="form-label">Начальная стомость</label>
+            <input appNumericOnly type="text" formControlName="preMoney" class="form-control"
+                   id="preMoneyInput" placeholder="10000">
+            <div
+                *ngIf="showErrors(fundingRoundFormGroup.controls.fundingGoal)"
+                class="alert alert-danger"
+            >
+                <div *ngIf="fundingRoundFormGroup.controls.fundingGoal.errors?.['required']">
+                    {{"form-validation-errors.PREMONEY_REQUIRED" | translate}}
+                </div>
+            </div>
+        </div>
         <div class="col-12">
             <div class="input-group">
                 <div class="mb-3">

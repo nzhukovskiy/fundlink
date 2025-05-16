@@ -1,14 +1,16 @@
-import { Expose } from "class-transformer";
-
 export class CreateFundingRoundDto {
-  fundingGoal: string;
+    fundingGoal: string;
 
-  startDate: Date;
+    preMoney: string;
 
-  endDate: Date;
-  constructor(fundingGoal: string, startDate: Date, endDate: Date) {
-    this.fundingGoal = fundingGoal;
-    this.startDate = startDate;
-    this.endDate = endDate;
-  }
+    startDate: Date;
+
+    endDate: Date;
+
+    constructor(fundingGoal: string, preMoney: string, startDate: Date, endDate: Date) {
+        this.fundingGoal = fundingGoal;
+        this.preMoney = preMoney;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

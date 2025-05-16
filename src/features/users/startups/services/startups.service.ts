@@ -281,27 +281,29 @@ export class StartupsService {
         } else if (!exitStartupDto.value) {
             throw new BadRequestException("Exit value must be provided")
         }
-        startup.exit = this.exitRepository.create(exitStartupDto)
-        startup.stage = StartupStage.EXITED
+        // startup.exit = this.exitRepository.create(exitStartupDto)
+        // startup.stage = StartupStage.EXITED
         const investors = (await this.getInvestors(startup.id)).investors
-        const savedStartup = await this.startupRepository.save(startup)
+        // const savedStartup = await this.startupRepository.save(startup)
 
         for (const investor of investors) {
-            const share = await this.calculateInvestorShareForStartup(
-                investor.id,
-                savedStartup.id
-            )
-            const investorResult = new Decimal(startup.exit.value)
-                .mul(new Decimal(share.sharePercentage))
-                .div(100)
-            this.eventEmitter2.emit("notification", {
-                userId: investor.id,
-                userType: Roles.INVESTOR,
-                type: NotificationTypes.STARTUP_EXIT,
-                text: `Стартап ${savedStartup.title} вышел по сценарию ${savedStartup.exit.type}`,
-                exit: savedStartup.exit,
-                exitInvestorShare: investorResult.toString(),
-            })
+            const share = await this.startupsRepository.calculateInvestorShareWithStartupShare(investor.id, startupId)
+            console.log(investor.id, startupId, share)
+            // const share = await this.calculateInvestorShareForStartup(
+            //     investor.id,
+            //     savedStartup.id
+            // )
+            // const investorResult = new Decimal(startup.exit.value)
+            //     .mul(new Decimal(share.sharePercentage))
+            //     .div(100)
+            // this.eventEmitter2.emit("notification", {
+            //     userId: investor.id,
+            //     userType: Roles.INVESTOR,
+            //     type: NotificationTypes.STARTUP_EXIT,
+            //     text: `Стартап ${savedStartup.title} вышел по сценарию ${savedStartup.exit.type}`,
+            //     exit: savedStartup.exit,
+            //     exitInvestorShare: investorResult.toString(),
+            // })
         }
         return this.getOne(startupId, true)
     }

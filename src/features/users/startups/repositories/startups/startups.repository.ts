@@ -1,9 +1,11 @@
-import { Injectable } from "@nestjs/common"
-import { PaginateQuery } from "nestjs-paginate"
-import { InjectRepository } from "@nestjs/typeorm"
-import { Startup } from "../../entities/startup"
-import { Repository } from "typeorm"
-import { PaginateService } from "../../../../../common/paginate/services/paginate/paginate.service"
+import { Injectable } from "@nestjs/common";
+import { PaginateQuery } from "nestjs-paginate";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Startup } from "../../entities/startup";
+import { Repository } from "typeorm";
+import { PaginateService } from "../../../../../common/paginate/services/paginate/paginate.service";
+import Decimal from "decimal.js";
+import { InvestmentStage } from "../../../../investments/constants/investment-stage";
 
 @Injectable()
 export class StartupsRepository {
@@ -189,5 +191,32 @@ export class StartupsRepository {
           .andWhere("investment.stage = 'COMPLETED'")
           .groupBy("startup.id")
           .getRawOne()
+    }
+
+    async calculateInvestorShareWithStartupShare(investorId: number, startupId: number) {
+        const startup = await this.getOne(startupId, true)
+        let dilutionFactor = new Decimal(1)
+        let currentShare = new Decimal(0)
+        for (const fundingRound of startup.entities[0].fundingRounds) {
+            if (fundingRound.currentRaised === "0") {
+                continue
+            }
+            const currentInvestments = fundingRound.investments
+              .filter(x => x.stage === InvestmentStage.COMPLETED)
+              .filter(x => x.investor.id === investorId);
+            if (!currentInvestments.length) {
+                currentShare = currentShare.mul(dilutionFactor)
+                dilutionFactor = new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
+                continue
+            }
+             currentShare = currentShare.plus((currentInvestments
+              .reduce((acc, x) => acc.plus(x.amount) , new Decimal(0))).div(
+              new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney)).mul(dilutionFactor))
+
+            dilutionFactor = new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
+            console.log(investorId, startupId, fundingRound.id, currentShare, dilutionFactor)
+            const investments = fundingRound.investments.filter(x => x.investor.id === investorId);
+        }
+        return currentShare
     }
 }

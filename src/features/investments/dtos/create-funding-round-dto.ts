@@ -7,6 +7,10 @@ export class CreateFundingRoundDto {
     fundingGoal: string;
 
     @ApiProperty()
+    @IsNumberString()
+    preMoney: string;
+
+    @ApiProperty()
     @IsDateString()
     startDate: Date;
 

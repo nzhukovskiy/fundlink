@@ -14,4 +14,8 @@ export class CreateStartupDto extends UpdateStartupDto {
     @ApiProperty()
     @IsNumberString()
     initialFundingGoal: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    preMoney: string;
 }

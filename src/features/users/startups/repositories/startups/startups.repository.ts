@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { PaginateService } from "../../../../../common/paginate/services/paginate/paginate.service";
 import Decimal from "decimal.js";
 import { InvestmentStage } from "../../../../investments/constants/investment-stage";
+import { FundingStage } from "../../../../investments/constants/funding-stage";
 
 @Injectable()
 export class StartupsRepository {
@@ -195,27 +196,39 @@ export class StartupsRepository {
 
     async calculateInvestorShareWithStartupShare(investorId: number, startupId: number) {
         const startup = await this.getOne(startupId, true)
-        let dilutionFactor = new Decimal(1)
         let currentShare = new Decimal(0)
+        let wereInvestments = false
+        const lastFundingRound = startup.entities[0].fundingRounds[startup.entities[0].fundingRounds.length - 1]
         for (const fundingRound of startup.entities[0].fundingRounds) {
+            const dilutionFactor =
+              fundingRound.stage === FundingStage.SEED ?
+                new Decimal(1) :
+                new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
             if (fundingRound.currentRaised === "0") {
                 continue
             }
             const currentInvestments = fundingRound.investments
               .filter(x => x.stage === InvestmentStage.COMPLETED)
               .filter(x => x.investor.id === investorId);
+            console.log("using df", dilutionFactor)
             if (!currentInvestments.length) {
-                currentShare = currentShare.mul(dilutionFactor)
-                dilutionFactor = new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
+                if (wereInvestments) {
+                    currentShare = currentShare.mul(dilutionFactor)
+                }
                 continue
             }
-             currentShare = currentShare.plus((currentInvestments
+            wereInvestments = true
+            const added = (currentInvestments
               .reduce((acc, x) => acc.plus(x.amount) , new Decimal(0))).div(
-              new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney)).mul(dilutionFactor))
+              new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney))
+            console.log("added", added)
+            currentShare = currentShare.mul(dilutionFactor)
+             currentShare = currentShare.plus(added)
 
-            dilutionFactor = new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
-            console.log(investorId, startupId, fundingRound.id, currentShare, dilutionFactor)
-            const investments = fundingRound.investments.filter(x => x.investor.id === investorId);
+            console.log(`premoney: ${fundingRound.preMoney}, currentRaised: ${fundingRound.currentRaised}`)
+
+            console.log("calculated new df", dilutionFactor)
+            console.log(`share of investor ${investorId} in round ${fundingRound.stage} = ${currentShare}`)
         }
         return currentShare
     }

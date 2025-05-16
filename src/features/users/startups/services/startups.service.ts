@@ -127,6 +127,7 @@ export class StartupsService {
         const savedStartup = await this.startupRepository.save(startupDto)
         await this.fundingRoundsService.create(savedStartup.id, {
             fundingGoal: createStartupDto.initialFundingGoal,
+            preMoney: createStartupDto.preMoney,
             startDate: new Date(),
             endDate: new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import Decimal from "decimal.js"
 import { DcfDetailedDto } from "../../dtos/responses/dcf-detailed.dto/dcf-detailed.dto"
-import { Startup } from "../../entities/startup"
+import { Startup } from "../../entities/startup.entity"
 import { WaccDetailsDto } from "../../dtos/responses/wacc-details.dto/wacc-details.dto"
 import { ValuationService } from "./valuation.service"
 

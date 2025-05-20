@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Roles } from "../../../constants/roles"
-import { Startup } from "../../entities/startup"
+import { Startup } from "../../entities/startup.entity"
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
 import { DataSource, Repository } from "typeorm"
 import { Tag } from "../../../../tags/entities/tag/tag"
@@ -135,6 +135,7 @@ export class StartupsStatsService {
         }
         console.log(startupResults)
         return mappedStartups
+            .map(x => x as Startup)
             .sort((a, b) => startupResults[b.id] - startupResults[a.id])
             .slice(0, 5)
     }

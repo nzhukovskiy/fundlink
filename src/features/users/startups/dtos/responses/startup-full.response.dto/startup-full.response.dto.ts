@@ -1,4 +1,4 @@
-import { Startup } from "../../../entities/startup";
+import { Startup } from "../../../entities/startup.entity";
 import { Expose } from "class-transformer";
 
 export class StartupFullResponseDto extends Startup {

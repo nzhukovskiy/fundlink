@@ -6,8 +6,9 @@ import { JwtTokenService } from "../../token/services/jwt-token.service";
 import { ErrorCode } from "../../../constants/error-code";
 import { RefreshTokenService } from "../../token/services/refresh-token.service";
 import { Roles } from "../../users/constants/roles";
-import { Startup } from "../../users/startups/entities/startup";
+import { Startup } from "../../users/startups/entities/startup.entity";
 import { Investor } from "../../users/investors/entities/investor";
+import { FullTokenDto } from "../dtos/full-token.dto";
 
 @Injectable()
 export class AuthService {
@@ -67,10 +68,7 @@ export class AuthService {
             token: newTokens.refreshToken,
             expiresAt: new Date((await this.jwtTokenService.decode(newTokens.refreshToken)).exp * 1000),
         })
-        return {
-            accessToken: newTokens.accessToken,
-            refreshToken: newTokens.refreshToken
-        }
+        return newTokens
     }
 
 }

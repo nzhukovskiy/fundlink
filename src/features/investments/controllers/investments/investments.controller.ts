@@ -11,6 +11,8 @@ import { InvestmentService } from "../../services/investment.service";
 export class InvestmentsController {
     constructor(private readonly investmentService: InvestmentService) {
     }
+
+    @ApiBearerAuth()
     @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/approve')
@@ -18,6 +20,7 @@ export class InvestmentsController {
         return this.investmentService.approveInvestment(id, req.token.payload.id);
     }
 
+    @ApiBearerAuth()
     @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/reject')

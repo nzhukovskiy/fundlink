@@ -1,5 +1,5 @@
 // src/constants/typeorm.ts
-import { Startup } from "../features/users/startups/entities/startup";
+import { Startup } from "../features/users/startups/entities/startup.entity";
 import { Investor } from "../features/users/investors/entities/investor";
 import { FundingRound } from "../features/investments/entities/funding-round/funding-round";
 import { Investment } from "../features/investments/entities/investment/investment";

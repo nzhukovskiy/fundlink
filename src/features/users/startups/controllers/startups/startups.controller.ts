@@ -31,6 +31,7 @@ import { OptionalAuthGuard } from "../../../../auth/guards/optional-auth/optiona
 import { ExitStartupDto } from "../../dtos/requests/exit-startup.dto"
 import { Roles as RolesEnum } from "../../../constants/roles"
 import { StartupsStatsService } from "../../services/startups-stats/startups-stats.service"
+import { Startup } from "../../entities/startup.entity";
 
 @Controller("startups")
 @ApiTags("startups")
@@ -76,7 +77,7 @@ export class StartupsController {
     }
 
     @Get("most-popular")
-    getMostPopularStartups() {
+    getMostPopularStartups(): Promise<Startup[]> {
         return this.startupsStatsService.getMostPopularStartups()
     }
 
@@ -183,6 +184,8 @@ export class StartupsController {
         return this.startupsService.uploadPresentation(user.id, file.filename)
     }
 
+    @ApiBearerAuth()
+    @ApiBody({type: AssignTagDto})
     @Roles("STARTUP")
     @UseGuards(AuthGuard, RolesGuard)
     @Post("assign-tag")
@@ -193,6 +196,8 @@ export class StartupsController {
         )
     }
 
+    @ApiBearerAuth()
+    @ApiBody({type: AssignTagDto})
     @Roles("STARTUP")
     @UseGuards(AuthGuard, RolesGuard)
     @Post("remove-tag")
@@ -203,6 +208,19 @@ export class StartupsController {
         )
     }
 
+    @ApiBearerAuth()
+    @ApiConsumes("multipart/form-data")
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                logo: {
+                    type: "string",
+                    format: "binary",
+                },
+            },
+        },
+    })
     @Roles("STARTUP")
     @UseGuards(AuthGuard, RolesGuard)
     @Post("upload-logo")
@@ -221,6 +239,7 @@ export class StartupsController {
         return this.startupsService.uploadLogo(user.id, file.filename)
     }
 
+    @ApiBearerAuth()
     @Roles("INVESTOR")
     @UseGuards(AuthGuard, RolesGuard)
     @Post(":id/mark-as-interesting")
@@ -228,6 +247,7 @@ export class StartupsController {
         return this.startupsService.markAsInteresting(id, req.token.payload.id)
     }
 
+    @ApiBearerAuth()
     @Roles("INVESTOR")
     @UseGuards(AuthGuard, RolesGuard)
     @Post(":id/remove-from-interesting")
@@ -238,6 +258,8 @@ export class StartupsController {
         )
     }
 
+    @ApiBearerAuth()
+    @ApiBody({type: ExitStartupDto})
     @Roles("STARTUP")
     @UseGuards(AuthGuard, RolesGuard)
     @Post("exit")

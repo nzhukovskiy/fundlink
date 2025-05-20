@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Startup } from "../users/startups/entities/startup";
+import { Startup } from "../users/startups/entities/startup.entity";
 import { Investor } from "../users/investors/entities/investor";
 import { FundingRound } from "../investments/entities/funding-round/funding-round";
 import { Investment } from "../investments/entities/investment/investment";

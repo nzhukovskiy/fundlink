@@ -1,4 +1,4 @@
-import { Startup } from './startup';
+import { Startup } from './startup.entity';
 
 describe('Startup', () => {
   it('should be defined', () => {

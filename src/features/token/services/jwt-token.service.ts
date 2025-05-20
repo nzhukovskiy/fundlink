@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { User } from "../../users/user/user";
-import { Startup } from "../../users/startups/entities/startup";
+import { Startup } from "../../users/startups/entities/startup.entity";
 import { Investor } from "../../users/investors/entities/investor";
+import { FullTokenDto } from "../../auth/dtos/full-token.dto";
 
 @Injectable()
 export class JwtTokenService {
@@ -20,7 +21,7 @@ export class JwtTokenService {
         return {
             accessToken: await this.generateAccessToken(user),
             refreshToken: await this.generateRefreshToken(user)
-        };
+        } as FullTokenDto;
     }
 
     private async generateAccessToken(payload: any) {

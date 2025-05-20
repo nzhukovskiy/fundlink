@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Startup } from "../../../users/startups/entities/startup";
+import { Startup } from "../../../users/startups/entities/startup.entity";
 
 @Entity()
 export class Tag {

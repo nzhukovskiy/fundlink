@@ -10,7 +10,7 @@ import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FundingRound } from "../entities/funding-round/funding-round";
 import { Repository } from "typeorm";
-import { Startup } from "../../users/startups/entities/startup";
+import { Startup } from "../../users/startups/entities/startup.entity";
 import { Cron } from "@nestjs/schedule";
 import { FundingStage } from "../constants/funding-stage";
 import Decimal from "decimal.js";

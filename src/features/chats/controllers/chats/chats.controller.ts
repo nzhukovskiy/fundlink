@@ -15,12 +15,15 @@ import { Roles } from "../../../users/constants/roles"
 import { ChatsService } from "../../services/chats/chats.service"
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
 import { ChatBetweenUsersDto } from "../../dtos/chat-between-users-dto/chat-between-users-dto"
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 
 @Controller("chats")
 @ApiTags('chats')
 export class ChatsController {
     constructor(private readonly chatsService: ChatsService) {}
+
+    @ApiBearerAuth()
+    @ApiBody({type: CreateChatDto})
     @UseGuards(AuthGuard)
     @Post()
     createChat(@Body() createChatDto: CreateChatDto, @Req() req) {
@@ -43,12 +46,14 @@ export class ChatsController {
         }
     }
 
+    @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Get("chatsForUser")
     getChatsForUser(@Req() req) {
         return this.chatsService.getChatsForUser(req.token.payload)
     }
 
+    @ApiBearerAuth()
     @UseGuards(AuthGuard, ChatAccessGuard)
     @Get("chatBetweenUsers")
     getChatBetweenUsers(
@@ -58,6 +63,7 @@ export class ChatsController {
         return this.chatsService.getChatBetweenUsers({ startupId, investorId })
     }
 
+    @ApiBearerAuth()
     @UseGuards(AuthGuard, ChatAccessGuard)
     @Get(":id")
     getChat(@Param("id") id: number) {

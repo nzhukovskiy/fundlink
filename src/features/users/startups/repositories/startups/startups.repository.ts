@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PaginateQuery } from "nestjs-paginate";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Startup } from "../../entities/startup";
+import { Startup } from "../../entities/startup.entity";
 import { Repository } from "typeorm";
 import { PaginateService } from "../../../../../common/paginate/services/paginate/paginate.service";
 import Decimal from "decimal.js";

@@ -4,7 +4,7 @@ import { Roles } from "../../../auth/decorators/roles.decorator";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RolesGuard } from "../../../auth/guards/roles.guard";
 import { ChangeProposalService } from "../../services/change-proposal-service/change-proposal.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 
 @Controller('proposals')
 @ApiTags('proposals')
@@ -13,6 +13,8 @@ export class ProposalsController {
     constructor(private readonly changeProposalService: ChangeProposalService) {
     }
 
+    @ApiBearerAuth()
+    @ApiBody({type: VoteProposalDto})
     @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/vote')

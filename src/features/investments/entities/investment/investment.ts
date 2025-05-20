@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-import { Startup } from "../../../users/startups/entities/startup";
+import { Startup } from "../../../users/startups/entities/startup.entity";
 import { Investor } from "../../../users/investors/entities/investor";
 import { FundingRound } from "../funding-round/funding-round";
 import { InvestmentApprovalType } from "../../constants/investment-approval-type";

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { FundingRound } from "./entities/funding-round/funding-round";
-import { Startup } from "../users/startups/entities/startup";
+import { Startup } from "../users/startups/entities/startup.entity";
 import { FundingRoundsController } from "./controllers/funding-rounds.controller";
 import { FundingRoundsService } from "./services/funding-rounds.service";
 import { Investment } from "./entities/investment/investment";

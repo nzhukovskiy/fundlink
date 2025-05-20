@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ExitType } from "../../constants/exit-type";
-import { Startup } from "./startup";
+import { Startup } from "./startup.entity";
 
 @Entity()
 export class Exit {

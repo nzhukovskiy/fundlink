@@ -46,6 +46,7 @@ export class FundingRoundsController {
         return this.fundingRoundsService.delete(id, req.token.payload);
     }
 
+    @ApiBearerAuth()
     @Roles('STARTUP')
     @UseGuards(AuthGuard, RolesGuard)
     @Post(':id/cancel-proposal')

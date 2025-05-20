@@ -2,13 +2,14 @@ import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common"
 import { NotificationsService } from "../../services/notifications/notifications.service"
 import { AuthGuard } from "../../../auth/guards/auth.guard"
 import { Paginate, PaginateQuery } from "nestjs-paginate"
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 @Controller("notifications")
 @ApiTags('notifications')
 export class NotificationsController {
     constructor(private readonly notificationsService: NotificationsService) {}
 
+    @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Get("")
     getNotifications(@Paginate() query: PaginateQuery, @Req() req, @Query("onlyUnread") onlyUnread: boolean) {
@@ -20,6 +21,7 @@ export class NotificationsController {
         )
     }
 
+    @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Get("unread-count")
     getUnreadNotificationsCount(@Req() req) {

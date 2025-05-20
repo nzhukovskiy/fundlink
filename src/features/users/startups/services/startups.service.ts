@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from "@nestjs/common"
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
-import { Startup } from "../entities/startup"
+import { Startup } from "../entities/startup.entity"
 import { DataSource, Repository } from "typeorm"
 import { CreateStartupDto } from "../dtos/requests/create-startup-dto"
 import * as bcrypt from "bcrypt"

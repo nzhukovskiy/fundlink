@@ -36,6 +36,7 @@ export class InvestorsController {
         return this.investorsService.getFullInvestmentsInfo(req.token.payload.id);
     }
 
+    @ApiBearerAuth()
     @Roles('INVESTOR')
     @UseGuards(AuthGuard, RolesGuard)
     @Get('recommendations')

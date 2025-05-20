@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { FundingStage } from "../../constants/funding-stage";
-import { Startup } from "../../../users/startups/entities/startup";
+import { Startup } from "../../../users/startups/entities/startup.entity";
 import { Investment } from "../investment/investment";
 import { NotificationTimings } from "../../constants/notification-timings";
 

@@ -7,13 +7,11 @@ import { UpdateInvestorDto } from "../dtos/update-investor-dto";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RolesGuard } from "../../../auth/guards/roles.guard";
 import { Roles } from "../../../auth/decorators/roles.decorator";
-import { RecommendationService } from "../recommendations/services/recommendation/recommendation.service";
 
 @Controller('investors')
 @ApiTags('investors')
 export class InvestorsController {
-    constructor(private readonly investorsService: InvestorsService,
-                private readonly recommendationService: RecommendationService) {
+    constructor(private readonly investorsService: InvestorsService) {
     }
     @Get()
     findAll(@Paginate() query: PaginateQuery) {
@@ -41,7 +39,7 @@ export class InvestorsController {
     @UseGuards(AuthGuard, RolesGuard)
     @Get('recommendations')
     getRecommendations(@Req() req) {
-        return this.recommendationService.getRecommendationsForInvestor(req.token.payload.id);
+        return this.investorsService.getRecommendations(req.token.payload.id);
     }
 
     @Get(':id')

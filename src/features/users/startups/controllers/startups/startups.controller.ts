@@ -231,7 +231,6 @@ export class StartupsController {
         })
     )
     async uploadLogo(@UploadedFile() file: Express.Multer.File, @Req() req) {
-        console.log(file)
         if (!file) {
             throw new BadRequestException("No file provided")
         }

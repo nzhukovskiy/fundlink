@@ -13,8 +13,6 @@ import { JwtTokenService } from "../../../token/services/jwt-token.service"
 import { UsersService } from "../../services/users.service"
 import { UpdateInvestorDto } from "../dtos/update-investor-dto"
 import { User } from "../../user/user"
-import { Startup } from "../../startups/entities/startup.entity"
-import { Investment } from "../../../investments/entities/investment/investment"
 import { plainToInstance } from "class-transformer"
 import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
@@ -23,6 +21,7 @@ import { StartupsRepository } from "../../startups/repositories/startups/startup
 import { InvestmentsRepository } from "../../../investments/repositories/investments/investments.repository";
 import { InvestorsRepository } from "../repositories/investors/investors.repository";
 import { ErrorCode } from "../../../../constants/error-code";
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class InvestorsService {
@@ -34,7 +33,8 @@ export class InvestorsService {
         private readonly usersService: UsersService,
         private readonly startupsRepository: StartupsRepository,
         private readonly investmentsRepository: InvestmentsRepository,
-        private readonly investorsRepository: InvestorsRepository
+        private readonly investorsRepository: InvestorsRepository,
+        private readonly httpService: HttpService
     ) {}
 
     getAll(query: PaginateQuery) {
@@ -103,6 +103,15 @@ export class InvestorsService {
 
     getInvestorsNumber() {
         return this.investorRepository.createQueryBuilder("investor").getCount()
+    }
+
+    async getRecommendations(id: number) {
+        const token = await this.jwtTokenService.generateApiToken();
+        const response = await this.httpService.axiosRef.get(
+          `http://127.0.0.1:5000/get-recommendations/${id}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        return response.data;
     }
 
     async getStats(investorId: number) {

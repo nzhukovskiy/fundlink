@@ -24,7 +24,6 @@ export class InvestorVoteService {
                 investor: investor,
                 proposal: proposal
             })
-            console.log(vote)
 
             return this.investorVoteRepository.save(vote)
         }

@@ -74,7 +74,6 @@ export class ChatsGateway extends BaseGateway {
                 message: message
             } as CreateNotificationDto)
         } else {
-            console.log(chat)
             if (client.data.user.role === Roles.STARTUP) {
                 this.server
                     .to(`${Roles.INVESTOR}-${chat.investor.id}`)

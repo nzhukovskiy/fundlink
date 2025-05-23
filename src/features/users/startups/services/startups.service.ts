@@ -39,13 +39,9 @@ export class StartupsService {
         @InjectRepository(Investor)
         private readonly investorRepository: Repository<Investor>,
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
-        @InjectRepository(Exit)
-        private readonly exitRepository: Repository<Exit>,
         private readonly usersService: UsersService,
         private readonly jwtTokenService: JwtTokenService,
-        private readonly paginateService: PaginateService,
         private readonly fundingRoundsService: FundingRoundsService,
-        private readonly eventEmitter2: EventEmitter2,
         private readonly valuationService: ValuationService,
         private readonly startupsRepository: StartupsRepository,
         private readonly investorsRepository: InvestorsRepository

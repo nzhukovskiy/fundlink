@@ -20,7 +20,6 @@ import { StartupStage } from "../../users/constants/startup-stage";
 export class InvestmentService {
     constructor(@InjectRepository(Investment) private readonly investmentRepository: Repository<Investment>,
                 @InjectRepository(Investor) private readonly investorRepository: Repository<Investor>,
-                @InjectRepository(Startup) private readonly startupRepository: Repository<Startup>,
                 private readonly fundingRoundsService: FundingRoundsService,
                 private eventEmitter: EventEmitter2) {
     }

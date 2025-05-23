@@ -55,4 +55,12 @@ export class JwtTokenService {
     async decode(token: string) {
         return this.jwtService.decode(token)
     }
+
+    async generateApiToken() {
+        return this.jwtService.signAsync({service: "fundlink-api"},
+          {
+              expiresIn: '15m',
+              secret: this.configService.get("JWT_API_SECRET")
+          })
+    }
 }

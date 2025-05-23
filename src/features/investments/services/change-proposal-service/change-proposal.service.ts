@@ -21,7 +21,6 @@ export class ChangeProposalService {
     constructor(@InjectRepository(FundingRoundChangeProposal) private readonly fundingRoundChangeProposalRepository: Repository<FundingRoundChangeProposal>,
                 @InjectRepository(InvestorVote) private readonly investorVoteRepository: Repository<InvestorVote>,
                 @InjectRepository(FundingRound) private readonly fundingRoundRepository: Repository<FundingRound>,
-                private readonly investorVoteService: InvestorVoteService,
                 private readonly eventEmitter2: EventEmitter2) {
     }
 

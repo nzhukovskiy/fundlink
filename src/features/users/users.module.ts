@@ -13,13 +13,13 @@ import { JwtTokenModule } from "../token/jwt-token.module"
 import { Investment } from "../investments/entities/investment/investment"
 import { Tag } from "../tags/entities/tag/tag"
 import { PaginateModule } from "../../common/paginate/paginate.module"
-import { RecommendationService } from "./investors/recommendations/services/recommendation/recommendation.service"
 import { Exit } from "./startups/entities/exit"
 import { DcfValuationService } from "./startups/services/valuation/dcf-valuation.service"
 import { ValuationService } from "./startups/services/valuation/valuation.service"
 import { StartupsStatsService } from "./startups/services/startups-stats/startups-stats.service"
 import { StartupsRepository } from "./startups/repositories/startups/startups.repository"
 import { InvestorsRepository } from "./investors/repositories/investors/investors.repository";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
     imports: [
@@ -34,13 +34,13 @@ import { InvestorsRepository } from "./investors/repositories/investors/investor
         InvestmentModule,
         JwtTokenModule,
         PaginateModule,
+        HttpModule
     ],
     controllers: [StartupsController, InvestorsController],
     providers: [
         StartupsService,
         UsersService,
         InvestorsService,
-        RecommendationService,
         {
             provide: ValuationService,
             useClass: DcfValuationService,

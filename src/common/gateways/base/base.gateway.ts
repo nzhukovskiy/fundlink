@@ -8,7 +8,6 @@ export abstract class BaseGateway
     constructor(protected readonly jwtTokenService: JwtTokenService) {}
 
     async handleConnection(client: Socket) {
-        console.log("Trying to connect")
         try {
             const token =
                 client.handshake.auth.token ||

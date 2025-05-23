@@ -11,7 +11,6 @@ export class StartupsStatsService {
     constructor(
         @InjectRepository(Startup)
         private readonly startupRepository: Repository<Startup>,
-        @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
         @InjectRepository(FundingRound)
         private readonly fundingRoundRepository: Repository<FundingRound>,
         @InjectDataSource()
@@ -133,7 +132,6 @@ export class StartupsStatsService {
                 score.investorsScore * 0.25 +
                 score.interestingScore * 0.15
         }
-        console.log(startupResults)
         return mappedStartups
             .map(x => x as Startup)
             .sort((a, b) => startupResults[b.id] - startupResults[a.id])

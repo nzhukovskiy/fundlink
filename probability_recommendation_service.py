@@ -33,7 +33,6 @@ class ProbabilityRecommendationService():
         startups_weights = {}
         for row in rows:
             investor_id, name, surname, startup_id, startup_title, startup_description, investment_amount, investment_date = row
-            print(investor_id, name, startup_id)
             investment_amount = int(investment_amount)
 
             self.__construct_dict(investor_id, investor_data, startup_id, 

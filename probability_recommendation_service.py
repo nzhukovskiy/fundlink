@@ -65,12 +65,13 @@ class ProbabilityRecommendationService():
         for investor_id in investor_data.keys():
             total_investments = self.__calculate_total_investments(investor_data[investor_id])
             for startup_id in investor_data[investor_id]["startups"].keys():
+                total_startup_investment = self.__calculate_total_investment_received(startup_data[startup_id])
                 connection_sum = 0
                 for investment in investor_data[investor_id]["startups"][startup_id]["investments"]:
                     time_decay = 1
                     connection_sum += time_decay*investment["investment_amount"]
                 investor_data[investor_id]["startups"][startup_id]["weight"] = connection_sum/total_investments
-                startup_data[startup_id]["investors"][investor_id]["weight"] = connection_sum/total_investments
+                startup_data[startup_id]["investors"][investor_id]["weight"] = connection_sum/total_startup_investment
 
 
         for i in range(2):
@@ -142,5 +143,12 @@ class ProbabilityRecommendationService():
         investments_sum = 0
         for startup in investor["startups"].values():
             for investment in startup["investments"]:
+                investments_sum += investment["investment_amount"]
+        return investments_sum
+    
+    def __calculate_total_investment_received(self, startup):
+        investments_sum = 0
+        for investor in startup["investors"].values():
+            for investment in investor["investments"]:
                 investments_sum += investment["investment_amount"]
         return investments_sum

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { FundingStage } from "../../constants/funding-stage";
 import { Startup } from "../../../users/startups/entities/startup.entity";
 import { Investment } from "../investment/investment";
@@ -38,6 +38,7 @@ export class FundingRound {
     isCurrent: boolean;
 
     @ManyToOne(() => Startup, (startup) => startup.fundingRounds)
+    @Index()
     startup: Startup;
 
     @OneToMany(() => Investment, (investment) => investment.fundingRound)

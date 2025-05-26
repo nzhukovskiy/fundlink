@@ -5,6 +5,8 @@ import { User } from "../../users/user/user";
 import { Startup } from "../../users/startups/entities/startup.entity";
 import { Investor } from "../../users/investors/entities/investor";
 import { FullTokenDto } from "../../auth/dtos/full-token.dto";
+import { randomUUID } from 'crypto';
+
 
 @Injectable()
 export class JwtTokenService {
@@ -39,7 +41,11 @@ export class JwtTokenService {
     }
 
     private async generateRefreshToken(payload: any) {
-        return this.jwtService.signAsync({payload},
+        const refreshPayload = {
+            ...payload,
+            jti: randomUUID(),
+        };
+        return this.jwtService.signAsync(refreshPayload,
           {
               expiresIn: '10d',
               secret: this.configService.get("JWT_REFRESH_SECRET")

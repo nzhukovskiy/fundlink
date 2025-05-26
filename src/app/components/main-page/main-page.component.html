@@ -1,5 +1,5 @@
 <app-main-stats></app-main-stats>
-<div *ngIf="role == Roles.INVESTOR">
+<div *ngIf="(userService.currentUser$ | async)?.role == Roles.INVESTOR">
     <app-recommended-startups></app-recommended-startups>
 </div>
 <div>

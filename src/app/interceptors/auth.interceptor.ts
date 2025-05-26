@@ -36,15 +36,10 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(authReq).pipe(
             catchError((err: HttpErrorResponse) => {
                 if (err.status === 401 && !authReq.url.includes('refresh') && !authReq.url.includes('login')) {
-                    console.log("trying to refresh token")
                     return this.refreshTokens(authReq, next)
                 }
                 if (!authReq.url.includes('chatBetweenUsers') && !authReq.url.includes('recommendations')) {
                     const errorData = err.error?.data || {};
-                    if (err.error?.message.length > 0) {
-                        console.log('hghf')
-                    }
-                    console.log(err)
                     this.translate.get(`errors.${err.error.errorCode}`, errorData).subscribe(translated => {
                         this.toastrService.error(translated);
                     })

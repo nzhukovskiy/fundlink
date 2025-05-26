@@ -121,7 +121,6 @@ export class StartupPageComponent implements OnInit {
     }
 
     openInvestmentDialog(fundingRoundId: number) {
-        console.log(this.investors);
         const dialogRef = this.dialog.open(CreateInvestmentComponent, {
             data: fundingRoundId,
         });

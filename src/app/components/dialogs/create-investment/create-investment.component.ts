@@ -5,6 +5,7 @@ import { SubmitDialogReturn } from '../../../constants/submit-dialog-return';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { InvestmentsService } from '../../../services/investments.service';
 import Decimal from 'decimal.js';
+import {markAllControlsAsTouched} from "../../../utils/validate-form-utils";
 
 @Component({
     selector: 'app-create-investment',
@@ -19,7 +20,7 @@ export class CreateInvestmentComponent {
     readonly data = inject<number>(MAT_DIALOG_DATA);
 
     investmentFormGroup = new FormGroup({
-        amount: new FormControl<string>('', [Validators.min(1)]),
+        amount: new FormControl<string>('', [Validators.required, Validators.min(1)]),
     });
 
     close(data: Decimal) {
@@ -27,11 +28,12 @@ export class CreateInvestmentComponent {
     }
 
     makeInvestment() {
-        if (!this.investmentFormGroup.invalid) {
-            this.investmentsService.create(this.data,
-                { amount: this.investmentFormGroup.controls.amount.getRawValue()! },
-            ).subscribe(res => this.close(res.amount));
+        if (this.investmentFormGroup.invalid) {
+            markAllControlsAsTouched(this.investmentFormGroup);
+            return;
         }
-
+        this.investmentsService.create(this.data,
+            { amount: this.investmentFormGroup.controls.amount.getRawValue()! },
+        ).subscribe(res => this.close(res.amount));
     }
 }

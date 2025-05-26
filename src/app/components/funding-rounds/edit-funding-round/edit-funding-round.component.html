@@ -24,10 +24,10 @@
             <input appNumericOnly type="text" formControlName="preMoney" class="form-control"
                    id="preMoneyInput" placeholder="10000">
             <div
-                *ngIf="showErrors(fundingRoundFormGroup.controls.fundingGoal)"
+                *ngIf="showErrors(fundingRoundFormGroup.controls.preMoney)"
                 class="alert alert-danger"
             >
-                <div *ngIf="fundingRoundFormGroup.controls.fundingGoal.errors?.['required']">
+                <div *ngIf="fundingRoundFormGroup.controls.preMoney.errors?.['required']">
                     {{"form-validation-errors.PREMONEY_REQUIRED" | translate}}
                 </div>
             </div>

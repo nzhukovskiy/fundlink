@@ -9,10 +9,16 @@
             </select>
         </div>
     </div>
-    <div *ngIf="showExitValue" class="mb-3">
+    <div *ngIf="exitType !== ExitType.BANKRUPT" class="mb-3">
         <label for="exitValue" class="form-label">Цена</label>
         <input formControlName="value" appNumericOnly class="form-control" id="exitValue">
     </div>
+    <ng-container *ngIf="exitType === ExitType.IPO">
+        <div  class="mb-3">
+            <label for="exitValue" class="form-label">Количество акций</label>
+            <input formControlName="totalShares" appNumericOnly class="form-control" id="shareNumber">
+        </div>
+    </ng-container>
     <div class="exit-startup-button-form-group">
         <button type="submit" (click)="exitStartup()" class="btn btn-primary mb-3 action-btn">Совершить экзит</button>
     </div>

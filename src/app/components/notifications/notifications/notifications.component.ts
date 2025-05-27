@@ -7,6 +7,7 @@ import { debounceTime, filter, map, Subject, Subscription, switchMap, takeUntil,
 import { PageEvent } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
 import {ChangesApprovalStatus} from "../../../constants/changes-approval-status";
+import {Roles} from "../../../constants/roles";
 
 @Component({
   selector: 'app-notifications',
@@ -101,4 +102,5 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
 
     protected readonly ChangesApprovalStatus = ChangesApprovalStatus;
+    protected readonly Roles = Roles;
 }

@@ -35,7 +35,12 @@
                         <mat-icon>access_time</mat-icon>Раунд закончился!
                     </div>
                     <div *ngIf="notification.type === NotificationType.STARTUP_EXIT">
-                        <mat-icon>outbound</mat-icon>Стартап совершил экзит!
+                        <ng-container *ngIf="notification.userType === Roles.INVESTOR">
+                            <mat-icon>outbound</mat-icon>Стартап совершил экзит!
+                        </ng-container>
+                        <ng-container *ngIf="notification.userType === Roles.STARTUP">
+                            <mat-icon>outbound</mat-icon>Вы совершили экзит!
+                        </ng-container>
                     </div>
                     <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>
                 </div>

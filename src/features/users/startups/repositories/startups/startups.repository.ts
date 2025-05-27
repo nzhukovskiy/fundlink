@@ -198,7 +198,6 @@ export class StartupsRepository {
         const startup = await this.getOne(startupId, true)
         let currentShare = new Decimal(0)
         let wereInvestments = false
-        const lastFundingRound = startup.entities[0].fundingRounds[startup.entities[0].fundingRounds.length - 1]
         for (const fundingRound of startup.entities[0].fundingRounds) {
             const dilutionFactor =
               fundingRound.stage === FundingStage.SEED ?
@@ -229,6 +228,32 @@ export class StartupsRepository {
 
             console.log("calculated new df", dilutionFactor)
             console.log(`share of investor ${investorId} in round ${fundingRound.stage} = ${currentShare}`)
+        }
+        return currentShare
+    }
+
+    async calculateStartupsShare(startupId: number) {
+        const startup = await this.getOne(startupId, true)
+        let currentShare = new Decimal(0)
+        for (const fundingRound of startup.entities[0].fundingRounds) {
+            const dilutionFactor =
+              fundingRound.stage === FundingStage.SEED ?
+                new Decimal(1) :
+                new Decimal(fundingRound.preMoney).div(new Decimal(fundingRound.preMoney).plus(fundingRound.currentRaised))
+            if (fundingRound.currentRaised === "0") {
+                continue
+            }
+
+            currentShare = fundingRound.stage === FundingStage.SEED ?
+              new Decimal(fundingRound.preMoney).div(
+                new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney)) :
+              currentShare = currentShare.mul(dilutionFactor)
+
+
+            console.log(`premoney: ${fundingRound.preMoney}, currentRaised: ${fundingRound.currentRaised}`)
+
+            console.log("calculated new df", dilutionFactor)
+            console.log(`share of startup ${startupId} in round ${fundingRound.stage} = ${currentShare}`)
         }
         return currentShare
     }

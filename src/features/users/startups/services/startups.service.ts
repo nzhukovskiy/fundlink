@@ -1,35 +1,29 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from "@nestjs/common"
-import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
-import { Startup } from "../entities/startup.entity"
-import { DataSource, Repository } from "typeorm"
-import { CreateStartupDto } from "../dtos/requests/create-startup-dto"
-import * as bcrypt from "bcrypt"
-import { PaginateQuery } from "nestjs-paginate"
-import { UpdateStartupDto } from "../dtos/requests/update-startup-dto"
-import { FundingRoundsService } from "../../../investments/services/funding-rounds.service"
-import { JwtTokenService } from "../../../token/services/jwt-token.service"
-import { Investor } from "../../investors/entities/investor"
-import { UsersService } from "../../services/users.service"
-import { User } from "../../user/user"
-import { Tag } from "../../../tags/entities/tag/tag"
-import Decimal from "decimal.js"
-import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
-import { FundingRound } from "../../../investments/entities/funding-round/funding-round"
-import { ExitStartupDto } from "../dtos/requests/exit-startup.dto"
-import { Exit } from "../entities/exit"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { Roles } from "../../constants/roles"
-import { NotificationTypes } from "../../../notifications/constants/notification-types"
-import { ExitType } from "../../constants/exit-type"
-import { StartupStage } from "../../constants/startup-stage"
-import { ErrorCode } from "../../../../constants/error-code"
-import { ValuationService } from "./valuation/valuation.service"
-import { StartupsRepository } from "../repositories/startups/startups.repository"
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Startup } from "../entities/startup.entity";
+import { Repository } from "typeorm";
+import { CreateStartupDto } from "../dtos/requests/create-startup-dto";
+import * as bcrypt from "bcrypt";
+import { PaginateQuery } from "nestjs-paginate";
+import { UpdateStartupDto } from "../dtos/requests/update-startup-dto";
+import { FundingRoundsService } from "../../../investments/services/funding-rounds.service";
+import { JwtTokenService } from "../../../token/services/jwt-token.service";
+import { Investor } from "../../investors/entities/investor";
+import { UsersService } from "../../services/users.service";
+import { User } from "../../user/user";
+import { Tag } from "../../../tags/entities/tag/tag";
+import Decimal from "decimal.js";
+import { ExitStartupDto } from "../dtos/requests/exit-startup.dto";
+import { ExitType } from "../../constants/exit-type";
+import { StartupStage } from "../../constants/startup-stage";
+import { ErrorCode } from "../../../../constants/error-code";
+import { ValuationService } from "./valuation/valuation.service";
+import { StartupsRepository } from "../repositories/startups/startups.repository";
 import { InvestorsRepository } from "../../investors/repositories/investors/investors.repository";
+import { Exit } from "../entities/exit";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Roles } from "../../constants/roles";
+import { NotificationTypes } from "../../../notifications/constants/notification-types";
 
 @Injectable()
 export class StartupsService {
@@ -39,12 +33,14 @@ export class StartupsService {
         @InjectRepository(Investor)
         private readonly investorRepository: Repository<Investor>,
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+        @InjectRepository(Exit) private readonly exitRepository: Repository<Exit>,
         private readonly usersService: UsersService,
         private readonly jwtTokenService: JwtTokenService,
         private readonly fundingRoundsService: FundingRoundsService,
         private readonly valuationService: ValuationService,
         private readonly startupsRepository: StartupsRepository,
-        private readonly investorsRepository: InvestorsRepository
+        private readonly investorsRepository: InvestorsRepository,
+        private readonly eventEmitter2: EventEmitter2
     ) {}
 
     async getAll(
@@ -269,7 +265,12 @@ export class StartupsService {
     }
 
     async exitStartup(startupId: number, exitStartupDto: ExitStartupDto) {
-        const startup = await this.getOne(startupId)
+        const startup = await this.startupRepository
+          .createQueryBuilder("startup")
+          .leftJoinAndSelect("startup.fundingRounds", "fundingRound")
+          .leftJoinAndSelect("fundingRound.investments", "investment")
+          .where("startup.id = :id", {id: startupId})
+          .getOne()
         if (startup.exit) {
             throw new BadRequestException("Startup already exited")
         }
@@ -278,33 +279,77 @@ export class StartupsService {
         } else if (!exitStartupDto.value) {
             throw new BadRequestException("Exit value must be provided")
         }
-        // startup.exit = this.exitRepository.create(exitStartupDto)
-        // startup.stage = StartupStage.EXITED
         const investors = (await this.getInvestors(startup.id)).investors
-        // const savedStartup = await this.startupRepository.save(startup)
 
+        const startupShare = await this.startupsRepository.calculateStartupsShare(startup.id);
+        console.log("startup share", startupShare)
+        const startupResult = new Decimal(exitStartupDto.value)
+          .mul(new Decimal(startupShare))
+
+        const exit = this.exitRepository.create(exitStartupDto)
+        if (exitStartupDto.type === ExitType.IPO) {
+            exit.sharePrice = new Decimal(exitStartupDto.value).div(new Decimal(exitStartupDto.totalShares)).toString()
+        }
+
+        startup.stage = StartupStage.EXITED
+        startup.exit = exit
+        const savedStartup = await this.startupRepository.save(startup)
+
+        this.eventEmitter2.emit("notification", {
+            userId: savedStartup.id,
+            userType: Roles.STARTUP,
+            type: NotificationTypes.STARTUP_EXIT,
+            text: `Вы совершили экзит по сценарию ${savedStartup.exit.type}`,
+            exit: savedStartup.exit,
+            exitInvestorShare: startupResult.toString(),
+            exitInvestorShareNumber: (new Decimal(exitStartupDto.totalShares).mul(new Decimal(startupShare))).toString()
+        })
+
+        console.log(`RESULT STARTUP ${startup.id} SHARE ${startupResult}`)
         for (const investor of investors) {
-            const share = await this.startupsRepository.calculateInvestorShareWithStartupShare(investor.id, startupId)
-            console.log(investor.id, startupId, share)
+            const share = await this.startupsRepository.calculateInvestorShareWithStartupShare(investor.id, startup.id)
+            console.log("total share", investor.id, startup.id, share)
             // const share = await this.calculateInvestorShareForStartup(
             //     investor.id,
             //     savedStartup.id
             // )
-            // const investorResult = new Decimal(startup.exit.value)
-            //     .mul(new Decimal(share.sharePercentage))
-            //     .div(100)
-            // this.eventEmitter2.emit("notification", {
-            //     userId: investor.id,
-            //     userType: Roles.INVESTOR,
-            //     type: NotificationTypes.STARTUP_EXIT,
-            //     text: `Стартап ${savedStartup.title} вышел по сценарию ${savedStartup.exit.type}`,
-            //     exit: savedStartup.exit,
-            //     exitInvestorShare: investorResult.toString(),
-            // })
+            let exitInvestorShareNumber: null | Decimal
+            let investorResult = new Decimal(0)
+            if (exitStartupDto.type === ExitType.ACQUIRED) {
+                investorResult = new Decimal(exitStartupDto.value)
+                  .mul(new Decimal(share))
+                console.log(`RESULT INVESTOR ${investor.id} SHARE ${investorResult}`)
+
+            }
+            else {
+                exitInvestorShareNumber = new Decimal(exitStartupDto.totalShares).mul(new Decimal(share))
+                investorResult = exitInvestorShareNumber.mul(exit.sharePrice)
+                console.log(`IPO RESULT INVESTOR ${investor.id} SHARE ${investorResult}`)
+
+            }
+            this.eventEmitter2.emit("notification", {
+                userId: investor.id,
+                userType: Roles.INVESTOR,
+                type: NotificationTypes.STARTUP_EXIT,
+                text: `Стартап ${savedStartup.title} совершил экзит по сценарию ${savedStartup.exit.type}`,
+                exit: savedStartup.exit,
+                exitInvestorShare: investorResult.toString(),
+                exitInvestorShareNumber: exitInvestorShareNumber ? exitInvestorShareNumber.toString() : null
+            })
+
+
         }
+
         return this.getOne(startupId, true)
     }
 
+    private async exitAcquired(startup: Startup, exitStartupDto: ExitStartupDto) {
+
+    }
+
+    private async exitIPO(startup: Startup, exitStartupDto: ExitStartupDto) {
+
+    }
     private calculateInvestorShareForStartup(
         investorId: number,
         startupId: number

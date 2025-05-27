@@ -1,6 +1,7 @@
 import { ExitType } from "../../../constants/exit-type";
-import { IsEnum, IsNumberString, IsOptional } from "class-validator";
+import { IsEnum, IsNumber, IsNumberString, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Column } from "typeorm";
 
 export class ExitStartupDto {
     @ApiProperty()
@@ -11,4 +12,14 @@ export class ExitStartupDto {
     @IsNumberString()
     @IsOptional()
     value: string;
+
+    @ApiProperty()
+    @IsNumberString()
+    @IsOptional()
+    totalShares: string;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional()
+    lockupPeriodDays: number;
 }

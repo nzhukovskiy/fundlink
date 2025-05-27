@@ -37,8 +37,10 @@ export class AuthService {
     }
 
     async refreshTokens(refreshToken: string) {
-        const payload = await this.jwtTokenService.verifyRefreshToken(refreshToken)
-        if (!payload) {
+        const oldFullPayload = await this.jwtTokenService.verifyRefreshToken(refreshToken)
+        const { exp, iat, nbf, ...payload } = oldFullPayload;
+        console.log("payload of refresh token", oldFullPayload)
+        if (!oldFullPayload) {
             throw new UnauthorizedException({
                 errorCode: ErrorCode.INVALID_REFRESH_TOKEN,
                 message: "Invalid refresh token"
@@ -57,14 +59,14 @@ export class AuthService {
         await this.refreshTokenService.revokeToken(oldRefreshToken)
 
         const newTokens = await this.jwtTokenService.generateTokens(
-          payload.payload
+          payload as Investor | Startup
         )
         // const newAccessToken = await this.jwtTokenService.generateAccessToken(payload.payload)
         // const newRefreshToken = await this.jwtTokenService.generateRefreshToken(payload.payload)
 
         await this.refreshTokenService.create({
-            userId: payload.payload.id,
-            userType: payload.payload.role,
+            userId: oldFullPayload.id,
+            userType: oldFullPayload.role,
             token: newTokens.refreshToken,
             expiresAt: new Date((await this.jwtTokenService.decode(newTokens.refreshToken)).exp * 1000),
         })

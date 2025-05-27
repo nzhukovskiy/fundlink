@@ -66,4 +66,7 @@ export class Notification {
 
     @Column({type: "decimal", nullable: true})
     exitInvestorShare?: string;
+
+    @Column({type: "decimal", nullable: true})
+    exitInvestorShareNumber?: string;
 }

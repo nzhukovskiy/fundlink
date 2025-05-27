@@ -15,7 +15,9 @@ export class JwtTokenService {
     }
 
     async generateTokens(user: Investor | Startup) {
-        delete user.password
+        if (user.password) {
+            delete user.password
+        }
         if (!user["role"]) {
             user["role"] = user.getRole()
         }

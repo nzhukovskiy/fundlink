@@ -22,4 +22,13 @@ export class Exit {
     @OneToOne(() => Startup, startup => startup.exit)
     @JoinColumn()
     startup: Startup;
+
+    @Column({type: "decimal", nullable: true})
+    sharePrice: string;
+
+    @Column({type: "decimal", nullable: true})
+    totalShares: string;
+
+    @Column({nullable: true, default: 180})
+    lockupPeriodDays: number;
 }

@@ -34,6 +34,10 @@
             <span class="label">Количество акций</span>
             <span class="value positive">{{notification!.exitInvestorShareNumber }}</span>
         </div>
+        <div class="details-row" *ngIf="notification?.exit?.type === ExitType.IPO">
+            <span class="label">Период блокировки</span>
+            <span class="value positive">{{notification!.exit!.lockupPeriodDays}} дней</span>
+        </div>
     </div>
 </div>
 

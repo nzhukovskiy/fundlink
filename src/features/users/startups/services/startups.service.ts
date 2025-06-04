@@ -282,7 +282,6 @@ export class StartupsService {
         const investors = (await this.getInvestors(startup.id)).investors
 
         const startupShare = await this.startupsRepository.calculateStartupsShare(startup.id);
-        console.log("startup share", startupShare)
         const startupResult = new Decimal(exitStartupDto.value)
           .mul(new Decimal(startupShare))
 
@@ -305,27 +304,17 @@ export class StartupsService {
             exitInvestorShareNumber: (new Decimal(exitStartupDto.totalShares).mul(new Decimal(startupShare))).toString()
         })
 
-        console.log(`RESULT STARTUP ${startup.id} SHARE ${startupResult}`)
         for (const investor of investors) {
             const share = await this.startupsRepository.calculateInvestorShareWithStartupShare(investor.id, startup.id)
-            console.log("total share", investor.id, startup.id, share)
-            // const share = await this.calculateInvestorShareForStartup(
-            //     investor.id,
-            //     savedStartup.id
-            // )
             let exitInvestorShareNumber: null | Decimal
             let investorResult = new Decimal(0)
             if (exitStartupDto.type === ExitType.ACQUIRED) {
                 investorResult = new Decimal(exitStartupDto.value)
                   .mul(new Decimal(share))
-                console.log(`RESULT INVESTOR ${investor.id} SHARE ${investorResult}`)
-
             }
             else {
                 exitInvestorShareNumber = new Decimal(exitStartupDto.totalShares).mul(new Decimal(share))
                 investorResult = exitInvestorShareNumber.mul(exit.sharePrice)
-                console.log(`IPO RESULT INVESTOR ${investor.id} SHARE ${investorResult}`)
-
             }
             this.eventEmitter2.emit("notification", {
                 userId: investor.id,
@@ -336,24 +325,7 @@ export class StartupsService {
                 exitInvestorShare: investorResult.toString(),
                 exitInvestorShareNumber: exitInvestorShareNumber ? exitInvestorShareNumber.toString() : null
             })
-
-
         }
-
         return this.getOne(startupId, true)
-    }
-
-    private async exitAcquired(startup: Startup, exitStartupDto: ExitStartupDto) {
-
-    }
-
-    private async exitIPO(startup: Startup, exitStartupDto: ExitStartupDto) {
-
-    }
-    private calculateInvestorShareForStartup(
-        investorId: number,
-        startupId: number
-    ) {
-        return this.startupsRepository.calculateInvestorShareForStartup(investorId, startupId)
     }
 }

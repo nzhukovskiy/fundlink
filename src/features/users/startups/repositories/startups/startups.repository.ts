@@ -209,7 +209,6 @@ export class StartupsRepository {
             const currentInvestments = fundingRound.investments
               .filter(x => x.stage === InvestmentStage.COMPLETED)
               .filter(x => x.investor.id === investorId);
-            console.log("using df", dilutionFactor)
             if (!currentInvestments.length) {
                 if (wereInvestments) {
                     currentShare = currentShare.mul(dilutionFactor)
@@ -220,14 +219,10 @@ export class StartupsRepository {
             const added = (currentInvestments
               .reduce((acc, x) => acc.plus(x.amount) , new Decimal(0))).div(
               new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney))
-            console.log("added", added)
             currentShare = currentShare.mul(dilutionFactor)
              currentShare = currentShare.plus(added)
 
-            console.log(`premoney: ${fundingRound.preMoney}, currentRaised: ${fundingRound.currentRaised}`)
 
-            console.log("calculated new df", dilutionFactor)
-            console.log(`share of investor ${investorId} in round ${fundingRound.stage} = ${currentShare}`)
         }
         return currentShare
     }
@@ -249,11 +244,6 @@ export class StartupsRepository {
                 new Decimal(fundingRound.currentRaised).plus(fundingRound.preMoney)) :
               currentShare = currentShare.mul(dilutionFactor)
 
-
-            console.log(`premoney: ${fundingRound.preMoney}, currentRaised: ${fundingRound.currentRaised}`)
-
-            console.log("calculated new df", dilutionFactor)
-            console.log(`share of startup ${startupId} in round ${fundingRound.stage} = ${currentShare}`)
         }
         return currentShare
     }

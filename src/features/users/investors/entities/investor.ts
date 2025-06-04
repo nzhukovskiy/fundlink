@@ -1,8 +1,7 @@
-import { User } from "../../user/user";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
-import { Roles } from "../../constants/roles";
-import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
-import { Investment } from "../../../investments/entities/investment/investment";
+import { User } from "../../user/user"
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm"
+import { Roles } from "../../constants/roles"
+import { Investment } from "../../../investments/entities/investment/investment"
 import { Startup } from "../../startups/entities/startup.entity"
 
 @Entity()

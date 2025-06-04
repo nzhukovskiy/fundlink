@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
-import { Repository } from "typeorm";
-import { Tag } from "../../entities/tag/tag";
-import { Startup } from "../../../users/startups/entities/startup.entity";
+import { Injectable, NotFoundException } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
+import { Tag } from "../../entities/tag/tag"
 
 @Injectable()
 export class TagsService {

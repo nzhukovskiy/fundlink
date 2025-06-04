@@ -1,10 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from "@nestjs/common";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { SpelunkerModule } from "nestjs-spelunker";
-import { writeFileSync } from 'fs';
-import { AuthModule } from "./features/auth/auth.module";
+import { NestFactory } from "@nestjs/core"
+import { AppModule } from "./app.module"
+import { ValidationPipe } from "@nestjs/common"
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
+import { writeFileSync } from "fs"
+
 process.env.TZ = 'UTC';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -23,14 +22,6 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     writeFileSync('./swagger.json', JSON.stringify(document));
-    // const tree = SpelunkerModule.explore(app);
-    // const root = SpelunkerModule.graph(tree);
-    // const edges = SpelunkerModule.findGraphEdges(root);
-    // console.log('graph LR');
-    // const mermaidEdges = edges.map(
-    //   ({ from, to }) => `  ${from.module.name}-->${to.module.name}`,
-    // );
-    // console.log(mermaidEdges.join('\n'));
 
 
     await app.listen(3000);

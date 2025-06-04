@@ -1,12 +1,10 @@
-import { User } from "../../user/user";
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
-import { FundingRound } from "../../../investments/entities/funding-round/funding-round";
-import { Roles } from "../../constants/roles";
-import { Tag } from "../../../tags/entities/tag/tag";
-import { InvestmentApprovalType } from "../../../investments/constants/investment-approval-type";
-import { FundingStage } from "../../../investments/constants/funding-stage";
-import { StartupStage } from "../../constants/startup-stage";
-import { Exit } from "./exit";
+import { User } from "../../user/user"
+import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm"
+import { FundingRound } from "../../../investments/entities/funding-round/funding-round"
+import { Roles } from "../../constants/roles"
+import { Tag } from "../../../tags/entities/tag/tag"
+import { StartupStage } from "../../constants/startup-stage"
+import { Exit } from "./exit"
 
 @Entity()
 export class Startup extends User {

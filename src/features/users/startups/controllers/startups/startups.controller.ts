@@ -31,7 +31,7 @@ import { OptionalAuthGuard } from "../../../../auth/guards/optional-auth/optiona
 import { ExitStartupDto } from "../../dtos/requests/exit-startup.dto"
 import { Roles as RolesEnum } from "../../../constants/roles"
 import { StartupsStatsService } from "../../services/startups-stats/startups-stats.service"
-import { Startup } from "../../entities/startup.entity";
+import { Startup } from "../../entities/startup.entity"
 
 @Controller("startups")
 @ApiTags("startups")

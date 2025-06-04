@@ -1,11 +1,8 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
-import { AuthService } from "../services/auth.service";
-import { LoginUserDto } from "../../users/dtos/login-user-dto";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { AuthGuard } from "../guards/auth.guard";
-import { RolesGuard } from "../guards/roles.guard";
-import { RefreshTokenDto } from "../dtos/refresh-token.dto";
-import { RefreshToken } from "../../token/entities/refresh-token";
+import { Body, Controller, Post } from "@nestjs/common"
+import { AuthService } from "../services/auth.service"
+import { LoginUserDto } from "../../users/dtos/login-user-dto"
+import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger"
+import { RefreshTokenDto } from "../dtos/refresh-token.dto"
 
 @Controller('auth')
 @ApiTags('auth')

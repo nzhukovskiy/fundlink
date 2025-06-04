@@ -1,10 +1,9 @@
-import { Body, Controller, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
-import { CreateFundingRoundDto } from "../../dtos/create-funding-round-dto";
-import { Roles } from "../../../auth/decorators/roles.decorator";
-import { AuthGuard } from "../../../auth/guards/auth.guard";
-import { RolesGuard } from "../../../auth/guards/roles.guard";
-import { InvestmentService } from "../../services/investment.service";
+import { Controller, Param, Post, Req, UseGuards } from "@nestjs/common"
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger"
+import { Roles } from "../../../auth/decorators/roles.decorator"
+import { AuthGuard } from "../../../auth/guards/auth.guard"
+import { RolesGuard } from "../../../auth/guards/roles.guard"
+import { InvestmentService } from "../../services/investment.service"
 
 @Controller('investments')
 @ApiTags('investments')

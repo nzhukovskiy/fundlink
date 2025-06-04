@@ -1,14 +1,12 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { LoginUserDto } from "../../users/dtos/login-user-dto";
-import { UsersService } from "../../users/services/users.service";
-import * as bcrypt from "bcrypt";
-import { JwtTokenService } from "../../token/services/jwt-token.service";
-import { ErrorCode } from "../../../constants/error-code";
-import { RefreshTokenService } from "../../token/services/refresh-token.service";
-import { Roles } from "../../users/constants/roles";
-import { Startup } from "../../users/startups/entities/startup.entity";
-import { Investor } from "../../users/investors/entities/investor";
-import { FullTokenDto } from "../dtos/full-token.dto";
+import { Injectable, UnauthorizedException } from "@nestjs/common"
+import { LoginUserDto } from "../../users/dtos/login-user-dto"
+import { UsersService } from "../../users/services/users.service"
+import * as bcrypt from "bcrypt"
+import { JwtTokenService } from "../../token/services/jwt-token.service"
+import { ErrorCode } from "../../../constants/error-code"
+import { RefreshTokenService } from "../../token/services/refresh-token.service"
+import { Startup } from "../../users/startups/entities/startup.entity"
+import { Investor } from "../../users/investors/entities/investor"
 
 @Injectable()
 export class AuthService {
@@ -39,7 +37,6 @@ export class AuthService {
     async refreshTokens(refreshToken: string) {
         const oldFullPayload = await this.jwtTokenService.verifyRefreshToken(refreshToken)
         const { exp, iat, nbf, ...payload } = oldFullPayload;
-        console.log("payload of refresh token", oldFullPayload)
         if (!oldFullPayload) {
             throw new UnauthorizedException({
                 errorCode: ErrorCode.INVALID_REFRESH_TOKEN,
@@ -61,8 +58,6 @@ export class AuthService {
         const newTokens = await this.jwtTokenService.generateTokens(
           payload as Investor | Startup
         )
-        // const newAccessToken = await this.jwtTokenService.generateAccessToken(payload.payload)
-        // const newRefreshToken = await this.jwtTokenService.generateRefreshToken(payload.payload)
 
         await this.refreshTokenService.create({
             userId: oldFullPayload.id,

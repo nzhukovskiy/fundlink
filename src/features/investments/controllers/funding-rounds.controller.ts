@@ -1,13 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
-import { FundingRoundsService } from "../services/funding-rounds.service";
-import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
-import { CreateInvestmentDto } from "../dtos/create-investment-dto";
-import { InvestmentService } from "../services/investment.service";
-import { AuthGuard } from "../../auth/guards/auth.guard";
-import { RolesGuard } from "../../auth/guards/roles.guard";
-import { Roles } from "../../auth/decorators/roles.decorator";
-import { VoteProposalDto } from "../dtos/vote-proposal.dto/vote-proposal.dto";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common"
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger"
+import { FundingRoundsService } from "../services/funding-rounds.service"
+import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto"
+import { CreateInvestmentDto } from "../dtos/create-investment-dto"
+import { InvestmentService } from "../services/investment.service"
+import { AuthGuard } from "../../auth/guards/auth.guard"
+import { RolesGuard } from "../../auth/guards/roles.guard"
+import { Roles } from "../../auth/decorators/roles.decorator"
 
 @Controller('funding-rounds')
 @ApiTags('funding-rounds')

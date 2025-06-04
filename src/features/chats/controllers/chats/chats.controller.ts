@@ -1,21 +1,10 @@
-import {
-    BadRequestException,
-    Body,
-    Controller,
-    Get,
-    Param,
-    Post,
-    Query,
-    Req,
-    UseGuards,
-} from "@nestjs/common"
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, UseGuards } from "@nestjs/common"
 import { CreateChatDto } from "../../dtos/create-chat-dto"
 import { AuthGuard } from "../../../auth/guards/auth.guard"
 import { Roles } from "../../../users/constants/roles"
 import { ChatsService } from "../../services/chats/chats.service"
 import { ChatAccessGuard } from "../../guards/chat-access/chat-access.guard"
-import { ChatBetweenUsersDto } from "../../dtos/chat-between-users-dto/chat-between-users-dto"
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger"
 
 @Controller("chats")
 @ApiTags('chats')

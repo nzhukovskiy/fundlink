@@ -1,8 +1,4 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from "@nestjs/common"
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Investor } from "../entities/investor"
 import { Repository } from "typeorm"
@@ -14,14 +10,16 @@ import { UsersService } from "../../services/users.service"
 import { UpdateInvestorDto } from "../dtos/update-investor-dto"
 import { User } from "../../user/user"
 import { plainToInstance } from "class-transformer"
-import { StartupFullResponseDto } from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
+import {
+    StartupFullResponseDto,
+} from "../../startups/dtos/responses/startup-full.response.dto/startup-full.response.dto"
 import { PaginateService } from "../../../../common/paginate/services/paginate/paginate.service"
 import { InvestorStatisticsDto } from "../dtos/investor-statistics.dto/investor-statistics.dto"
-import { StartupsRepository } from "../../startups/repositories/startups/startups.repository";
-import { InvestmentsRepository } from "../../../investments/repositories/investments/investments.repository";
-import { InvestorsRepository } from "../repositories/investors/investors.repository";
-import { ErrorCode } from "../../../../constants/error-code";
-import { HttpService } from '@nestjs/axios';
+import { StartupsRepository } from "../../startups/repositories/startups/startups.repository"
+import { InvestmentsRepository } from "../../../investments/repositories/investments/investments.repository"
+import { InvestorsRepository } from "../repositories/investors/investors.repository"
+import { ErrorCode } from "../../../../constants/error-code"
+import { HttpService } from "@nestjs/axios"
 
 @Injectable()
 export class InvestorsService {

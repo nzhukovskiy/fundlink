@@ -6,15 +6,14 @@ import { Investment } from "../entities/investment/investment"
 import { Repository } from "typeorm"
 import { FundingRoundsService } from "./funding-rounds.service"
 import { Investor } from "../../users/investors/entities/investor"
-import { Startup } from "../../users/startups/entities/startup.entity"
 import { InvestmentStage } from "../constants/investment-stage"
 import { InvestmentApprovalType } from "../constants/investment-approval-type"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { Roles } from "../../users/constants/roles"
 import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto"
 import { NotificationTypes } from "../../notifications/constants/notification-types"
-import Decimal from "decimal.js";
-import { StartupStage } from "../../users/constants/startup-stage";
+import Decimal from "decimal.js"
+import { StartupStage } from "../../users/constants/startup-stage"
 
 @Injectable()
 export class InvestmentService {

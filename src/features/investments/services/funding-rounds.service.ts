@@ -4,28 +4,28 @@ import {
     HttpException,
     HttpStatus,
     Injectable,
-    NotFoundException
-} from "@nestjs/common";
-import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto";
-import { InjectRepository } from "@nestjs/typeorm";
-import { FundingRound } from "../entities/funding-round/funding-round";
-import { Repository } from "typeorm";
-import { Startup } from "../../users/startups/entities/startup.entity";
-import { Cron } from "@nestjs/schedule";
-import { FundingStage } from "../constants/funding-stage";
-import Decimal from "decimal.js";
-import { User } from "../../users/user/user";
-import { NotificationTimings } from "../constants/notification-timings";
-import { FundingRoundNotificationsTimings } from "../constants/funding-round-notifications-timings";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Roles } from "../../users/constants/roles";
-import { NotificationTypes } from "../../notifications/constants/notification-types";
-import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto";
-import { ChangeProposalService } from "./change-proposal-service/change-proposal.service";
-import { FundingRoundChangeProposal } from "../entities/funding-round-change-proposal/funding-round-change-proposal";
-import { ChangesApprovalStatus } from "../constants/changes-approval-status";
-import { StartupStage } from "../../users/constants/startup-stage";
-import { ErrorCode } from "../../../constants/error-code";
+    NotFoundException,
+} from "@nestjs/common"
+import { CreateFundingRoundDto } from "../dtos/create-funding-round-dto"
+import { InjectRepository } from "@nestjs/typeorm"
+import { FundingRound } from "../entities/funding-round/funding-round"
+import { Repository } from "typeorm"
+import { Startup } from "../../users/startups/entities/startup.entity"
+import { Cron } from "@nestjs/schedule"
+import { FundingStage } from "../constants/funding-stage"
+import Decimal from "decimal.js"
+import { User } from "../../users/user/user"
+import { NotificationTimings } from "../constants/notification-timings"
+import { FundingRoundNotificationsTimings } from "../constants/funding-round-notifications-timings"
+import { EventEmitter2 } from "@nestjs/event-emitter"
+import { Roles } from "../../users/constants/roles"
+import { NotificationTypes } from "../../notifications/constants/notification-types"
+import { CreateNotificationDto } from "../../notifications/entities/dtos/create-notification.dto"
+import { ChangeProposalService } from "./change-proposal-service/change-proposal.service"
+import { FundingRoundChangeProposal } from "../entities/funding-round-change-proposal/funding-round-change-proposal"
+import { ChangesApprovalStatus } from "../constants/changes-approval-status"
+import { StartupStage } from "../../users/constants/startup-stage"
+import { ErrorCode } from "../../../constants/error-code"
 
 @Injectable()
 export class FundingRoundsService {

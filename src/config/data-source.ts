@@ -1,4 +1,3 @@
-import { ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
 import { entities, migrations } from "../constants/typeorm";
 import * as dotenv from 'dotenv';

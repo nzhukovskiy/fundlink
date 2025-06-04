@@ -1,19 +1,10 @@
-import {
-    ConnectedSocket,
-    MessageBody,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-} from "@nestjs/websockets"
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets"
 import { Server, Socket } from "socket.io"
 import { BaseGateway } from "../../../../common/gateways/base/base.gateway"
 import { OnEvent } from "@nestjs/event-emitter"
 import { JwtTokenService } from "../../../token/services/jwt-token.service"
 import { CreateNotificationDto } from "../../entities/dtos/create-notification.dto"
 import { NotificationsService } from "../../services/notifications/notifications.service"
-import { MarkAsReadDto } from "../../../chats/dtos/mark-as-read.dto/mark-as-read.dto"
 import { MarkNotificationAsReadDto } from "../../entities/dtos/mark-notification-as-read.dto"
 
 @WebSocketGateway(3001, { cors: true, namespace: "/notifications" })

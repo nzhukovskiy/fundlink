@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
-import { User } from "../../users/user/user";
-import { Startup } from "../../users/startups/entities/startup.entity";
-import { Investor } from "../../users/investors/entities/investor";
-import { FullTokenDto } from "../../auth/dtos/full-token.dto";
-import { randomUUID } from 'crypto';
+import { Injectable } from "@nestjs/common"
+import { JwtService } from "@nestjs/jwt"
+import { ConfigService } from "@nestjs/config"
+import { Startup } from "../../users/startups/entities/startup.entity"
+import { Investor } from "../../users/investors/entities/investor"
+import { FullTokenDto } from "../../auth/dtos/full-token.dto"
+import { randomUUID } from "crypto"
 
 
 @Injectable()

@@ -5,11 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Socket } from "socket.io"
 import { Roles } from "../../../users/constants/roles"
 import { ChatBetweenUsersDto } from "../../dtos/chat-between-users-dto/chat-between-users-dto"
-import { plainToInstance } from "class-transformer";
-import {
-    ChatAndUnreadMessageCountResponseDto
-} from "../../dtos/responses/chat-and-unread-message-count.response.dto/chat-and-unread-message-count.response.dto";
-import { Message } from "../../entities/message/message";
+import { Message } from "../../entities/message/message"
 
 @Injectable()
 export class ChatsService {
@@ -55,7 +51,6 @@ export class ChatsService {
 
     async joinChat(chatId: number, client: Socket) {
         client.join(`chat-${chatId}`)
-        console.log(client.data.user, "with id", client.id, "joined", `chat-${chatId}`)
     }
 
     async getChatsForUser(user: any) {

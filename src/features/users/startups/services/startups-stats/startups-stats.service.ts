@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common"
 import { Roles } from "../../../constants/roles"
 import { Startup } from "../../entities/startup.entity"
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm"
 import { DataSource, Repository } from "typeorm"
-import { Tag } from "../../../../tags/entities/tag/tag"
 import { FundingRound } from "../../../../investments/entities/funding-round/funding-round"
 
 @Injectable()

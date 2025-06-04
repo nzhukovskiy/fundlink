@@ -1,20 +1,19 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { FundingRoundChangeProposal } from "../../entities/funding-round-change-proposal/funding-round-change-proposal";
-import { FundingRound } from "../../entities/funding-round/funding-round";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
+import { FundingRoundChangeProposal } from "../../entities/funding-round-change-proposal/funding-round-change-proposal"
+import { FundingRound } from "../../entities/funding-round/funding-round"
 import {
-    CreateFundingRoundChangeProposalDto
-} from "../../dtos/create-funding-round-change-proposal.dto/create-funding-round-change-proposal.dto";
-import { InvestorVoteService } from "../investor-vote-service/investor-vote.service";
-import { Investor } from "../../../users/investors/entities/investor";
-import { InvestorVote } from "../../entities/investor-vote/investor-vote";
-import { VoteProposalDto } from "../../dtos/vote-proposal.dto/vote-proposal.dto";
-import { ChangesApprovalStatus } from "../../constants/changes-approval-status";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Roles } from "../../../users/constants/roles";
-import { NotificationTypes } from "../../../notifications/constants/notification-types";
-import { CreateNotificationDto } from "../../../notifications/entities/dtos/create-notification.dto";
+    CreateFundingRoundChangeProposalDto,
+} from "../../dtos/create-funding-round-change-proposal.dto/create-funding-round-change-proposal.dto"
+import { Investor } from "../../../users/investors/entities/investor"
+import { InvestorVote } from "../../entities/investor-vote/investor-vote"
+import { VoteProposalDto } from "../../dtos/vote-proposal.dto/vote-proposal.dto"
+import { ChangesApprovalStatus } from "../../constants/changes-approval-status"
+import { EventEmitter2 } from "@nestjs/event-emitter"
+import { Roles } from "../../../users/constants/roles"
+import { NotificationTypes } from "../../../notifications/constants/notification-types"
+import { CreateNotificationDto } from "../../../notifications/entities/dtos/create-notification.dto"
 
 @Injectable()
 export class ChangeProposalService {

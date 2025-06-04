@@ -9,9 +9,6 @@ import {RegisterComponent} from "./components/auth/register/register.component";
 import {ProfileComponent} from "./components/profile/profile/profile.component";
 import {authGuard} from "./guards/auth.guard";
 import {EditFundingRoundComponent} from "./components/funding-rounds/edit-funding-round/edit-funding-round.component";
-import {
-  CreateFundingRoundComponent
-} from "./components/funding-rounds/create-funding-round/create-funding-round.component";
 import {EditStartupComponent} from "./components/startups/edit-startup/edit-startup.component";
 import {rolesGuard} from "./guards/roles.guard";
 import {Roles} from "./constants/roles";

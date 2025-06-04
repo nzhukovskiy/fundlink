@@ -29,7 +29,6 @@ export class ClearableSelectComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.selectFormControl.setValue(this.selectInitialValue);
         this.selectFormControl.valueChanges.subscribe(value => {
-            console.log(value);
             this.selectChanged.emit(value!);
         })
     }

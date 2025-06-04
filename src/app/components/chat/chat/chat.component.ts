@@ -6,17 +6,14 @@ import {
     OnInit,
     QueryList,
     ViewChild,
-    ViewChildren
+    ViewChildren,
 } from '@angular/core';
-import {ChatService} from "../../../services/chat.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Chat} from "../../../data/models/chat";
-import {Message} from "../../../data/models/message";
-import {AppSocketService} from "../../../services/socket/app-socket.service";
-import {LocalStorageService} from "../../../services/local-storage.service";
-import {Roles} from "../../../constants/roles";
-import {CreateMessageDto} from "../../../data/dtos/create-message.dto";
-import {last} from "rxjs";
+import { ActivatedRoute, Router } from '@angular/router';
+import { Chat } from '../../../data/models/chat';
+import { Message } from '../../../data/models/message';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { Roles } from '../../../constants/roles';
+import { CreateMessageDto } from '../../../data/dtos/create-message.dto';
 import { ChatSocketService } from '../../../services/socket/chat-socket.service';
 
 @Component({
@@ -142,7 +139,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
 
     private scrollChatToBottomForce() {
-        console.log("force")
         this.messagesContainer!.nativeElement.scrollTop = this.messagesContainer!.nativeElement.scrollHeight;
     }
 

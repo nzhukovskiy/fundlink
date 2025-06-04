@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Roles } from '../../../constants/roles';
 import { FundingRound } from '../../../data/models/funding-round';
-import { ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import { CreateInvestmentComponent } from '../../dialogs/create-investment/create-investment.component';
 import Decimal from 'decimal.js';
 
 @Component({

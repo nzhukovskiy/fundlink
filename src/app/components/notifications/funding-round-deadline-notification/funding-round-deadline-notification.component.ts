@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {NotificationBase} from "../notification-base/notification-base";
-import {InvestmentsService} from "../../../services/investments.service";
 
 @Component({
   selector: 'app-funding-round-deadline-notification',

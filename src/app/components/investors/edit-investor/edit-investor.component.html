@@ -75,15 +75,6 @@
             <input type="text" formControlName="location" class="form-control" id="investorUpdateLocationField"
                    placeholder="Москва, Россия">
         </div>
-<!--        <div class="mb-3">-->
-<!--            <label for="formFile" class="form-label">Логотип</label>-->
-<!--            <div class="investor-logo-group">-->
-<!--                <input #startupLogoInput (change)="onImageChanged($event)" class="form-control" type="file"-->
-<!--                       id="formFile">-->
-<!--                <mat-icon (click)="removeImage()">close</mat-icon>-->
-<!--            </div>-->
-<!--            <img #startupLogoPreview class="investor-logo-preview" alt="" src="">-->
-<!--        </div>-->
         <div class="mb-3 register-submit-button-group">
             <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">
                 {{formType === FormType.UPDATE ? "Обновить информацию": "Зарегистрироваться"}}

@@ -19,7 +19,6 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit(): void {
         let user = this.localStorageService.getUser();
-        console.log(user);
         if (user?.role) {
             this.role = user.role;
         }

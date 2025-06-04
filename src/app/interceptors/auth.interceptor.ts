@@ -1,17 +1,11 @@
-import {Injectable, Injector} from '@angular/core';
-import {
-    HttpRequest,
-    HttpHandler,
-    HttpEvent,
-    HttpInterceptor, HttpErrorResponse
-} from '@angular/common/http';
-import {BehaviorSubject, catchError, filter, finalize, Observable, switchAll, switchMap, take, throwError} from 'rxjs';
-import {LocalStorageService} from "../services/local-storage.service";
-import {ToastrService} from "ngx-toastr";
-import {TranslateService} from "@ngx-translate/core";
-import {AuthService} from "../services/auth.service";
-import {User} from "../data/models/user";
-import {UserService} from "../services/users/user.service";
+import { Injectable, Injector } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { BehaviorSubject, catchError, filter, finalize, Observable, switchMap, take, throwError } from 'rxjs';
+import { LocalStorageService } from '../services/local-storage.service';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/users/user.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

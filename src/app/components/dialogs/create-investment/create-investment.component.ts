@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SubmitDialogComponent } from '../../../dialogs/submit-dialog/submit-dialog.component';
-import { SubmitDialogReturn } from '../../../constants/submit-dialog-return';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InvestmentsService } from '../../../services/investments.service';
 import Decimal from 'decimal.js';
-import {markAllControlsAsTouched} from "../../../utils/validate-form-utils";
+import { markAllControlsAsTouched } from '../../../utils/validate-form-utils';
 
 @Component({
     selector: 'app-create-investment',

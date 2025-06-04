@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-import {AppHttpService} from "./app-http.service";
-import {CreateInvestmentComponent} from "../components/dialogs/create-investment/create-investment.component";
-import {CreateInvestmentDto} from "../data/dtos/create-investment.dto";
-import {Investment} from "../data/models/investment";
+import { Injectable } from '@angular/core';
+import { AppHttpService } from './app-http.service';
+import { CreateInvestmentDto } from '../data/dtos/create-investment.dto';
+import { Investment } from '../data/models/investment';
 
 @Injectable({
     providedIn: 'root'

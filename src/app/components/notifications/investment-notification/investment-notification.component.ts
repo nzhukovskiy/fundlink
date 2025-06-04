@@ -26,6 +26,5 @@ export class InvestmentNotificationComponent extends NotificationBase {
             this.notification!.investment = investment;
         })
     }
-    protected readonly NotificationType = NotificationType;
     protected readonly InvestmentStage = InvestmentStage;
 }

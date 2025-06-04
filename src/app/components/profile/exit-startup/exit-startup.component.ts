@@ -1,9 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {ExitType} from "../../../constants/exit-type";
-import {MatDialogRef} from "@angular/material/dialog";
-import {SubmitDialogComponent} from "../../../dialogs/submit-dialog/submit-dialog.component";
-import {Exit} from "../../../data/models/exit";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ExitType } from '../../../constants/exit-type';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-exit-startup',
@@ -23,7 +21,6 @@ export class ExitStartupComponent implements OnInit {
     })
 
     exitType = ExitType.ACQUIRED
-    showExitValue = true;
 
     exitStartup() {
         this.dialogRef.close(this.exitFormGroup.getRawValue())
@@ -33,12 +30,6 @@ export class ExitStartupComponent implements OnInit {
         this.exitFormGroup.controls.type.setValue(ExitType.ACQUIRED);
         this.exitFormGroup.controls.type.valueChanges.subscribe(value => {
             this.exitType = value as ExitType
-            // if (value === ExitType.BANKRUPT) {
-            //     this.showExitValue = false;
-            // }
-            // else {
-            //     this.showExitValue = true;
-            // }
         })
     }
 

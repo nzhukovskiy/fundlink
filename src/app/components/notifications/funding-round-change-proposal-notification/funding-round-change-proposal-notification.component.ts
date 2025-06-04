@@ -13,7 +13,6 @@ import {Roles} from "../../../constants/roles";
 })
 export class FundingRoundChangeProposalNotificationComponent extends NotificationBase implements OnInit {
     constructor(private readonly proposalsService: ProposalsService,
-                private readonly localStorageService: LocalStorageService,
                 readonly userService: UserService) {
         super();
     }
@@ -26,11 +25,6 @@ export class FundingRoundChangeProposalNotificationComponent extends Notificatio
         }).subscribe(proposal => {
             this.notification!.changes = proposal;
             this.updateCurrentInvestorVoted();
-            // const idx = this.notification!.changes!.votes.findIndex(x => x.id === vote.id)
-            // if (idx !== -1) {
-            //     this.notification!.changes!.votes[idx] = vote;
-            //     this.updateCurrentInvestorVoted();
-            // }
         })
     }
 
@@ -40,11 +34,6 @@ export class FundingRoundChangeProposalNotificationComponent extends Notificatio
         }).subscribe(proposal => {
             this.notification!.changes = proposal;
             this.updateCurrentInvestorVoted();
-            // const idx = this.notification!.changes!.votes.findIndex(x => x.id === vote.id)
-            // if (idx !== -1) {
-            //     this.notification!.changes!.votes[idx] = vote;
-            //     this.updateCurrentInvestorVoted();
-            // }
         })
     }
 
@@ -57,11 +46,8 @@ export class FundingRoundChangeProposalNotificationComponent extends Notificatio
     protected readonly Roles = Roles;
 
     private updateCurrentInvestorVoted() {
-        console.log("hi")
         this.userService.currentUser$.subscribe(u => {
-            console.log(this.notification)
             this.currentInvestorVoted = this.notification!.changes!.votes.some(x => x.investor.id === u?.id && x.approved !== null)
-            console.log(this.currentInvestorVoted)
         })
     }
 }

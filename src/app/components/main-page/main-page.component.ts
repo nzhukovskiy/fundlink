@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Roles } from 'src/app/constants/roles';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import {UserService} from "../../services/users/user.service";
+import { UserService } from '../../services/users/user.service';
 
 @Component({
     selector: 'app-main-page',

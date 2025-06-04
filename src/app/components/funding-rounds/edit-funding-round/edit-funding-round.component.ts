@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FundingRoundsService} from "../../../services/funding-rounds.service";
-import {NgbDate, NgbDateStruct} from "@ng-bootstrap/ng-bootstrap";
-import {ngbDateFormat} from "../../../converters/ngb-date-format";
-import {FundingRound} from "../../../data/models/funding-round";
-import {FormType} from "../../../constants/form-type";
-import {markAllControlsAsTouched, showErrors} from "../../../utils/validate-form-utils";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FundingRoundsService } from '../../../services/funding-rounds.service';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ngbDateFormat } from '../../../converters/ngb-date-format';
+import { FundingRound } from '../../../data/models/funding-round';
+import { FormType } from '../../../constants/form-type';
+import { markAllControlsAsTouched, showErrors } from '../../../utils/validate-form-utils';
 
 @Component({
     selector: 'app-edit-funding-round',
@@ -71,7 +71,6 @@ export class EditFundingRoundComponent implements OnInit {
     handleFormSubmission() {
         if (this.fundingRoundFormGroup.invalid) {
             markAllControlsAsTouched(this.fundingRoundFormGroup);
-            console.log("invalid")
             return;
         }
         if (this.formType === FormType.UPDATE) {
@@ -84,7 +83,6 @@ export class EditFundingRoundComponent implements OnInit {
 
     updateFundingRound() {
         if (!this.fundingRoundFormGroup.invalid) {
-            console.log("Updating")
             this.fundingRoundsService.update(this.id!, {
                 fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
                 preMoney: this.fundingRoundFormGroup.controls.preMoney.getRawValue()!,
@@ -97,7 +95,6 @@ export class EditFundingRoundComponent implements OnInit {
     }
 
     createFundingRound() {
-        console.log("creating")
         this.fundingRoundsService.create({
             fundingGoal: this.fundingRoundFormGroup.controls.fundingGoal.getRawValue()!,
             preMoney: this.fundingRoundFormGroup.controls.preMoney.getRawValue()!,

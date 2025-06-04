@@ -221,5 +221,4 @@ export class StartupProfileComponent implements OnInit {
 
     protected readonly Roles = Roles;
     protected readonly StartupStage = StartupStage;
-    protected readonly InvestmentFullDto = InvestmentFullDto;
 }

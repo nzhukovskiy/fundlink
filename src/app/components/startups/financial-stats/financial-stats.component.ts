@@ -28,15 +28,6 @@ export class FinancialStatsComponent implements OnInit {
             y: {
                 position: 'left',
             },
-            // y1: {
-            //     position: 'right',
-            //     grid: {
-            //         color: 'rgba(255,0,0,0.3)',
-            //     },
-            //     ticks: {
-            //         color: 'red',
-            //     },
-            // },
         },
 
         plugins: {
@@ -63,7 +54,4 @@ export class FinancialStatsComponent implements OnInit {
             label: "Амортизационные расходы"
         })
     }
-
-
-    protected readonly NotificationType = NotificationType;
 }

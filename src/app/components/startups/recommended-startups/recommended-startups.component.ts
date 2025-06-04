@@ -17,7 +17,6 @@ export class RecommendedStartupsComponent implements OnInit {
         this.investorsService.getRecommendations().subscribe({
             next: (res) => {
                 this.recommendedStartups = (res as any).recommendedStartups;
-                console.log(this.recommendedStartups);
             },
         error: (err) => {
             this.recommendedStartups = []

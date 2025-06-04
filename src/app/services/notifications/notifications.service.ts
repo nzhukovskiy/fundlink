@@ -58,15 +58,4 @@ export class NotificationsService {
     private getUnreadNotificationsCount() {
         return this.appHttpService.get<number>(`notifications/unread-count`);
     }
-
-    refreshNotificationsCount() {
-        this.getUnreadNotificationsCount().subscribe(count => {
-            this.notificationsCountSubject.next(count);
-        });
-    }
-
-    clearNotifications() {
-        this.notificationsCountSubject.next(0);
-    }
-
 }

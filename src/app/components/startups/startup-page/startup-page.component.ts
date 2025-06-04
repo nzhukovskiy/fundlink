@@ -1,20 +1,18 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Investor} from 'src/app/data/models/investor';
-import {Startup} from 'src/app/data/models/startup';
-import {StartupService} from 'src/app/services/startup.service';
-import {LocalStorageService} from '../../../services/local-storage.service';
-import {MatDialog} from '@angular/material/dialog';
-import {CreateInvestmentComponent} from '../../dialogs/create-investment/create-investment.component';
-import {Roles} from '../../../constants/roles';
-import {ChatService} from '../../../services/chat.service';
-import {Chat} from '../../../data/models/chat';
-import {BehaviorSubject} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Investor } from 'src/app/data/models/investor';
+import { Startup } from 'src/app/data/models/startup';
+import { StartupService } from 'src/app/services/startup.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateInvestmentComponent } from '../../dialogs/create-investment/create-investment.component';
+import { Roles } from '../../../constants/roles';
+import { Chat } from '../../../data/models/chat';
+import { BehaviorSubject } from 'rxjs';
 import Decimal from 'decimal.js';
-import {ChartConfiguration, ChartOptions} from "chart.js";
-import { SubmitDialogComponent } from '../../../dialogs/submit-dialog/submit-dialog.component';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { FinancialStatsComponent } from '../financial-stats/financial-stats.component';
-import {ExitType} from "../../../constants/exit-type";
+import { ExitType } from '../../../constants/exit-type';
 
 @Component({
     selector: 'app-startup-page',

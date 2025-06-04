@@ -3,11 +3,11 @@ import { NotificationsService } from '../../../services/notifications/notificati
 import { Notification } from '../../../data/models/notification';
 import { NotificationsSocketService } from '../../../services/socket/notifications-socket.service';
 import { NotificationType } from '../../../constants/notification-type';
-import { debounceTime, filter, map, Subject, Subscription, switchMap, takeUntil, timer } from 'rxjs';
+import { map, Subject, Subscription, switchMap, takeUntil, timer } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
-import {ChangesApprovalStatus} from "../../../constants/changes-approval-status";
-import {Roles} from "../../../constants/roles";
+import { ChangesApprovalStatus } from '../../../constants/changes-approval-status';
+import { Roles } from '../../../constants/roles';
 
 @Component({
   selector: 'app-notifications',

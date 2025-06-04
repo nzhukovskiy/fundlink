@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { InvestmentApprovalType } from '../../../constants/investment-approval-type';
 import { InvestmentStage } from '../../../constants/investment-stage';
-import { Investment } from '../../../data/models/investment';
 import { Roles } from '../../../constants/roles';
 import { NgbdSortableHeaderDirective } from '../../../directives/ngbd-sortable-header.directive';
 import { SortEvent } from '../../../types/sort-event';
 import Decimal from 'decimal.js';
-import {InvestmentFullDto} from "../../../data/dtos/responses/investment-full.dto";
+import { InvestmentFullDto } from '../../../data/dtos/responses/investment-full.dto';
 
 @Component({
   selector: 'app-investments-table',

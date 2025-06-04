@@ -1,13 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvestorsService } from 'src/app/services/investors.service';
-import {FormType} from "../../../constants/form-type";
+import { FormType } from '../../../constants/form-type';
 import { AuthService } from '../../../services/auth.service';
-import { ChatService } from '../../../services/chat.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import {markAllControlsAsTouched, showErrors} from "../../../utils/validate-form-utils";
-import {investorResolver} from "../../../resolvers/investor.resolver";
+import { markAllControlsAsTouched, showErrors } from '../../../utils/validate-form-utils';
 
 @Component({
   selector: 'app-edit-investor',
@@ -18,7 +16,6 @@ export class EditInvestorComponent implements OnInit {
 
     constructor (private readonly investorsService: InvestorsService,
                  private readonly router: Router,
-                 private readonly route: ActivatedRoute,
                  private readonly authService: AuthService,
                  private readonly localStorageService: LocalStorageService,) {
     }

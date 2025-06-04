@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ɵgetUnknownElementStrictMode } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import Decimal from 'decimal.js';
 import { FundingRound } from 'src/app/data/models/funding-round';
 import { Startup } from 'src/app/data/models/startup';

@@ -12,7 +12,7 @@ import { AllInvestorsComponent } from './components/investors/all-investors/all-
 import { InvestorPageComponent } from './components/investors/investor-page/investor-page.component';
 import { StartupPageComponent } from './components/startups/startup-page/startup-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { LoginComponent } from './components/auth/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -25,9 +25,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MatIconModule } from '@angular/material/icon';
 import { EditFundingRoundComponent } from './components/funding-rounds/edit-funding-round/edit-funding-round.component';
-import {
-    CreateFundingRoundComponent,
-} from './components/funding-rounds/create-funding-round/create-funding-round.component';
 import { NumericOnlyDirective } from './directives/numeric-only.directive';
 import { SubmitDialogComponent } from './dialogs/submit-dialog/submit-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -41,7 +38,6 @@ import {
 } from './components/startups/recommended-startups/recommended-startups.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
-import { AppSocketService } from './services/socket/app-socket.service';
 import { ChatComponent } from './components/chat/chat/chat.component';
 import { MessageComponent } from './components/chat/message/message.component';
 import { GotoChatComponent } from './components/common/goto-chat/goto-chat.component';
@@ -75,24 +71,31 @@ import { DecimalInterceptor } from './interceptors/decimal.interceptor';
 import { FinancialStatsComponent } from './components/startups/financial-stats/financial-stats.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { DcfVisualizationComponent } from './components/startups/dcf-visualization/dcf-visualization.component';
-import {  } from 'ngx-math';
 import { KatexDirective } from './directives/katex.directive';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { TextDialogComponent } from './components/dialogs/text-dialog/text-dialog.component';
-import {RussianPaginatorIntlService} from "./services/paginator/russian-paginator-intl.service";
-import { FundingRoundDeadlineNotificationComponent } from './components/notifications/funding-round-deadline-notification/funding-round-deadline-notification.component';
-import { FundingRoundChangeProposalNotificationComponent } from './components/notifications/funding-round-change-proposal-notification/funding-round-change-proposal-notification.component';
-import { FundingRoundEndedNotificationComponent } from './components/notifications/funding-round-ended-notification/funding-round-ended-notification.component';
-import { MostPopularStartupsComponent } from './components/startups/most-popular-startups/most-popular-startups.component';
+import { RussianPaginatorIntlService } from './services/paginator/russian-paginator-intl.service';
+import {
+    FundingRoundDeadlineNotificationComponent,
+} from './components/notifications/funding-round-deadline-notification/funding-round-deadline-notification.component';
+import {
+    FundingRoundChangeProposalNotificationComponent,
+} from './components/notifications/funding-round-change-proposal-notification/funding-round-change-proposal-notification.component';
+import {
+    FundingRoundEndedNotificationComponent,
+} from './components/notifications/funding-round-ended-notification/funding-round-ended-notification.component';
+import {
+    MostPopularStartupsComponent,
+} from './components/startups/most-popular-startups/most-popular-startups.component';
 import { StartupsListComponent } from './components/startups/startups-list/startups-list.component';
 import { MostFundedStartupsComponent } from './components/startups/most-funded-startups/most-funded-startups.component';
 import { MainStatsComponent } from './components/main-page/main-stats/main-stats.component';
 import { ExitStartupComponent } from './components/profile/exit-startup/exit-startup.component';
 import { ExitNotificationComponent } from './components/notifications/exit-notification/exit-notification.component';
-import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
-import {MatMenuModule} from "@angular/material/menu";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { ShortenNumberPipe } from './pipes/shorten-number.pipe';
 
 
@@ -116,7 +119,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         StartupProfileComponent,
         InvestorProfileComponent,
         EditFundingRoundComponent,
-        CreateFundingRoundComponent,
         SubmitDialogComponent,
         NumericOnlyDirective,
         EditStartupComponent,

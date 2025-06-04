@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage.service';
-import { User } from '../../data/models/user';
 import { BehaviorSubject } from 'rxjs';
 import { UserJwtInfo } from '../../data/models/user-jwt-info';
-import {Tokens} from "../../data/dtos/tokens";
-import {Router} from "@angular/router";
+import { Tokens } from '../../data/dtos/tokens';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',

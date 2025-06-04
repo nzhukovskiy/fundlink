@@ -77,7 +77,6 @@ export class EditStartupComponent implements OnInit {
 
     handleFormSubmission() {
         if (this.startupEditFormGroup.invalid) {
-            console.log(this.getAllErrors(this.startupEditFormGroup))
             markAllControlsAsTouched(this.startupEditFormGroup);
             return;
         }
@@ -98,7 +97,6 @@ export class EditStartupComponent implements OnInit {
             somMarket: this.startupEditFormGroup.controls.somMarket.getRawValue()!,
             teamExperience: this.startupEditFormGroup.controls.teamExperience.getRawValue()!,
             autoApproveInvestments: this.startupEditFormGroup.controls.autoApproveInvestments.getRawValue()!,
-            // industry: this.startupEditFormGroup.controls.industry.getRawValue()!,
             revenuePerYear: this.startupEditFormGroup.controls.revenuePerYear.getRawValue()!,
             capitalExpenditures: this.startupEditFormGroup.controls.capitalExpenditures.getRawValue()!,
             changesInWorkingCapital: this.startupEditFormGroup.controls.changesInWorkingCapital.getRawValue()!,
@@ -107,7 +105,6 @@ export class EditStartupComponent implements OnInit {
     }
 
     createStartup() {
-        // this.authService.registerStartup(this.startupEditFormGroup.getRawValue())
         this.authService.registerStartup({
             title: this.startupEditFormGroup.controls.title.getRawValue()!,
             description: this.startupEditFormGroup.controls.description.getRawValue()!,
@@ -139,14 +136,9 @@ export class EditStartupComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        // this.constantsService.getIndustryTypes().subscribe(res => {
-        //   this.industryTypes = res;
-        //   // this.startupEditFormGroup.controls.industry.setValue(this.industryTypes[0])
-        // })
         if (this.formType === FormType.UPDATE) {
             let user = this.localStorageService.getUser();
             this.startupService.getOne(user!.id).subscribe(startup => {
-                console.log(startup);
                 this.startupEditFormGroup.controls.email.clearValidators();
                 this.startupEditFormGroup.controls.email.updateValueAndValidity();
                 this.startupEditFormGroup.controls.password.clearValidators();
@@ -168,7 +160,6 @@ export class EditStartupComponent implements OnInit {
                         samMarket: startup.samMarket,
                         somMarket: startup.somMarket,
                         teamExperience: startup.teamExperience,
-                        // industry: startup.industry,
                         revenuePerYear: startup.revenuePerYear,
                         capitalExpenditures: startup.capitalExpenditures,
                         changesInWorkingCapital: startup.changesInWorkingCapital,
@@ -193,7 +184,6 @@ export class EditStartupComponent implements OnInit {
                             samMarket: startup.samMarket,
                             somMarket: startup.somMarket,
                             teamExperience: startup.teamExperience,
-                            // industry: startup.industry,
                             revenuePerYear: startup.revenuePerYear,
                             capitalExpenditures: startup.capitalExpenditures,
                             changesInWorkingCapital: startup.changesInWorkingCapital,
@@ -208,8 +198,6 @@ export class EditStartupComponent implements OnInit {
             });
         }
     }
-
-    industryTypes: string[] = [];
 
     get revenuePerYear(): FormArray {
         return this.startupEditFormGroup.get('revenuePerYear') as FormArray;

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Startup } from 'src/app/data/models/startup';
 import { StartupService } from 'src/app/services/startup.service';
 import { PageEvent } from '@angular/material/paginator';
-import { InvestorsService } from 'src/app/services/investors.service';
-import { plainToInstance } from 'class-transformer';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';

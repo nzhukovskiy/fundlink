@@ -1,13 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Roles} from "../../../constants/roles";
-import {LocalStorageService} from "../../../services/local-storage.service";
-import {Startup} from "../../../data/models/startup";
-import {Investor} from "../../../data/models/investor";
-import {InvestorsService} from "../../../services/investors.service";
-import {ChatService} from "../../../services/chat.service";
-import {BehaviorSubject, catchError} from "rxjs";
-import {Chat} from "../../../data/models/chat";
-import {GetChatDTO} from "../../../data/dtos/get-chat.dto";
+import { Component, Input, OnInit } from '@angular/core';
+import { Roles } from '../../../constants/roles';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { Startup } from '../../../data/models/startup';
+import { Investor } from '../../../data/models/investor';
+import { ChatService } from '../../../services/chat.service';
+import { Chat } from '../../../data/models/chat';
+import { GetChatDTO } from '../../../data/dtos/get-chat.dto';
 
 @Component({
   selector: 'app-goto-chat',
@@ -34,7 +32,6 @@ export class GotoChatComponent implements OnInit {
   protected readonly Roles = Roles;
 
   ngOnInit(): void {
-    console.log(this.userToChatWith);
     let user = this.localStorageService.getUser();
     if (user?.role === Roles.STARTUP) {
       this.loadChatRedirectRules({startupId: user.id, investorId: this.userToChatWith!.id});

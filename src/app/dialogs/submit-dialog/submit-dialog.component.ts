@@ -1,7 +1,7 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {tap} from "rxjs";
-import {SubmitDialogReturn} from "../../constants/submit-dialog-return";
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { tap } from 'rxjs';
+import { SubmitDialogReturn } from '../../constants/submit-dialog-return';
 
 @Component({
   selector: 'app-submit-dialog',

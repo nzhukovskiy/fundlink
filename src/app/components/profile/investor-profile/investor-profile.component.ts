@@ -1,17 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {InvestorsService} from "../../../services/investors.service";
-import {Investor} from "../../../data/models/investor";
-import {Investment} from "../../../data/models/investment";
-import {Startup} from "../../../data/models/startup";
-import {ChartConfiguration} from "chart.js";
-import {start} from "@popperjs/core";
-import {InvestmentStage} from "../../../constants/investment-stage";
-import Decimal from "decimal.js";
-import {StartupFullDto} from "../../../data/dtos/responses/startup-full.dto";
+import { Component, OnInit } from '@angular/core';
+import { InvestorsService } from '../../../services/investors.service';
+import { Investor } from '../../../data/models/investor';
+import { ChartConfiguration } from 'chart.js';
+import { start } from '@popperjs/core';
+import { InvestmentStage } from '../../../constants/investment-stage';
+import Decimal from 'decimal.js';
+import { StartupFullDto } from '../../../data/dtos/responses/startup-full.dto';
 import { InvestmentApprovalType } from '../../../constants/investment-approval-type';
 import { Roles } from '../../../constants/roles';
-import {FormType} from "../../../constants/form-type";
-import {InvestmentFullDto} from "../../../data/dtos/responses/investment-full.dto";
+import { FormType } from '../../../constants/form-type';
+import { InvestmentFullDto } from '../../../data/dtos/responses/investment-full.dto';
 
 @Component({
     selector: 'app-investor-profile',
@@ -81,10 +79,5 @@ export class InvestorProfileComponent implements OnInit {
     }
 
 
-    protected readonly InvestmentStage = InvestmentStage;
-    protected readonly parseInt = parseInt;
-    protected readonly start = start;
-    protected readonly InvestmentApprovalType = InvestmentApprovalType;
     protected readonly Roles = Roles;
-    protected readonly FormType = FormType;
 }

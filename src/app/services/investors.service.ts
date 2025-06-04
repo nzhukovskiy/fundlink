@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AppHttpService } from './app-http.service';
 import { Investor } from '../data/models/investor';
-import { Investment } from '../data/models/investment';
 import { UpdateInvestorDto } from '../data/dtos/update-investor.dto';
-import { Startup } from '../data/models/startup';
 import { StartupFullDto } from '../data/dtos/responses/startup-full.dto';
-import {InvestorStatsDto} from "../data/dtos/responses/investor-stats.dto";
-import {forkJoin} from "rxjs";
-import {InvestmentFullDto} from "../data/dtos/responses/investment-full.dto";
+import { InvestorStatsDto } from '../data/dtos/responses/investor-stats.dto';
+import { forkJoin } from 'rxjs';
+import { InvestmentFullDto } from '../data/dtos/responses/investment-full.dto';
 
 @Injectable({
     providedIn: 'root',

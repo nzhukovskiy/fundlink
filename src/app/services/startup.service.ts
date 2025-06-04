@@ -5,12 +5,8 @@ import { Investor } from '../data/models/investor';
 import { HttpParams } from '@angular/common/http';
 import { PaginationResult } from '../data/dtos/pagination-result';
 import { UpdateStartupDto } from '../data/dtos/update-startup-dto';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { Observable, map, tap } from 'rxjs';
-import { ObserversModule } from '@angular/cdk/observers';
 import { FundingRound } from '../data/models/funding-round';
-import { Tag } from '../data/models/tag';
-import {ExitStartupDto} from "../data/dtos/exit-startup.dto";
+import { ExitStartupDto } from '../data/dtos/exit-startup.dto';
 
 @Injectable({
     providedIn: 'root',

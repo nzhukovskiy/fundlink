@@ -1,5 +1,4 @@
-import {Component, Input} from '@angular/core';
-import Decimal from "decimal.js";
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-progress-bar',

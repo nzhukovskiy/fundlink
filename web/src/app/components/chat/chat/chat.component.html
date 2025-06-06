@@ -1,0 +1,34 @@
+<ng-container *ngIf="chat; else newChat">
+    <div class="user-chat-logo">
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR"
+                         [avatarStyle]="'image'"
+                         [imagePath]="chat.startup.logoPath">
+        </app-user-avatar>
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.STARTUP"
+                         [avatarStyle]="'initials'"
+                         [fullName]="{name: chat.investor.name, surname: chat.investor.surname}">
+        </app-user-avatar>
+        <div class="member-name">
+            {{getMemberName()}}
+        </div>
+    </div>
+
+    <div #messagesContainer class="messages-container">
+        <div #messageItem
+             [attr.data-id]="message.id"
+             *ngFor="let message of chat?.messages">
+            <ng-container *ngIf="firstUnreadMessage && firstUnreadMessage.id === message.id">
+                <div #unreadMessagesLabel class="unread-messages-label">Непрочитанные сообщения</div>
+            </ng-container>
+            <app-message
+                [message]="message"
+                [isLastMessage]="isLastMessage(message)"
+                (markAsReadEvent)="handleMarkAsRead($event)">
+            </app-message>
+        </div>
+    </div>
+</ng-container>
+<ng-template #newChat>
+    Новый чат, тут пока что пусто
+</ng-template>
+<app-send-message (message)="sendMessage($event)"></app-send-message>

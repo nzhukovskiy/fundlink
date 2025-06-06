@@ -1,0 +1,12 @@
+<app-main-stats></app-main-stats>
+<div *ngIf="(userService.currentUser$ | async)?.role == Roles.INVESTOR">
+    <app-recommended-startups></app-recommended-startups>
+</div>
+<div>
+    <h3 class="section-title">Самые популярные</h3>
+    <app-most-popular-startups></app-most-popular-startups>
+</div>
+<div>
+    <h3 class="section-title">С наибольшим объемом инвестиций</h3>
+    <app-most-funded-startups></app-most-funded-startups>
+</div>

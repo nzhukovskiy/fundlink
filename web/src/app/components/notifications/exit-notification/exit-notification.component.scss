@@ -1,0 +1,83 @@
+.exit-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid;
+}
+
+.exit-card.acquired { border-color: #00c853; }
+.exit-card.ipo { border-color: #2979ff; }
+.exit-card.bankrupt { border-color: #ff1744; }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.startup-name {
+    font-weight: 600;
+    font-size: 24px;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+}
+
+
+.exit-type {
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 16px;
+}
+
+.acquired .exit-type { background: #00c85333; color: #00c853; }
+.ipo .exit-type { background: #2979ff33; color: #2979ff; }
+.bankrupt .exit-type { background: #ff174433; color: #ff1744; }
+
+.details-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+.label {
+    color: #616161;
+    min-width: 120px;
+}
+
+.value {
+    color: #212121;
+    font-weight: 500;
+    text-align: right;
+}
+
+.financial-details {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.positive { color: #00c853; }
+.negative { color: #ff1744; }
+
+@media (max-width: 480px) {
+    .exit-card {
+        margin: 12px;
+        padding: 16px;
+    }
+
+    .startup-name {
+        font-size: 18px;
+    }
+}
+.startup-group {
+    display: flex;
+    align-items: center;
+}

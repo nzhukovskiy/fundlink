@@ -1,0 +1,56 @@
+<div class="approval-container">
+    <div class="header">
+        <h1 class="startup-name">Стартап {{notification?.changes?.fundingRound?.startup?.title}}</h1>
+        <h2 class="round-name">Изменения в раунд финансирования {{notification?.changes?.fundingRound?.stage}}</h2>
+    </div>
+
+    <div class="changes-section">
+        <div class="change-item" *ngIf="notification?.changes?.newEndDate">
+            <div class="old-values">
+                <div class="change-label">Дата окончания</div>
+                <div class="old-value highlight">{{notification?.changes?.oldEndDate | date:"d.LL.y"}}</div>
+            </div>
+            <div class="diff-indicator">
+                <span class="diff-arrow">→</span>
+            </div>
+            <div class="new-values">
+                <div class="change-label">Предлагаемая дата окончания</div>
+                <div class="new-value highlight">{{notification?.changes?.newEndDate | date:"d.LL.y"}}</div>
+            </div>
+        </div>
+
+        <div class="change-item" *ngIf="notification?.changes?.newFundingGoal">
+            <div class="old-values">
+                <div class="change-label">Цель раунда финансирования</div>
+                <div class="old-value highlight">{{notification?.changes?.oldFundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+            </div>
+            <div class="diff-indicator">
+                <span class="diff-arrow">→</span>
+            </div>
+            <div class="new-values">
+                <div class="change-label">Предлагаемая цель финансирования</div>
+                <div class="new-value highlight">{{notification?.changes?.newFundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons-container" *ngIf="!currentInvestorVoted && notification?.changes?.status === ChangesApprovalStatus.PENDING_REVIEW">
+        <button (click)="rejectProposal()" class="btn btn-reject">Отклонить изменения</button>
+        <button (click)="approveProposal()" class="btn btn-approve">Потвердить изменения</button>
+    </div>
+    <div *ngIf="currentInvestorVoted && notification?.changes?.status === ChangesApprovalStatus.PENDING_REVIEW">
+        Вы проголосовали по данному изменению, ожидайте решения других инвесторов
+    </div>
+    <div *ngIf="notification?.changes?.status === ChangesApprovalStatus.COMPLETED" class="status-banner status-approved">
+        <span class="status-icon">✓</span>
+        <div class="status-message">
+            Изменения подтверждены
+        </div>
+    </div>
+    <div *ngIf="notification?.changes?.status === ChangesApprovalStatus.REJECTED" class="status-banner status-rejected">
+        <span class="status-icon">✗</span>
+        <div class="status-message">
+            Изменения отклонены
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+.unread-notification-badge {
+    background-color: #dc3545;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.notification-header::after {
+    margin-left: 0;
+}
+.notification-main-info {
+    display: flex;
+
+    div {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 10px;
+        }
+    }
+}
+.notification-created-at {
+    margin-right: 10px;
+    margin-left: auto;
+}
+.only-read-checkbox {
+    margin: 20px 0;
+    label, input {
+        cursor: pointer;
+    }
+}

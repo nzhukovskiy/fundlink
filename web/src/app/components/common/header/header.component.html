@@ -1,0 +1,104 @@
+<div class="outer-header">
+    <div class="container">
+        <nav class="header-navigation navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid navigation-container">
+                <a [routerLink]="['']">
+                    <img src="assets/fundlink-high-resolution-logo.png" height="90">
+                </a>
+                <div class="nav-menu-container">
+                    <ul class="header-nav-bar navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" [routerLink]="['investors']">Инвесторы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [routerLink]="['startups']">Стартапы</a>
+                        </li>
+                        <li class="profile-dropdown">
+                            <div class="profile-icon">
+                                <mat-icon>account_circle</mat-icon>
+                                <span *ngIf="notificationsService.notificationsCount$ | async"
+                                      class="badge badge-primary unread-messages-badge"
+                                      matTooltip="У вас есть новые уведомления">
+                    {{notificationsService.notificationsCount$ | async}}
+                    </span>
+                            </div>
+
+                            <div class="profile-menu">
+                                <ng-container *ngIf="userService.currentUser$ | async; else userNotLoggedIn">
+                                    <a [routerLink]="['profile']" class="profile-menu-item"><mat-icon>account_circle</mat-icon>Профиль</a>
+                                    <a [routerLink]="['notifications']" class="profile-menu-item">
+                                        <mat-icon>notifications</mat-icon>
+                                        Уведомления
+                                        <span *ngIf="notificationsService.notificationsCount$ | async"
+                                              class="badge badge-primary unread-messages-badge"
+                                              matTooltip="У вас есть новые уведомления">
+                                {{notificationsService.notificationsCount$ | async}}
+                            </span>
+                                    </a>
+                                    <a *ngIf="(userService.currentUser$ | async)?.role === Roles.INVESTOR" [routerLink]="['/startups']" [queryParams]="{isInteresting: true}" class="profile-menu-item">
+                                        <mat-icon>favorite</mat-icon>
+                                        Избранные стартапы
+                                    </a>
+                                    <a [routerLink]="['chats']" class="profile-menu-item">
+                                        <mat-icon>mail_outline</mat-icon>
+                                        Сообщения</a>
+                                </ng-container>
+                                <ng-template #userNotLoggedIn>
+                                    <a [routerLink]="['login']" class="profile-menu-item">
+                                        <mat-icon>exit_to_app</mat-icon>
+                                        Войти</a>
+                                </ng-template>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="profile-menu-mobile">
+                    <a class="mobile-menu-trigger-button" mat-button [matMenuTriggerFor]="menu">
+                        <mat-icon>menu</mat-icon>
+                        <span *ngIf="notificationsService.notificationsCount$ | async"
+                              class="badge badge-primary unread-messages-badge unread-messages-badge-mobile"
+                              matTooltip="У вас есть новые уведомления">
+                    {{notificationsService.notificationsCount$ | async}}
+                    </span>
+                    </a>
+                    <mat-menu class="mobile-menu" #menu="matMenu">
+                        <li mat-menu-item class="nav-item">
+                            <a class="nav-link" aria-current="page" [routerLink]="['investors']">Инвесторы</a>
+                        </li>
+                        <li mat-menu-item class="nav-item">
+                            <a class="nav-link" [routerLink]="['startups']">Стартапы</a>
+                        </li>
+                        <ng-container *ngIf="userService.currentUser$ | async; else userNotLoggedIn">
+                            <a mat-menu-item [routerLink]="['profile']" class="profile-menu-item">
+                                <mat-icon class="mobile-menu-icon">account_circle</mat-icon>
+                                Профиль</a>
+                            <a mat-menu-item [routerLink]="['notifications']" class="profile-menu-item notifications-menu-item">
+                                <mat-icon class="mobile-menu-icon">notifications</mat-icon>
+                                Уведомления
+                                <span *ngIf="notificationsService.notificationsCount$ | async"
+                                      class="badge badge-primary unread-messages-badge"
+                                      matTooltip="У вас есть новые уведомления">
+                                {{notificationsService.notificationsCount$ | async}}
+                            </span>
+                            </a>
+                            <a mat-menu-item *ngIf="(userService.currentUser$ | async)?.role === Roles.INVESTOR" [routerLink]="['/startups']" [queryParams]="{isInteresting: true}" class="profile-menu-item">
+                                <mat-icon class="mobile-menu-icon">favorite</mat-icon>
+                                Избранные стартапы
+                            </a>
+                            <a mat-menu-item [routerLink]="['chats']" class="profile-menu-item">
+                                <mat-icon class="mobile-menu-icon">mail_outline</mat-icon>
+                                Сообщения</a>
+                        </ng-container>
+                        <ng-template #userNotLoggedIn>
+                            <a mat-menu-item [routerLink]="['login']" class="profile-menu-item">
+                                <mat-icon class="mobile-menu-icon">exit_to_app</mat-icon>
+                                Войти</a>
+                        </ng-template>
+                    </mat-menu>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+</div>

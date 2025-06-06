@@ -1,0 +1,114 @@
+.calculation-section {
+    margin-bottom: 2em;
+    padding: 1em;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.calculation-section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+.calculation-section h4 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: #333;
+}
+
+.formula-block {
+    background-color: #eef;
+    padding: 0.5em 1em;
+    margin-bottom: 1em;
+    border-radius: 3px;
+    font-size: 0.95em;
+}
+
+.formula-block p {
+    margin: 0.3em 0;
+}
+
+.calculation-steps dl {
+    margin-left: 1em;
+}
+
+.calculation-steps dt {
+    font-weight: bold;
+    margin-top: 0.8em;
+}
+
+.calculation-steps dd {
+    margin-left: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    font-size: 0.9em;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+td span[latex] {
+    display: block;
+    margin-top: 4px;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+tfoot td {
+    background-color: #e9e9e9;
+}
+
+.final-value {
+    background-color: #e6ffe6;
+    border-color: #b3ffb3;
+}
+.final-value h3 {
+    color: #006400;
+    border-color: #99e699;
+}
+.final-value .calculation-steps div[latex] {
+    font-size: 1.1em;
+}
+.final-value .calculation-steps p {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+
+.warnings {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+.warnings h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    border: none;
+}
+.warnings ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}

@@ -1,0 +1,86 @@
+<h4>Ваши уведомления</h4>
+<div class="form-check only-read-checkbox">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [formControl]="onlyUnread">
+    <label class="form-check-label" for="flexCheckDefault">
+        Только непрочитанные
+    </label>
+</div>
+<div ngbAccordion>
+    <div ngbAccordionItem *ngFor="let notification of notifications; trackBy: trackByNotificationId" [id]="notification.id"
+         (show)="onNotificationPanelOpen(notification.id)" (hide)="onNotificationPanelHide(notification.id)">
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton class="notification-header">
+                <div class="notification-main-info">
+                    <div *ngIf="notification.type === NotificationType.INVESTMENT">
+                        <mat-icon>attach_money</mat-icon>В ваш стартап совершена новая инвестиция!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.MESSAGE">
+                        <mat-icon> mail_outline</mat-icon>Новое сообщение для вас!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_DEADLINE">
+                        <mat-icon>access_time</mat-icon>Раунд финансирования подходит к концу!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL">
+                        <mat-icon>compare_arrows</mat-icon>Стартап хочет внести изменения в раунд финансирования!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED">
+                        <ng-container *ngIf="notification.changes?.status === ChangesApprovalStatus.COMPLETED">
+                            <mat-icon>check</mat-icon>Ваши изменения приняты!
+                        </ng-container>
+                        <ng-container *ngIf="notification.changes?.status === ChangesApprovalStatus.REJECTED">
+                            <mat-icon>close</mat-icon>Ваши изменения отклонены!
+                        </ng-container>
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.FUNDING_ROUND_ENDED">
+                        <mat-icon>access_time</mat-icon>Раунд закончился!
+                    </div>
+                    <div *ngIf="notification.type === NotificationType.STARTUP_EXIT">
+                        <ng-container *ngIf="notification.userType === Roles.INVESTOR">
+                            <mat-icon>outbound</mat-icon>Стартап совершил экзит!
+                        </ng-container>
+                        <ng-container *ngIf="notification.userType === Roles.STARTUP">
+                            <mat-icon>outbound</mat-icon>Вы совершили экзит!
+                        </ng-container>
+                    </div>
+                    <span *ngIf="!notification.read" class="badge badge-secondary unread-notification-badge">Новое</span>
+                </div>
+                <div class="notification-created-at">
+                    {{notification.createdAt | date:"d.LL.y в H:mm" }}
+                </div>
+            </button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.INVESTMENT">
+                <app-investment-notification [notification]="notification"></app-investment-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.MESSAGE">
+                <app-message-notification [notification]="notification"></app-message-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_DEADLINE">
+                <app-funding-round-deadline-notification [notification]="notification"></app-funding-round-deadline-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL">
+                <app-funding-round-change-proposal-notification [notification]="notification"></app-funding-round-change-proposal-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_CHANGE_PROPOSAL_FINISHED">
+                <app-funding-round-change-proposal-notification [notification]="notification"></app-funding-round-change-proposal-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.FUNDING_ROUND_ENDED">
+                <app-funding-round-ended-notification [notification]="notification"></app-funding-round-ended-notification>
+            </div>
+            <div ngbAccordionBody *ngIf="notification.type === NotificationType.STARTUP_EXIT">
+                <app-exit-notification [notification]="notification"></app-exit-notification>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="notifications.length === 0">
+    Здесь пока ничего нет
+</div>
+<mat-paginator *ngIf="notifications.length" class="notifications-paginator" [length]="totalNotificationsNumber"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 8, 10, 25, 100]"
+               (page)="handlePageChange($event)"
+               aria-label="Select page">
+</mat-paginator>

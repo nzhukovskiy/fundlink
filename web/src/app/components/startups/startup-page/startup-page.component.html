@@ -1,0 +1,80 @@
+<div class="header-section">
+    <img class="logo" *ngIf="startup?.logoPath" [src]="'http://localhost:3000/uploads/logos/' + startup?.logoPath" alt="">
+    <img class="logo" *ngIf="!startup?.logoPath" src="assets/no-image.jpg" alt="">
+    <div class="startup-info">
+        <div class="startup-info-title-section">
+            <h1 class="title">{{startup?.title}}</h1>
+            <div class="title-right-group" *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role !== Roles.STARTUP">
+                <app-goto-chat [userToChatWith]="startup"></app-goto-chat>
+                <div class="mb-3 button-group">
+                    <a (click)="toggleStartupInterestingState()" class="btn btn-primary mb-3 action-btn" [matTooltip]=" startup?.isInteresting ? 'Удалить из избранного': 'Добавить в избранные'">
+                        <mat-icon *ngIf="startup?.isInteresting">favorite</mat-icon>
+                        <mat-icon *ngIf="!startup?.isInteresting">favorite_border</mat-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <app-tags-list [tags]="startup!.tags"></app-tags-list>
+        <div>Общая цель: {{startup?.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
+            <app-input-help-tooltip tooltipMessage="Долгосрочная цель"></app-input-help-tooltip>
+        </div>
+        <div class="funding-goal">Текущая цель: {{getTotalFundingGoalByRounds().toNumber() | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
+            <app-input-help-tooltip tooltipMessage="Сумма целей всех раундов финансирования"></app-input-help-tooltip>
+        </div>
+        <div>Всего собрано: {{getCurrentFundingByRounds().toNumber() | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+        <app-progress-bar [fillPercent]="getOverallFundingProgress().toNumber()" [fillColor]="'#27ae60'"></app-progress-bar>
+    </div>
+</div>
+<div *ngIf="startup?.exit" class="stat-card startup-exit">
+    <h2 class="exit-type"
+        [ngClass]="{
+     'acquired': startup!.exit!.type === ExitType.ACQUIRED,
+     'ipo': startup!.exit!.type === ExitType.IPO,
+     'bankrupt': startup!.exit!.type === ExitType.BANKRUPT,
+     }">
+        {{"startup.exit." + startup!.exit.type | translate}}</h2>
+    <p class="exit-time"><mat-icon>schedule</mat-icon>{{startup!.exit.date | date:"d.LL.y в H:mm"}}</p>
+    <p class="exit-value" *ngIf="startup!.exit.value"><mat-icon>attach_money</mat-icon>Итоговая стоимость: {{startup!.exit.value | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</p>
+</div>
+<div class="stats-container">
+    <div *ngIf="startup && startup.dcf && startup.dcf.totalDcfValue != 0" class="stat-card">
+        <div class="stat-label">Оценка по методу DCF</div>
+        <div class="stat-value">{{startup.dcf.totalDcfValue.toString() | shortenNumber}}
+            <mat-icon *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role === Roles.INVESTOR" (click)="openDetailedFinancialStats()" matTooltip="Подробная информация" class="open-financial-stats-icon">open_in_new</mat-icon>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">TAM</div>
+        <div class="stat-value">{{startup!.tamMarket | shortenNumber}}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">SAM</div>
+        <div class="stat-value">{{startup!.samMarket | shortenNumber}}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">SOM</div>
+        <div class="stat-value">{{startup!.somMarket | shortenNumber}}</div>
+    </div>
+</div>
+<h2 class="section-title">О стартапе</h2>
+<div class="description">
+    <p style="white-space: pre-line;">{{startup?.description}}</p>
+</div>
+
+<ng-container *ngIf="startup?.presentationPath">
+    <h2 class="section-title">Презентация</h2>
+    <div class="attachment-section">
+        <div class="attachment">
+            <mat-icon>insert_drive_file</mat-icon>
+            <span>{{startup?.presentationPath}}</span>
+            <a [href]="'http://localhost:3000/uploads/presentations/' + startup?.presentationPath" class="download-btn">
+                <mat-icon>download</mat-icon>
+                Скачать презентацию
+            </a>
+        </div>
+    </div>
+</ng-container>
+
+<h4>Раунды инвестирования:</h4>
+<app-funding-rounds-list *ngIf="startup" [fundingRounds]="startup.fundingRounds" [investmentAllowed]="!startup.exit" (newInvestment)="openInvestmentDialog($event)"></app-funding-rounds-list>

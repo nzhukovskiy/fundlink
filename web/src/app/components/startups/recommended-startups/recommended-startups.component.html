@@ -1,0 +1,9 @@
+<ng-container *ngIf="recommendedStartups.length">
+    <h3 class="section-title">Рекомендации</h3>
+    <div class="startups-list">
+        <div *ngFor="let startup of recommendedStartups">
+            <app-single-startup [startup]="startup"></app-single-startup>
+        </div>
+    </div>
+
+</ng-container>

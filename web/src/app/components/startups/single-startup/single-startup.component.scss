@@ -1,0 +1,32 @@
+.startup-card-title {
+  cursor: pointer;
+}
+.card-body {
+  height: 200px;
+}
+.card-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.card-body a {
+  text-decoration: none;
+}
+.startup-card-img:hover {
+  cursor: pointer;
+  filter: brightness(60%);
+  transition: all 1s ease;
+}
+.startup-card-img {
+  max-height: 100%;
+  max-width: 100%;
+  width: fit-content;
+  overflow: clip;
+  margin: auto auto;
+}
+.startup-img-container {
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

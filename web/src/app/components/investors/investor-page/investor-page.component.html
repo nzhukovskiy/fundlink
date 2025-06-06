@@ -1,0 +1,46 @@
+<div class="investor-card">
+    <div class="avatar-section">
+        <div class="avatar">{{investor!.name[0].toUpperCase()}}{{investor!.surname[0].toUpperCase()}}</div>
+    </div>
+
+    <div class="content-section">
+        <div class="investors-info-group">
+            <h1 class="name">{{investor?.name}} {{investor?.surname}}</h1>
+            <app-goto-chat *ngIf="localStorageService.getUser() && localStorageService.getUser()?.role !== Roles.INVESTOR" [userToChatWith]="investor"></app-goto-chat>
+        </div>
+
+
+        <div *ngIf="investor?.title" class="location">
+            <mat-icon>business_center</mat-icon>
+            <span>{{investor?.title}}</span>
+        </div>
+
+        <div *ngIf="investor?.location" class="location">
+            <mat-icon>location_on</mat-icon>
+            <span>{{investor?.location}}</span>
+        </div>
+        <div class="email">
+            <mat-icon>mail</mat-icon>
+            <span><a [href]="'mailto:' + investor!.email">{{investor?.email}}</a></span>
+        </div>
+
+        <p class="bio">
+            {{investor?.description}}
+        </p>
+
+        <div class="stats" *ngIf="Object.keys(investorStats!).length">
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.averageInvestmentAmount | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+                <div class="stat-label">Средний размер инвестиции</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.startupsCount}}</div>
+                <div class="stat-label">Количество инвестированных стартапов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{investorStats?.lastInvestmentDate | date:"d.LL.y"}}</div>
+                <div class="stat-label">Последняя инвестиция</div>
+            </div>
+        </div>
+    </div>
+</div>

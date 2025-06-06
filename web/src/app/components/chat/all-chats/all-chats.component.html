@@ -1,0 +1,23 @@
+<div class="chat-list">
+    <a [routerLink]="['/chats', chat.id]"  *ngFor="let chat of chats" class="chat-item single-chat">
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR"
+            [avatarStyle]="'image'"
+            [imagePath]="chat.startup.logoPath">
+        </app-user-avatar>
+        <app-user-avatar *ngIf="localStorageService.getUser()?.role === Roles.STARTUP"
+                         [avatarStyle]="'initials'"
+                         [fullName]="{name: chat.investor.name, surname: chat.investor.surname}">
+        </app-user-avatar>
+        <div class="chat-info">
+            <div class="chat-title-group">
+                <div class="chat-name">{{getMemberName(chat)}}</div>
+                <span *ngIf="chat.unreadCount"
+                      class="badge badge-primary unread-messages-badge"
+                      matTooltip="В этом чате есть непрочитанные сообщения">
+                    {{chat.unreadCount}}
+                </span>
+            </div>
+            <div class="chat-preview">{{getLastMessage(chat).text}}</div>
+        </div>
+    </a>
+</div>

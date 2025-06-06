@@ -1,0 +1,14 @@
+.dialog-title {
+    margin: 30px;
+    text-align: center;
+}
+.button-group {
+    margin: 30px;
+    display: flex;
+    gap: 20px;
+}
+.button-group button {
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,15 @@
+<div class="message-notification">
+    <div class="notification-header">
+        <div class="sender-info">
+            <span class="sender-name">{{getMessageSender()}}</span>
+            <span class="notification-date">{{notification?.message?.timestamp | date:"d.LL.y в H:mm" }}</span>
+        </div>
+    </div>
+
+    <p class="message-preview">{{notification?.message?.text}}</p>
+
+    <a [routerLink]="['/chats/', notification?.message?.chat?.id]" class="chat-button">
+        <mat-icon> chat</mat-icon>
+        Перейти к чату
+    </a>
+</div>

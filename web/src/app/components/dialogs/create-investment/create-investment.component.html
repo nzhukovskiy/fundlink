@@ -1,0 +1,20 @@
+<form class="create-investment-form" [formGroup]="investmentFormGroup">
+  <div class="mb-3">
+    <label for="registerEmailField" class="form-label">Размер инвестиции, ₽</label>
+    <input appNumericOnly formControlName="amount" class="form-control" id="registerEmailField" placeholder="1000">
+  </div>
+    <div *ngIf="investmentFormGroup.controls.amount.invalid && (investmentFormGroup.controls.amount.dirty || investmentFormGroup.controls.amount.touched)"
+         class="alert alert-danger">
+
+        <div *ngIf="investmentFormGroup.controls.amount.errors?.['required']">
+            {{"form-validation-errors.INVESTMENT_AMOUNT_REQUIRED" | translate}}
+        </div>
+        <div *ngIf="investmentFormGroup.controls.amount.errors?.['min']">
+            {{"form-validation-errors.INVESTMENT_AMOUNT_MIN" | translate}}
+        </div>
+
+    </div>
+  <div class="mb-3 button-group">
+    <button type="submit" (click)="makeInvestment()" class="full-width-el btn btn-primary mb-3 action-btn">Инвестировать</button>
+  </div>
+</form>

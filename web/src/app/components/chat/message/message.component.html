@@ -1,0 +1,14 @@
+<div #messageElement class="message-row"
+     [ngClass]="{'message-row-right': message?.senderType === localStorageService.getUser()?.role}">
+    <div class="message-box">
+        <div class="message-top-group">
+            <p class="message-timestamp">{{message?.timestamp | date:"d.LL.y в H:mm"}}</p>
+            <ng-container *ngIf="isLastMessage">
+                <mat-icon *ngIf="message?.readAt" class="read-at-icon" [matTooltip]="message!.readAt ? (message!.readAt | date:'d.LL.y в H:mm')! : ''">remove_red_eye</mat-icon>
+                <p *ngIf="!message?.readAt">null</p>
+            </ng-container>
+        </div>
+        <p>{{message?.text}}</p>
+    </div>
+</div>
+

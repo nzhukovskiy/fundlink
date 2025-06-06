@@ -1,0 +1,5 @@
+<div class="startups-list">
+    <div *ngFor="let startup of startups">
+        <app-single-startup [showTotalInvestments]="showTotalInvestments" [startup]="startup"></app-single-startup>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="exit-card"
+     [ngClass]="{
+     'acquired': notification!.exit!.type === ExitType.ACQUIRED,
+     'ipo': notification!.exit!.type === ExitType.IPO,
+     'bankrupt': notification!.exit!.type === ExitType.BANKRUPT,
+     }">
+    <div class="header">
+        <div class="startup-group">
+            <app-user-avatar [avatarStyle]="'image'"
+                             [imagePath]="notification!.exit!.startup!.logoPath">
+            </app-user-avatar>
+            <h1 class="startup-name"><a [routerLink]="['/startups', notification!.exit!.startup!.id]">{{notification!.exit!.startup.title}}</a></h1>
+        </div>
+        <div class="exit-type">{{"startup.exit." + notification!.exit!.type | translate}}</div>
+    </div>
+
+    <div class="details-row">
+        <span class="label">Дата экзита</span>
+        <span class="value">{{notification!.exit!.date | date:"d.LL.y в H:mm"}}</span>
+    </div>
+
+    <div class="financial-details" *ngIf="notification!.exit!.type !== ExitType.BANKRUPT">
+        <div class="details-row">
+            <span class="label" *ngIf="!notification?.exitInvestorShareNumber">Стоимость</span>
+            <span class="label" *ngIf="notification?.exitInvestorShareNumber">Капитализация</span>
+            <span class="value positive">{{notification!.exit!.value | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</span>
+        </div>
+        <div class="details-row" >
+            <span class="label" *ngIf="!notification?.exitInvestorShareNumber">Ваша доля</span>
+            <span class="label" *ngIf="notification?.exitInvestorShareNumber">Суммарная стоимость ваших акций</span>
+            <span class="value positive">{{notification!.exitInvestorShare | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</span>
+        </div>
+        <div class="details-row" *ngIf="notification?.exitInvestorShareNumber">
+            <span class="label">Количество акций</span>
+            <span class="value positive">{{notification!.exitInvestorShareNumber }}</span>
+        </div>
+        <div class="details-row" *ngIf="notification?.exit?.type === ExitType.IPO">
+            <span class="label">Период блокировки</span>
+            <span class="value positive">{{notification!.exit!.lockupPeriodDays}} дней</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div *ngIf="avatarStyle === 'image'; else initialsAvatar" class="chat-avatar">
+    <img *ngIf="imagePath" [src]="'http://localhost:3000/uploads/logos/' + imagePath" alt="User Avatar">
+    <img *ngIf="!imagePath" src="assets/no-image.jpg" alt="User Avatar">
+</div>
+<ng-template #initialsAvatar>
+    <div >
+        <div class="profile-icon">{{fullName!.name[0].toUpperCase()}}{{fullName!.surname[0].toUpperCase()}}</div>
+    </div>
+</ng-template>

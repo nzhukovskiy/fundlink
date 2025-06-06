@@ -1,0 +1,24 @@
+<div class="financial-stats-chart-container">
+    <h2>Прогнозируемые финансовые показатели</h2>
+    <p>На срок в 5 лет</p>
+    <canvas
+        baseChart
+        [data]="lineChartData"
+        [type]="'line'"
+        [options]="lineChartOptions"
+    ></canvas>
+    <div ngbAccordion>
+        <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton class="notification-header">
+                    Подробная информация об оценке стартапа
+                </button>
+            </h2>
+            <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                    <app-dcf-visualization [dcfDetails]="startup.dcf"></app-dcf-visualization>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

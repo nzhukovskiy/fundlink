@@ -1,0 +1,64 @@
+<div class="approval-container">
+    <div class="header">
+        <h2 class="round-name">Раунд {{notification?.fundingRound?.stage}} закончился</h2>
+    </div>
+
+    <div *ngIf="fundingRoundStatus === 'closedSuccessfully'" class="outcome-container status-success">
+        <div class="progress-container">
+            <app-progress-bar [fillPercent]="50" [fillColor]="'#2ecc71'"></app-progress-bar>
+            <div class="progress-text">
+                {{notification?.fundingRound?.currentRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}} / {{notification?.fundingRound?.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
+            </div>
+        </div>
+        <div class="outcome-message status-success">
+            <span class="status-icon">✓</span>
+            <div>
+                <h3 style="margin: 0">Цель раунда достигнута!</h3>
+                <p style="margin: 5px 0 0 0">Раунд закрыт успешно с полным финансированием</p>
+            </div>
+        </div>
+        <div class="status-timestamp">Раунд закрыт {{notification?.createdAt | date:"d.LL.y в H:mm"}}</div>
+    </div>
+
+    <div *ngIf="fundingRoundStatus === 'closedUnderfunded'" class="outcome-container status-warning">
+        <div class="progress-container">
+            <app-progress-bar [fillPercent]="raisedToGoalRatio" [fillColor]="'#fff3e0'"></app-progress-bar>
+            <div class="progress-text">
+                {{notification?.fundingRound?.currentRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}} / {{notification?.fundingRound?.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
+            </div>
+        </div>
+        <div class="outcome-message status-warning">
+            <span class="status-icon">!</span>
+            <div>
+                <h3 style="margin: 0">Цель раунда не достигнута</h3>
+                <p style="margin: 5px 0 0 0">Раунд финансирования был закрыт без достижения поставленной цели</p>
+            </div>
+        </div>
+        <div class="funding-actions">
+            <a [routerLink]="['/fundingRounds', notification!.fundingRound!.id, 'edit']" class="btn btn-secondary">Редактировать раунд финансирования</a>
+        </div>
+        <div class="status-timestamp">Раунд закрыт {{notification?.createdAt | date:"d.LL.y в H:mm"}}</div>
+    </div>
+
+    <div *ngIf="fundingRoundStatus === 'closedOverfunded'" class="outcome-container status-info">
+        <div class="progress-container">
+            <div class="progress-container">
+                <app-progress-bar [fillPercent]="raisedToGoalRatio" [fillColor]="'#e3f2fd'"></app-progress-bar>
+                <div class="progress-text">
+                    {{notification?.fundingRound?.currentRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}} / {{notification?.fundingRound?.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}
+                </div>
+            </div>
+        </div>
+        <div class="outcome-message status-info">
+            <span class="status-icon">🏆</span>
+            <div>
+                <h3 style="margin: 0">Цель финансирования превышена!</h3>
+                <p style="margin: 5px 0 0 0">Раунд закрыт при общей сумме инвестиций превышающей цель раунда финансирования</p>
+            </div>
+        </div>
+        <div class="funding-actions">
+            <a [routerLink]="['/fundingRounds', notification!.fundingRound!.id, 'edit']" class="btn btn-secondary">Редактировать раунд финансирования</a>
+        </div>
+        <div class="status-timestamp">Раунд закрыт {{notification?.createdAt | date:"d.LL.y в H:mm"}}</div>
+    </div>
+</div>

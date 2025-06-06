@@ -1,0 +1,154 @@
+.investor-profile-top-group {
+    display: flex;
+    justify-content: space-between;
+}
+.startups-chart-container {
+    max-width: 400px;
+    max-height: 400px;
+    margin: 0 auto;
+}
+
+
+
+
+.startup-info-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.startup-header h3 {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.startup-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.investment-info,
+.share-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.label {
+    font-weight: 600;
+    color: #666;
+}
+
+.value {
+    font-size: 1rem;
+    color: #333;
+}
+
+.investor-share-chart {
+    max-width: 300px;
+}
+.startup-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.status-icon {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-badge.pending-review {
+    background-color: #fff3e0;
+    border: 1px solid #ffb74d;
+    color: #ef6c00;
+}
+
+.status-badge.pending-review .status-icon {
+    background-color: #ffb74d;
+    animation: pulse 1.5s infinite;
+}
+
+.status-badge.completed {
+    background-color: #e8f5e9;
+    border: 1px solid #81c784;
+    color: #2e7d32;
+}
+
+.status-badge.completed .status-icon {
+    background-color: #66bb6a;
+}
+
+.status-badge.rejected {
+    background-color: #ffebee;
+    border: 1px solid #ef9a9a;
+    color: #c62828;
+}
+
+.status-badge.rejected .status-icon {
+    background-color: #ef5350;
+}
+
+.status-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(0.95); }
+}
+
+
+
+.approval-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    gap: 8px;
+}
+
+.approval-type.auto-approve {
+    background: #e8f5e9;
+    border: 1px solid #66bb6a;
+    color: #2e7d32;
+}
+
+.approval-type.startup-approve {
+    background: #e3f2fd;
+    border: 1px solid #42a5f5;
+    color: #1565c0;
+}
+
+
+.approval-type:hover {
+    filter: brightness(0.95);
+}
+
+.profile-nav-tabs {
+    margin-bottom: 15px;
+}

@@ -1,0 +1,18 @@
+<div *ngIf="fundingRound" class="funding-card" [ngClass]="{'current': fundingRound.isCurrent}">
+    <div class="stage-badge">{{fundingRound.stage}}</div>
+    <div class="round-details">
+        <div matTooltip="Собрано на данный момент" class="round-target">{{fundingRound.currentRaised | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+        <div matTooltip="Цель раунда" class="round-goal">{{fundingRound.fundingGoal | currency:'RUB':'symbol':'1.0-0':'ru-RU'}}</div>
+    </div>
+
+    <app-progress-bar [fillPercent]="fundingPercent!.toNumber()" [fillColor]="'#3498db'"></app-progress-bar>
+
+    <div class="round-dates">
+        <span class="start-date">• Начало: {{fundingRound.startDate | date: "dd.MM.yy"}}</span>
+        <span class="end-date">• Окончание: {{fundingRound.endDate | date: "dd.MM.yy"}}</span>
+    </div>
+
+    <div *ngIf="localStorageService.getUser()?.role === Roles.INVESTOR && fundingRound.isCurrent && investmentAllowed" class="mb-3 button-group invest-btn">
+        <a (click)="openInvestmentDialog()" ><mat-icon>payment</mat-icon>Инвестировать</a>
+    </div>
+</div>

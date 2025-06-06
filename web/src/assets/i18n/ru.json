@@ -1,0 +1,52 @@
+{
+    "startup": {
+        "exit": {
+            "ACQUIRED": "Приобретен",
+            "IPO": "IPO",
+            "BANKRUPT": "Банкрот"
+        }
+    },
+    "investment": {
+        "stage": {
+            "PENDING_REVIEW": "Ожидает рассмотрения",
+            "COMMITTED": "committed",
+            "COMPLETED": "Завершено",
+            "REJECTED": "Отклонено"
+        },
+        "type": {
+            "AUTO_APPROVE": "Автоматически",
+            "STARTUP_APPROVE": "Ручное"
+        }
+    },
+    "errors": {
+        "UNAUTHORIZED": "Неверный адрес электронной почты или пароль",
+        "STARTUP_WITH_ID_DOES_NOT_EXISTS": "Стартапа с идентификатором {{id}} не существует",
+        "INVESTOR_WITH_ID_DOES_NOT_EXISTS": "Инвестора с идентификатором {{id}} не существует",
+        "USER_EMAIL_DUPLICATE": "Пользователь с адресом электронной почты {{email}} уже существует",
+        "FUNDING_ROUND_OVERLAP": "Даты раунда финансирования конфликтуют с уже существующими раундами финансирования",
+        "CANNOT_UPDATE_EXITED_STARTUP": "Невозможно обновить стартап, совершивший экзит",
+        "CANNOT_CREATE_FUNDING_ROUND_FOR_EXITED_STARTUP": "Невозможно создать раунд финансирования для стартапа, совершившего экзит",
+        "FUNDING_ROUND_END_CANNOT_BE_LOWER_THAN_START": "Дата окончания раунда финансирования не может быть меньше даты начала"
+    },
+    "form-validation-errors": {
+        "EMAIL_REQUIRED": "Необходимо указать адрес электронной почты",
+        "EMAIL_INVALID": "Некорректный адрес электронной почты",
+        "PASSWORD_REQUIRED": "Необходимо указать пароль",
+        "PASSWORD_MINLENGTH": "Длина пароля должна быть не менее 8 символов",
+        "TITLE_REQUIRED": "Необходимо указать название стартапа",
+        "DESCRIPTION_REQUIRED": "Необходимо указать описание стартапа",
+        "FUNDING_GOAL_REQUIRED": "Необходимо указать цель финансирования",
+        "INITIAL_FUNDING_GOAL_REQUIRED": "Необходимо указать начальную цель финансирования",
+        "TAM_REQUIRED": "Необходимо указать объем рынка TAM",
+        "SAM_REQUIRED": "Необходимо указать объем рынка SAM",
+        "SOM_REQUIRED": "Необходимо указать объем рынка SOM",
+        "NAME_REQUIRED": "Необходимо указать имя",
+        "SURNAME_REQUIRED": "Необходимо указать фамилию",
+        "MIN_EXISTING_FUNDING_GOAL": "Нельзя уменьшать цель раунда при наличии инвестиций",
+        "START_DATE_REQUIRED": "Необходимо указать дату начала",
+        "END_DATE_REQUIRED": "Необходимо указать дату окончания",
+        "INVESTMENT_AMOUNT_REQUIRED": "Необходимо указать сумму инвестиции",
+        "INVESTMENT_AMOUNT_MIN": "Сумма инвестиции не может быть меньше 1",
+        "PREMONEY_REQUIRED": "Необходимо указать начальную стоимость"
+    }
+}

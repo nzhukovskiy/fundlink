@@ -1,0 +1,84 @@
+<div class="form-container">
+    <h3 *ngIf="formType === FormType.UPDATE">Редактирование информации об инвесторе</h3>
+    <form class="register-form" [formGroup]="investorFormGroup">
+        <ng-container *ngIf="formType === FormType.CREATE">
+            <div class="mb-3">
+                <label for="investorRegisterEmailField" class="form-label">Адрес электронной почты<span class="text-danger">*</span></label>
+                <input required type="email" formControlName="email" class="form-control" id="investorRegisterEmailField"
+                       placeholder="name@example.com">
+                <div *ngIf="showErrors(investorFormGroup.controls.email)"
+                     class="alert">
+
+                    <div *ngIf="investorFormGroup.controls.email.errors?.['required']">
+                        {{"form-validation-errors.EMAIL_REQUIRED" | translate}}
+                    </div>
+                    <div *ngIf="investorFormGroup.controls.email.errors?.['email']">
+                        {{"form-validation-errors.EMAIL_INVALID" | translate}}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="investorRegisterPasswordField" class="form-label">Пароль<span class="text-danger">*</span></label>
+                <input class="form-control" formControlName="password" type="password"
+                       id="investorRegisterPasswordField">
+                <div *ngIf="showErrors(investorFormGroup.controls.password)"
+                     class="alert">
+
+                    <div *ngIf="investorFormGroup.controls.password.errors?.['required']">
+                        {{"form-validation-errors.PASSWORD_REQUIRED" | translate}}
+                    </div>
+                    <div *ngIf="investorFormGroup.controls.password.errors?.['minlength']">
+                        {{"form-validation-errors.PASSWORD_MINLENGTH" | translate}}
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <div class="mb-3">
+            <label for="investorUpdateNameField" class="form-label">Имя пользователя<span class="text-danger">*</span></label>
+            <input type="text" formControlName="name" class="form-control" id="investorUpdateNameField"
+                   placeholder="Alexander">
+            <div *ngIf="showErrors(investorFormGroup.controls.name)"
+                 class="alert">
+
+                <div *ngIf="investorFormGroup.controls.name.errors?.['required']">
+                    {{"form-validation-errors.NAME_REQUIRED" | translate}}
+                </div>
+
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="investorUpdateSurnameField" class="form-label">Фамилия пользователя<span class="text-danger">*</span></label>
+            <input type="text" formControlName="surname" class="form-control" id="investorUpdateSurnameField"
+                   placeholder="Alexandrov">
+            <div *ngIf="showErrors(investorFormGroup.controls.surname)"
+                 class="alert">
+
+                <div *ngIf="investorFormGroup.controls.surname.errors?.['required']">
+                    {{"form-validation-errors.SURNAME_REQUIRED" | translate}}
+                </div>
+
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="investorUpdateTitleField" class="form-label">Название</label>
+            <input type="text" formControlName="title" class="form-control" id="investorUpdateTitleField"
+                   placeholder="VC firm">
+        </div>
+        <div class="mb-3">
+            <label for="investorDescriptionField" class="form-label">Описание</label>
+            <textarea formControlName="description" class="form-control" id="investorDescriptionField"
+                      rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="investorUpdateLocationField" class="form-label">Локация</label>
+            <input type="text" formControlName="location" class="form-control" id="investorUpdateLocationField"
+                   placeholder="Москва, Россия">
+        </div>
+        <div class="mb-3 register-submit-button-group">
+            <button type="submit" (click)="handleFormSubmission()" class="btn btn-primary mb-3 action-btn">
+                {{formType === FormType.UPDATE ? "Обновить информацию": "Зарегистрироваться"}}
+            </button>
+        </div>
+    </form>
+</div>

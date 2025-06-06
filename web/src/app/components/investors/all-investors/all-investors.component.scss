@@ -1,0 +1,12 @@
+.investors-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.investor-link {
+    color: inherit;
+    text-decoration: none;
+}

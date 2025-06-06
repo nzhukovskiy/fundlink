@@ -1,0 +1,51 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col" sortable="date" (sort)="onSort($event)">Дата</th>
+        <th scope="col" sortable="amount" (sort)="onSort($event)">Размер</th>
+        <th scope="col" sortable="stage" (sort)="onSort($event)">Статус</th>
+        <th scope="col" sortable="approvalType" (sort)="onSort($event)">Тип принятия</th>
+        <th scope="col" *ngIf="investmentsFor === Roles.INVESTOR" sortable="fundingRoundStage" (sort)="onSort($event)">Раунд финансирования</th>
+        <th scope="col">{{investmentsFor === Roles.STARTUP ? "Инвестор" : "Стартап"}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let investment of investments">
+        <td>{{ investment.date | date:"d.LL.y в H:mm" }}</td>
+        <td>
+            {{ investment.amount}}
+        </td>
+        <td>
+            <div class="status-badge" [ngClass]="{
+                        'completed': investment.stage === InvestmentStage.COMPLETED,
+                        'pending-review': investment.stage === InvestmentStage.PENDING_REVIEW,
+                        'rejected': investment.stage === InvestmentStage.REJECTED,
+                        'for-startup': investmentsFor === Roles.STARTUP
+                        }"
+                 (click)="investmentsFor === Roles.STARTUP && investment.stage === InvestmentStage.PENDING_REVIEW ? emitApproveDialogClick(investment.id) : undefined"
+            >
+                <span class="status-icon"></span>
+                {{"investment.stage." + investment.stage | translate}}
+            </div>
+        </td>
+        <td>
+            <div class="approval-type" [ngClass]="{
+                        'auto-approve': investment.approvalType === InvestmentApprovalType.AUTO_APPROVE,
+                        'startup-approve': investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE,
+                        }"
+            [matTooltip]="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE ? 'Инвестиция принимается автоматически' : 'Стартап должен принять инвестицию вручную'">
+                <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.AUTO_APPROVE">done</mat-icon>
+                <mat-icon *ngIf="investment.approvalType === InvestmentApprovalType.STARTUP_APPROVE">settings</mat-icon>
+                {{"investment.type." + investment.approvalType | translate}}
+            </div>
+        </td>
+        <td *ngIf="investmentsFor === Roles.INVESTOR">
+            {{investment.fundingRoundStage}}
+        </td>
+        <td>
+            <a *ngIf="investmentsFor === Roles.INVESTOR" [routerLink]="['/startups', investment.startup_id]">{{ investment.startup_title }}</a>
+            <a *ngIf="investmentsFor === Roles.STARTUP" [routerLink]="['/investors', investment.investor.id]">{{ investment.investor.name }} {{ investment.investor.surname }}</a>
+        </td>
+    </tr>
+    </tbody>
+</table>

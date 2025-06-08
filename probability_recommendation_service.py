@@ -1,20 +1,9 @@
-from datetime import datetime
-from math import exp
 import os
 from flask import jsonify
-import psycopg2
 from sqlalchemy import create_engine, text
 
 DATABASE_URL = os.getenv("POSTGRES_URL")
 engine = create_engine(DATABASE_URL)
-
-ALPHA=50000000
-
-# db_pool = pool.SimpleConnectionPool(
-#     minconn=1,
-#     maxconn=50,
-#     dsn=os.getenv("POSTGRES_URL")
-# )
 
 class ProbabilityRecommendationService():
     def calculate_probs_recommendations(self, id):
@@ -97,13 +86,6 @@ class ProbabilityRecommendationService():
                 ]
             
             startup_ids = [startup["id"] for startup in startup_data_top]
-            # placeholders = ', '.join(['%s'] * len(startup_ids))
-            # query = f'''
-            #     SELECT * FROM funding_round
-            #     WHERE "startupId" IN ({placeholders}) AND "isCurrent" = true
-            # '''
-            # cursor.execute(query, startup_ids)
-            # funding_rounds = cursor.fetchall()
 
 
             query = text("""
@@ -131,15 +113,10 @@ class ProbabilityRecommendationService():
                 funding_round = funding_round_map.get(startup["id"])
                 startup["fundingRounds"] = [funding_round] if funding_round else []
 
-            # cursor.close()
             return jsonify({
                 "startup_weights": startups_weights,
                 "recommendedStartups": startup_data_top
             })
-        # finally:
-        #     if cursor is not None:
-        #         cursor.close()
-        #     db_pool.putconn(connection)
 
 
     def __construct_dict(self, parent_id, collection, child_id, parent_dict, child_dict, child_key, investment_amount, investment_date):

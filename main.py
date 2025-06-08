@@ -1,8 +1,7 @@
-from flask import Flask, abort, jsonify, request
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 import jwt
 import os
-from sqlalchemy import create_engine, text
 
 from probability_recommendation_service import ProbabilityRecommendationService
 load_dotenv(override=True)
@@ -21,12 +20,12 @@ def validate_jwt(token):
     except Exception:
         return False
 
-# @app.before_request
-# def check_auth():
-#     if request.endpoint == 'calculate':
-#         token = request.headers.get('Authorization', '').replace('Bearer ', '')
-#         if not validate_jwt(token):
-#             return jsonify({"msg": "Unauthorized"}), 401
+@app.before_request
+def check_auth():
+    if request.endpoint == 'calculate':
+        token = request.headers.get('Authorization', '').replace('Bearer ', '')
+        if not validate_jwt(token):
+            return jsonify({"msg": "Unauthorized"}), 401
 
 @app.route('/get-recommendations/<int:id>', methods=['GET'])
 def calculate(id):

@@ -9,3 +9,10 @@
         </div>
     </div>
 </div>
+<mat-paginator class="investors-paginator" [length]="totalNumber"
+               [pageIndex]="pageIndex"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 8, 10, 25, 100]"
+               (page)="handlePageChange($event)"
+               aria-label="Select page">
+</mat-paginator>

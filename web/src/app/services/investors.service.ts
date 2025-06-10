@@ -6,6 +6,8 @@ import { StartupFullDto } from '../data/dtos/responses/startup-full.dto';
 import { InvestorStatsDto } from '../data/dtos/responses/investor-stats.dto';
 import { forkJoin } from 'rxjs';
 import { InvestmentFullDto } from '../data/dtos/responses/investment-full.dto';
+import { HttpParams } from '@angular/common/http';
+import { PaginationResult } from '../data/dtos/pagination-result';
 
 @Injectable({
     providedIn: 'root',
@@ -15,8 +17,15 @@ export class InvestorsService {
     constructor(private readonly appHttpService: AppHttpService) {
     }
 
-    getAll() {
-        return this.appHttpService.get<{ data: Investor[] }>('investors');
+    getAll(page?: number, itemsPerPage?: number) {
+        let query = new HttpParams();
+        if (typeof page !== 'undefined') {
+            query = query.append('page', page);
+        }
+        if (typeof itemsPerPage !== 'undefined') {
+            query = query.append('limit', itemsPerPage);
+        }
+        return this.appHttpService.get<PaginationResult<Investor>>('investors', query);
     }
 
     getOne(id: number) {

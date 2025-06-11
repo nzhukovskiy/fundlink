@@ -17,7 +17,7 @@ export class ExitStartupComponent implements OnInit {
     exitFormGroup = new FormGroup({
         type: new FormControl(''),
         value: new FormControl(''),
-        totalShares: new FormControl(''),
+        totalShares: new FormControl(null),
     })
 
     exitType = ExitType.ACQUIRED

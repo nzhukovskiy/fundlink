@@ -301,7 +301,7 @@ export class StartupsService {
             text: `Вы совершили экзит по сценарию ${savedStartup.exit.type}`,
             exit: savedStartup.exit,
             exitInvestorShare: startupResult.toString(),
-            exitInvestorShareNumber: (new Decimal(exitStartupDto.totalShares).mul(new Decimal(startupShare))).toString()
+            exitInvestorShareNumber: exitStartupDto.totalShares ? (new Decimal(exitStartupDto.totalShares).mul(new Decimal(startupShare))).toString() : null
         })
 
         for (const investor of investors) {

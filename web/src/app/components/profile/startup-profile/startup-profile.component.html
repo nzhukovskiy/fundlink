@@ -27,7 +27,7 @@
                         <input (change)="onImageChanged($event)" class="form-control" type="file" id="formFile">
                     </div>
                 </div>
-                <div *ngIf="startup.dcf.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
+                <div *ngIf="startup.dcf && startup.dcf.totalDcfValue && startup.dcf?.totalDcfValue != 0">Оценка по методу
                     DCF: {{ startup.dcf.totalDcfValue | number:'1.2-2' }} руб.
                 </div>
                 <div *ngIf="startup.stage === StartupStage.ACTIVE" class="mb-3 button-group">
